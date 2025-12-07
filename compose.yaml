@@ -1,0 +1,22 @@
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        XDEBUG_ENABLED: ${XDEBUG_ENABLED:-true}
+        XDEBUG_MODE: develop,coverage,debug,profile
+        XDEBUG_HOST: ${XDEBUG_HOST:-host.docker.internal}
+        XDEBUG_IDE_KEY: ${XDEBUG_IDE_KEY:-DOCKER}
+        XDEBUG_LOG: /dev/stdout
+        XDEBUG_LOG_LEVEL: 0
+    #ports:
+      #- '${VITE_PORT:-5173}:5173'
+    tty: true  # Enables an interactive terminal
+    stdin_open: true  # Keeps standard input open for 'docker exec'
+    env_file:
+      - .env
+    volumes:
+      - ./:/var/www

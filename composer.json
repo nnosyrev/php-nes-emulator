@@ -1,0 +1,11 @@
+{
+    "name": "nnosyrev/php-nes-emulator",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "PhpNesEmulator\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
