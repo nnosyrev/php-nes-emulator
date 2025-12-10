@@ -1,5 +1,5 @@
 # Use the official PHP CLI image as the base
-FROM php:8.4-cli
+FROM php:8.1-cli
 
 # Set environment variables for user and group ID
 ARG UID=1000
@@ -16,13 +16,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev \
     libicu-dev \
     libzip-dev \
+    libsdl2-dev \
     && docker-php-ext-install -j$(nproc) \
     opcache \
     intl \
     zip \
     bcmath \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug\
+    && pecl install xdebug sdl-beta \
+    && docker-php-ext-enable xdebug sdl \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

@@ -12,11 +12,14 @@ services:
         XDEBUG_IDE_KEY: ${XDEBUG_IDE_KEY:-DOCKER}
         XDEBUG_LOG: /dev/stdout
         XDEBUG_LOG_LEVEL: 0
-    #ports:
-      #- '${VITE_PORT:-5173}:5173'
     tty: true  # Enables an interactive terminal
     stdin_open: true  # Keeps standard input open for 'docker exec'
+    privileged: true
+    network_mode: "host"
+    environment:
+      - DISPLAY=${DISPLAY}
     env_file:
       - .env
     volumes:
       - ./:/var/www
+      - /home/kolyan/.Xauthority:/home/www/.Xauthority
