@@ -60,6 +60,16 @@ final class CPUInstructionsTest extends TestCase
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
 
+    public function testINXOverflow(): void
+    {
+        $CPU = new CPU;
+        $CPU->interpret([Opcodes::LDX, 0xFF, Opcodes::INX, Opcodes::INX, Opcodes::BRK]);
+
+        $this->assertSame($CPU->getRegisterX(), 0x01);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
+    }
+
     private function getFlagNValue(int $value): bool
     {
         return ($value & 0b10000000) === 0b10000000;

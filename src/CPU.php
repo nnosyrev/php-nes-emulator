@@ -81,7 +81,7 @@ final class CPU
 
     private function setRegisterX(int $registerX): void
     {
-        $this->registerX = $registerX;
+        $this->registerX = $registerX % 256;
     }
 
     public function getRegisterX(): int
