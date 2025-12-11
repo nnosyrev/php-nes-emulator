@@ -30,35 +30,35 @@ final class CPU
 
             $this->incrementPC();
 
-            if ($opcode === 0xA9) {
+            if ($opcode === Opcodes::LDA) {
                 // LDA
                 $param = $program[$this->PC];
 
                 $this->incrementPC();
 
                 $this->setRegisterA($param);
-                $this->setFlagZ($this->getRegisterA() === 0);
-                $this->setFlagN(($this->getRegisterA() & 0b10000000) === 0b10000000);
-            } elseif ($opcode === 0xA2) {
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode === Opcodes::LDX) {
                 // LDX
                 $param = $program[$this->PC];
 
                 $this->incrementPC();
 
                 $this->setRegisterX($param);
-                $this->setFlagZ($this->getRegisterX() === 0);
-                $this->setFlagN(($this->getRegisterX() & 0b10000000) === 0b10000000);
-            } elseif ($opcode === 0xAA) {
+                $this->setFlagZByValue($this->getRegisterX());
+                $this->setFlagNByValue($this->getRegisterX());
+            } elseif ($opcode === Opcodes::TAX) {
                 // TAX
                 $this->setRegisterX($this->getRegisterA());
-                $this->setFlagZ($this->getRegisterX() === 0);
-                $this->setFlagN(($this->getRegisterX() & 0b10000000) === 0b10000000);
-            } elseif ($opcode === 0xE8) {
+                $this->setFlagZByValue($this->getRegisterX());
+                $this->setFlagNByValue($this->getRegisterX());
+            } elseif ($opcode === Opcodes::INX) {
                 // INX
                 $this->setRegisterX($this->getRegisterX() + 1);
-                $this->setFlagZ($this->getRegisterX() === 0);
-                $this->setFlagN(($this->getRegisterX() & 0b10000000) === 0b10000000);
-            } elseif ($opcode === 0x00) {
+                $this->setFlagZByValue($this->getRegisterX());
+                $this->setFlagNByValue($this->getRegisterX());
+            } elseif ($opcode === Opcodes::BRK) {
                 return;
             }
         }
@@ -94,6 +94,11 @@ final class CPU
         $this->flagZ = $flagZ;
     }
 
+    private function setFlagZByValue(int $value): void
+    {
+        $this->setFlagZ($value === 0);
+    }
+
     public function getFlagZ(): bool
     {
         return $this->flagZ;
@@ -102,6 +107,11 @@ final class CPU
     private function setFlagN(bool $flagN): void
     {
         $this->flagN = $flagN;
+    }
+
+    private function setFlagNByValue(int $value): void
+    {
+        $this->setFlagN(($value & 0b10000000) === 0b10000000);
     }
 
     public function getFlagN(): bool
