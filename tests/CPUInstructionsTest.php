@@ -70,6 +70,14 @@ final class CPUInstructionsTest extends TestCase
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
 
+    public function test5opcodes(): void
+    {
+        $CPU = new CPU;
+        $CPU->interpret([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
+
+        $this->assertSame($CPU->getRegisterX(), 0xC1);
+    }
+
     private function getFlagNValue(int $value): bool
     {
         return ($value & 0b10000000) === 0b10000000;
