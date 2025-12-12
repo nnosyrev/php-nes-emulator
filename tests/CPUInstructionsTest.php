@@ -14,7 +14,8 @@ final class CPUInstructionsTest extends TestCase
     public function testLDA(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDA, 0x05, Opcodes::BRK]);
+        $CPU->load([Opcodes::LDA, 0x05, Opcodes::BRK]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
@@ -24,7 +25,8 @@ final class CPUInstructionsTest extends TestCase
     public function testLDAFlags(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDA, 0x00, Opcodes::BRK]);
+        $CPU->load([Opcodes::LDA, 0x00, Opcodes::BRK]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x00);
         $this->assertSame($CPU->getFlagZ(), true);
@@ -34,7 +36,8 @@ final class CPUInstructionsTest extends TestCase
     public function testTAX(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDA, 0x05, Opcodes::TAX, 0x00]);
+        $CPU->load([Opcodes::LDA, 0x05, Opcodes::TAX, 0x00]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, $CPU->getRegisterA()->value);
         $this->assertSame($CPU->getFlagZ(), false);
@@ -44,7 +47,8 @@ final class CPUInstructionsTest extends TestCase
     public function testLDX(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDX, 0x05, Opcodes::BRK]);
+        $CPU->load([Opcodes::LDX, 0x05, Opcodes::BRK]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
@@ -54,7 +58,8 @@ final class CPUInstructionsTest extends TestCase
     public function testINX(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDX, 0x05, Opcodes::INX, Opcodes::BRK]);
+        $CPU->load([Opcodes::LDX, 0x05, Opcodes::INX, Opcodes::BRK]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x05 + 1);
         $this->assertSame($CPU->getFlagZ(), false);
@@ -64,7 +69,8 @@ final class CPUInstructionsTest extends TestCase
     public function testINXOverflow(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([Opcodes::LDX, 0xFF, Opcodes::INX, Opcodes::INX, Opcodes::BRK]);
+        $CPU->load([Opcodes::LDX, 0xFF, Opcodes::INX, Opcodes::INX, Opcodes::BRK]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x01);
         $this->assertSame($CPU->getFlagZ(), false);
@@ -74,7 +80,8 @@ final class CPUInstructionsTest extends TestCase
     public function test5opcodes(): void
     {
         $CPU = new CPU;
-        $CPU->interpret([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
+        $CPU->load([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
+        $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0xC1);
     }

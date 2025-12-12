@@ -6,6 +6,8 @@ namespace App;
 
 final class CPU
 {
+    private const PRG_ROM_START = 0x8000;
+
     private UInt8 $registerA;
     private UInt8 $registerX;
     private UInt8 $registerY;
@@ -19,49 +21,60 @@ final class CPU
     private bool $flagN;
 
     private int $SP;
-    private int $PC;
+    private UInt16 $PC;
 
-    public function interpret(array $program): void
+    private array $memory = [];
+
+    public function load(array $program): void
     {
-        $this->PC = 0;
+        $this->PC = new UInt16(self::PRG_ROM_START);
 
+        $current = self::PRG_ROM_START;
+        foreach ($program as &$byte) {
+            UInt8::validation($byte);
+
+            $this->memory[$current] = $byte;
+            $current++;
+        }
+    }
+
+    public function run(): void
+    {
         while (true) {
-            $opcode = $program[$this->PC];
+            $opcode = $this->readMemory($this->PC);
 
             $this->incrementPC();
 
-            if ($opcode === Opcodes::LDA) {
+            if ($opcode->value === Opcodes::LDA) {
                 // LDA
-                $param = $program[$this->PC];
-                $byte = new UInt8($param);
+                $param = $this->readMemory($this->PC);
 
                 $this->incrementPC();
 
-                $this->setRegisterA($byte);
+                $this->setRegisterA($param);
                 $this->setFlagZByValue($this->getRegisterA());
                 $this->setFlagNByValue($this->getRegisterA());
-            } elseif ($opcode === Opcodes::LDX) {
+            } elseif ($opcode->value === Opcodes::LDX) {
                 // LDX
-                $param = $program[$this->PC];
-                $byte = new UInt8($param);
+                $param = $this->readMemory($this->PC);
 
                 $this->incrementPC();
 
-                $this->setRegisterX($byte);
+                $this->setRegisterX($param);
                 $this->setFlagZByValue($this->getRegisterX());
                 $this->setFlagNByValue($this->getRegisterX());
-            } elseif ($opcode === Opcodes::TAX) {
+            } elseif ($opcode->value === Opcodes::TAX) {
                 // TAX
                 $this->setRegisterX($this->getRegisterA());
                 $this->setFlagZByValue($this->getRegisterX());
                 $this->setFlagNByValue($this->getRegisterX());
-            } elseif ($opcode === Opcodes::INX) {
+            } elseif ($opcode->value === Opcodes::INX) {
                 // INX
                 $byte = $this->getRegisterX();
                 $this->setRegisterX($byte->increment());
                 $this->setFlagZByValue($this->getRegisterX());
                 $this->setFlagNByValue($this->getRegisterX());
-            } elseif ($opcode === Opcodes::BRK) {
+            } elseif ($opcode->value === Opcodes::BRK) {
                 return;
             }
         }
@@ -69,7 +82,7 @@ final class CPU
 
     private function incrementPC(): void
     {
-        $this->PC += 1;
+        $this->PC = $this->PC->increment();
     }
 
     private function setRegisterA(UInt8 $byte): void
@@ -120,5 +133,10 @@ final class CPU
     public function getFlagN(): bool
     {
         return $this->flagN;
+    }
+
+    public function readMemory(UInt16 $addr): UInt8
+    {
+        return new UInt8($this->memory[$addr->value]);
     }
 }

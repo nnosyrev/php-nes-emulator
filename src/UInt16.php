@@ -6,23 +6,18 @@ namespace App;
 
 use Exception;
 
-final class UInt8
+final class UInt16
 {
     public function __construct(public readonly int $value)
     {
-        self::validation($value);
-    }
-
-    public static function validation(int $value): void
-    {
-        if ($value < 0 || $value > 255) {
+        if ($value < 0 || $value > 65535) {
             throw new Exception('Invalid value');
         }
     }
 
     public function increment(): self
     {
-        $newValue = ($this->value + 1) % 256;
+        $newValue = ($this->value + 1) % 65536;
 
         return new self($newValue);
     }
