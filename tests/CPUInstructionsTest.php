@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Byte;
 use App\CPU;
 use App\Opcodes;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +16,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDA, 0x05, Opcodes::BRK]);
 
-        $this->assertSame($CPU->getRegisterA(), 0x05);
+        $this->assertSame($CPU->getRegisterA()->value, 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }
@@ -25,7 +26,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDA, 0x00, Opcodes::BRK]);
 
-        $this->assertSame($CPU->getRegisterA(), 0x00);
+        $this->assertSame($CPU->getRegisterA()->value, 0x00);
         $this->assertSame($CPU->getFlagZ(), true);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }
@@ -35,7 +36,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDA, 0x05, Opcodes::TAX, 0x00]);
 
-        $this->assertSame($CPU->getRegisterX(), $CPU->getRegisterA());
+        $this->assertSame($CPU->getRegisterX()->value, $CPU->getRegisterA()->value);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -45,7 +46,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDX, 0x05, Opcodes::BRK]);
 
-        $this->assertSame($CPU->getRegisterX(), 0x05);
+        $this->assertSame($CPU->getRegisterX()->value, 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -55,7 +56,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDX, 0x05, Opcodes::INX, Opcodes::BRK]);
 
-        $this->assertSame($CPU->getRegisterX(), 0x05 + 1);
+        $this->assertSame($CPU->getRegisterX()->value, 0x05 + 1);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -65,7 +66,7 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([Opcodes::LDX, 0xFF, Opcodes::INX, Opcodes::INX, Opcodes::BRK]);
 
-        $this->assertSame($CPU->getRegisterX(), 0x01);
+        $this->assertSame($CPU->getRegisterX()->value, 0x01);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -75,11 +76,11 @@ final class CPUInstructionsTest extends TestCase
         $CPU = new CPU;
         $CPU->interpret([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
 
-        $this->assertSame($CPU->getRegisterX(), 0xC1);
+        $this->assertSame($CPU->getRegisterX()->value, 0xC1);
     }
 
-    private function getFlagNValue(int $value): bool
+    private function getFlagNValue(Byte $byte): bool
     {
-        return ($value & 0b10000000) === 0b10000000;
+        return ($byte->value & 0b10000000) === 0b10000000;
     }
 }

@@ -6,9 +6,9 @@ namespace App;
 
 final class CPU
 {
-    private int $registerA = 0;
-    private int $registerX;
-    private int $registerY;
+    private Byte $registerA;
+    private Byte $registerX;
+    private Byte $registerY;
 
     private bool $flagC;
     private bool $flagZ;
@@ -33,19 +33,21 @@ final class CPU
             if ($opcode === Opcodes::LDA) {
                 // LDA
                 $param = $program[$this->PC];
+                $byte = new Byte($param);
 
                 $this->incrementPC();
 
-                $this->setRegisterA($param);
+                $this->setRegisterA($byte);
                 $this->setFlagZByValue($this->getRegisterA());
                 $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode === Opcodes::LDX) {
                 // LDX
                 $param = $program[$this->PC];
+                $byte = new Byte($param);
 
                 $this->incrementPC();
 
-                $this->setRegisterX($param);
+                $this->setRegisterX($byte);
                 $this->setFlagZByValue($this->getRegisterX());
                 $this->setFlagNByValue($this->getRegisterX());
             } elseif ($opcode === Opcodes::TAX) {
@@ -55,7 +57,8 @@ final class CPU
                 $this->setFlagNByValue($this->getRegisterX());
             } elseif ($opcode === Opcodes::INX) {
                 // INX
-                $this->setRegisterX($this->getRegisterX() + 1);
+                $byte = $this->getRegisterX();
+                $this->setRegisterX($byte->increment());
                 $this->setFlagZByValue($this->getRegisterX());
                 $this->setFlagNByValue($this->getRegisterX());
             } elseif ($opcode === Opcodes::BRK) {
@@ -69,22 +72,22 @@ final class CPU
         $this->PC += 1;
     }
 
-    private function setRegisterA(int $registerA): void
+    private function setRegisterA(Byte $byte): void
     {
-        $this->registerA = $registerA % 256;
+        $this->registerA = $byte;
     }
 
-    public function getRegisterA(): int
+    public function getRegisterA(): Byte
     {
         return $this->registerA;
     }
 
-    private function setRegisterX(int $registerX): void
+    private function setRegisterX(Byte $byte): void
     {
-        $this->registerX = $registerX % 256;
+        $this->registerX = $byte;
     }
 
-    public function getRegisterX(): int
+    public function getRegisterX(): Byte
     {
         return $this->registerX;
     }
@@ -94,9 +97,9 @@ final class CPU
         $this->flagZ = $flagZ;
     }
 
-    private function setFlagZByValue(int $value): void
+    private function setFlagZByValue(Byte $byte): void
     {
-        $this->setFlagZ($value === 0);
+        $this->setFlagZ($byte->value === 0);
     }
 
     public function getFlagZ(): bool
@@ -109,9 +112,9 @@ final class CPU
         $this->flagN = $flagN;
     }
 
-    private function setFlagNByValue(int $value): void
+    private function setFlagNByValue(Byte $byte): void
     {
-        $this->setFlagN(($value & 0b10000000) === 0b10000000);
+        $this->setFlagN(($byte->value & 0b10000000) === 0b10000000);
     }
 
     public function getFlagN(): bool
