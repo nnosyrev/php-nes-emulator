@@ -6,12 +6,12 @@ namespace App;
 
 use Exception;
 
-final class Byte
+final class UInt8
 {
     public function __construct(public readonly int $value)
     {
         if ($value < 0 || $value > 255) {
-            throw new Exception('Invalid byte value');
+            throw new Exception('Invalid value');
         }
     }
 

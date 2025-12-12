@@ -6,9 +6,9 @@ namespace App;
 
 final class CPU
 {
-    private Byte $registerA;
-    private Byte $registerX;
-    private Byte $registerY;
+    private UInt8 $registerA;
+    private UInt8 $registerX;
+    private UInt8 $registerY;
 
     private bool $flagC;
     private bool $flagZ;
@@ -33,7 +33,7 @@ final class CPU
             if ($opcode === Opcodes::LDA) {
                 // LDA
                 $param = $program[$this->PC];
-                $byte = new Byte($param);
+                $byte = new UInt8($param);
 
                 $this->incrementPC();
 
@@ -43,7 +43,7 @@ final class CPU
             } elseif ($opcode === Opcodes::LDX) {
                 // LDX
                 $param = $program[$this->PC];
-                $byte = new Byte($param);
+                $byte = new UInt8($param);
 
                 $this->incrementPC();
 
@@ -72,22 +72,22 @@ final class CPU
         $this->PC += 1;
     }
 
-    private function setRegisterA(Byte $byte): void
+    private function setRegisterA(UInt8 $byte): void
     {
         $this->registerA = $byte;
     }
 
-    public function getRegisterA(): Byte
+    public function getRegisterA(): UInt8
     {
         return $this->registerA;
     }
 
-    private function setRegisterX(Byte $byte): void
+    private function setRegisterX(UInt8 $byte): void
     {
         $this->registerX = $byte;
     }
 
-    public function getRegisterX(): Byte
+    public function getRegisterX(): UInt8
     {
         return $this->registerX;
     }
@@ -97,7 +97,7 @@ final class CPU
         $this->flagZ = $flagZ;
     }
 
-    private function setFlagZByValue(Byte $byte): void
+    private function setFlagZByValue(UInt8 $byte): void
     {
         $this->setFlagZ($byte->value === 0);
     }
@@ -112,7 +112,7 @@ final class CPU
         $this->flagN = $flagN;
     }
 
-    private function setFlagNByValue(Byte $byte): void
+    private function setFlagNByValue(UInt8 $byte): void
     {
         $this->setFlagN(($byte->value & 0b10000000) === 0b10000000);
     }

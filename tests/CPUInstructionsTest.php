@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Byte;
 use App\CPU;
 use App\Opcodes;
+use App\UInt8;
 use PHPUnit\Framework\TestCase;
 
 final class CPUInstructionsTest extends TestCase
@@ -79,7 +79,7 @@ final class CPUInstructionsTest extends TestCase
         $this->assertSame($CPU->getRegisterX()->value, 0xC1);
     }
 
-    private function getFlagNValue(Byte $byte): bool
+    private function getFlagNValue(UInt8 $byte): bool
     {
         return ($byte->value & 0b10000000) === 0b10000000;
     }
