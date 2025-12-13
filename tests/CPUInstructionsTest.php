@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use App\CPU;
 use App\Opcodes;
+use App\UInt16;
 use App\UInt8;
 use PHPUnit\Framework\TestCase;
 
@@ -84,6 +85,18 @@ final class CPUInstructionsTest extends TestCase
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0xC1);
+    }
+
+    public function testReadWriteMemoryUInt16(): void
+    {
+        $addr = new UInt16(0);
+
+        $CPU = new CPU;
+        $CPU->writeMemoryUInt16($addr, new UInt16(0x8000));
+
+        $readed = $CPU->readMemoryUInt16($addr);
+
+        $this->assertSame($readed->value, 0x8000);
     }
 
     private function getFlagNValue(UInt8 $byte): bool

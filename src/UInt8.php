@@ -10,10 +10,10 @@ final class UInt8
 {
     public function __construct(public readonly int $value)
     {
-        self::validation($value);
+        self::validate($value);
     }
 
-    public static function validation(int $value): void
+    public static function validate(int $value): void
     {
         if ($value < 0 || $value > 255) {
             throw new Exception('Invalid value');

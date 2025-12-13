@@ -31,7 +31,7 @@ final class CPU
 
         $current = self::PRG_ROM_START;
         foreach ($program as &$byte) {
-            UInt8::validation($byte);
+            UInt8::validate($byte);
 
             $this->memory[$current] = $byte;
             $current++;
@@ -135,8 +135,32 @@ final class CPU
         return $this->flagN;
     }
 
-    public function readMemory(UInt16 $addr): UInt8
+    private function writeMemory(UInt16 $addr, UInt8 $data): void
+    {
+        $this->memory[$addr->value] = $data->value;
+    }
+
+    private function readMemory(UInt16 $addr): UInt8
     {
         return new UInt8($this->memory[$addr->value]);
+    }
+
+    public function writeMemoryUInt16(UInt16 $addr, UInt16 $data): void
+    {
+        $high = $data->value >> 8;
+        $low = $data->value & 0xFF;
+
+        $this->memory[$addr->value] = $low;
+        $this->memory[$addr->value + 1] = $high;
+    }
+
+    public function readMemoryUInt16(UInt16 $addr): UInt16
+    {
+        $low = $this->memory[$addr->value];
+        $high = $this->memory[$addr->value + 1];
+
+        $res = ($high << 8) | $low;
+
+        return new UInt16($res);
     }
 }
