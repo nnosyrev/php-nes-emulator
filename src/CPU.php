@@ -46,12 +46,49 @@ final class CPU
             $this->incrementPC();
 
             if ($opcode->value === Opcodes::LDA) {
-                // LDA
+                // LDA Immediate
                 $param = $this->readMemory($this->PC);
 
                 $this->incrementPC();
 
                 $this->setRegisterA($param);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xA5) {
+                // LDA zero page
+                $param = $this->readMemory($this->PC);
+                $value = $this->readMemory($param->toUInt16());
+
+                $this->incrementPC();
+
+                $this->setRegisterA($value);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xB5) {
+                // LDA zero page, X
+                $param = $this->readMemory($this->PC);
+                $value = $this->readMemory($param->add($this->getRegisterX())->toUInt16());
+
+                $this->incrementPC();
+
+                $this->setRegisterA($value);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xA1) {
+                // LDA Indirect X
+                $param = $this->readMemory($this->PC);
+                $value = $this->readMemory($param->add($this->getRegisterX())->toUInt16());
+
+                $low = $this->readMemory($value->toUInt16());
+                $high = $this->readMemory($value->increment()->toUInt16());
+
+                $result = ($high->value << 8) | $low->value;
+
+                $resValue = $this->readMemory(new UInt16($result));
+
+                $this->incrementPC();
+
+                $this->setRegisterA($resValue);
                 $this->setFlagZByValue($this->getRegisterA());
                 $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === Opcodes::LDX) {

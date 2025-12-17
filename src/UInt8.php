@@ -22,8 +22,25 @@ final class UInt8
 
     public function increment(): self
     {
-        $newValue = ($this->value + 1) % 256;
+        $newValue = $this->mod($this->value + 1);
 
         return new self($newValue);
+    }
+
+    public function add(UInt8 $add): self
+    {
+        $newValue = $this->mod($this->value + $add->value);
+
+        return new self($newValue);
+    }
+
+    public function toUInt16(): UInt16
+    {
+        return new UInt16($this->value);
+    }
+
+    private function mod(int $value): int
+    {
+        return $value % 256;
     }
 }
