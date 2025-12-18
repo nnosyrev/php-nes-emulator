@@ -52,8 +52,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($param);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xA5) {
                 // LDA zero page
                 $param = $this->readMemory($this->PC);
@@ -62,8 +60,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($value);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xB5) {
                 // LDA zero page, X
                 $param = $this->readMemory($this->PC);
@@ -72,8 +68,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($value);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xA1) {
                 // LDA Indirect X
                 $param = $this->readMemory($this->PC);
@@ -90,8 +84,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($resValue);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xB1) {
                 // LDA Indirect Y
                 $param = $this->readMemory($this->PC);
@@ -110,8 +102,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($resValue);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xAD) {
                 // LDA Absolute
                 $param = $this->readMemoryUInt16($this->PC);
@@ -122,8 +112,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($resValue);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xBD) {
                 // LDA Absolute X
                 $param = $this->readMemoryUInt16($this->PC);
@@ -134,8 +122,6 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($resValue);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === 0xB9) {
                 // LDA Absolute Y
                 $param = $this->readMemoryUInt16($this->PC);
@@ -146,28 +132,56 @@ final class CPU
                 $this->incrementPC();
 
                 $this->setRegisterA($resValue);
-                $this->setFlagZByValue($this->getRegisterA());
-                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === Opcodes::LDX) {
-                // LDX
+                // LDX Immediate
                 $param = $this->readMemory($this->PC);
 
                 $this->incrementPC();
 
                 $this->setRegisterX($param);
-                $this->setFlagZByValue($this->getRegisterX());
-                $this->setFlagNByValue($this->getRegisterX());
+            } elseif ($opcode->value === 0xA6) {
+                // LDX Zero page
+                $param = $this->readMemory($this->PC);
+                $value = $this->readMemory($param->toUInt16());
+
+                $this->incrementPC();
+
+                $this->setRegisterX($value);
+            } elseif ($opcode->value === 0xB6) {
+                // LDX Zero page Y
+                $param = $this->readMemory($this->PC);
+                $value = $this->readMemory($param->add($this->getRegisterY())->toUInt16());
+
+                $this->incrementPC();
+
+                $this->setRegisterX($value);
+            } elseif ($opcode->value === 0xAE) {
+                // LDX Absolute
+                $param = $this->readMemoryUInt16($this->PC);
+
+                $resValue = $this->readMemory($param);
+
+                $this->incrementPC();
+                $this->incrementPC();
+
+                $this->setRegisterX($resValue);
+            } elseif ($opcode->value === 0xBE) {
+                // LDX Absolute Y
+                $param = $this->readMemoryUInt16($this->PC);
+
+                $resValue = $this->readMemory($param->add($this->getRegisterY()));
+
+                $this->incrementPC();
+                $this->incrementPC();
+
+                $this->setRegisterX($resValue);
             } elseif ($opcode->value === Opcodes::TAX) {
                 // TAX
                 $this->setRegisterX($this->getRegisterA());
-                $this->setFlagZByValue($this->getRegisterX());
-                $this->setFlagNByValue($this->getRegisterX());
             } elseif ($opcode->value === Opcodes::INX) {
                 // INX
                 $byte = $this->getRegisterX();
                 $this->setRegisterX($byte->increment());
-                $this->setFlagZByValue($this->getRegisterX());
-                $this->setFlagNByValue($this->getRegisterX());
             } elseif ($opcode->value === Opcodes::BRK) {
                 return;
             }
@@ -182,6 +196,9 @@ final class CPU
     private function setRegisterA(UInt8 $byte): void
     {
         $this->registerA = $byte;
+
+        $this->setFlagZByValue($this->getRegisterA());
+        $this->setFlagNByValue($this->getRegisterA());
     }
 
     public function getRegisterA(): UInt8
@@ -192,6 +209,9 @@ final class CPU
     public function setRegisterX(UInt8 $byte): void
     {
         $this->registerX = $byte;
+
+        $this->setFlagZByValue($this->getRegisterX());
+        $this->setFlagNByValue($this->getRegisterX());
     }
 
     public function getRegisterX(): UInt8
