@@ -92,6 +92,26 @@ final class CPU
                 $this->setRegisterA($resValue);
                 $this->setFlagZByValue($this->getRegisterA());
                 $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xB1) {
+                // LDA Indirect Y
+                $param = $this->readMemory($this->PC);
+
+                $ptr = $param->toUInt16();
+
+                $low = $this->readMemory($ptr);
+                $high = $this->readMemory($ptr->increment());
+
+                $result = ($high->value << 8) | $low->value;
+
+                $addr = (new UInt16($result))->add($this->getRegisterY());
+
+                $resValue = $this->readMemory($addr);
+
+                $this->incrementPC();
+
+                $this->setRegisterA($resValue);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === Opcodes::LDX) {
                 // LDX
                 $param = $this->readMemory($this->PC);
@@ -141,6 +161,16 @@ final class CPU
     public function getRegisterX(): UInt8
     {
         return $this->registerX;
+    }
+
+    public function setRegisterY(UInt8 $byte): void
+    {
+        $this->registerY = $byte;
+    }
+
+    public function getRegisterY(): UInt8
+    {
+        return $this->registerY;
     }
 
     private function setFlagZ(bool $flagZ): void

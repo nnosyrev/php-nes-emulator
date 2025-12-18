@@ -63,6 +63,21 @@ final class CPUInstructionsTest extends TestCase
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }
 
+    public function testLDAIndirectY(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xB1, 0x01, Opcodes::BRK]);
+        $CPU->setRegisterY(new UInt8(0x01));
+        $CPU->writeMemory(new UInt16(0x01), new UInt8(0x03));
+        $CPU->writeMemory(new UInt16(0x02), new UInt8(0x07));
+        $CPU->writeMemory(new UInt16(0x0704), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
     public function testLDAFlags(): void
     {
         $CPU = new CPU;
