@@ -78,6 +78,44 @@ final class CPUInstructionsTest extends TestCase
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }
 
+    public function testLDAAbsolute(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xAD, 0x10, 0x22, Opcodes::BRK]);
+        $CPU->writeMemory(new UInt16(0x2210), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
+    public function testLDAAbsoluteX(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xBD, 0x10, 0x22, Opcodes::BRK]);
+        $CPU->setRegisterX(new UInt8(0x03));
+        $CPU->writeMemory(new UInt16(0x2213), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
+    public function testLDAAbsoluteY(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xB9, 0x10, 0x22, Opcodes::BRK]);
+        $CPU->setRegisterY(new UInt8(0x03));
+        $CPU->writeMemory(new UInt16(0x2213), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
     public function testLDAFlags(): void
     {
         $CPU = new CPU;

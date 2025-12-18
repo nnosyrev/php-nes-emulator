@@ -112,6 +112,42 @@ final class CPU
                 $this->setRegisterA($resValue);
                 $this->setFlagZByValue($this->getRegisterA());
                 $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xAD) {
+                // LDA Absolute
+                $param = $this->readMemoryUInt16($this->PC);
+
+                $resValue = $this->readMemory($param);
+
+                $this->incrementPC();
+                $this->incrementPC();
+
+                $this->setRegisterA($resValue);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xBD) {
+                // LDA Absolute X
+                $param = $this->readMemoryUInt16($this->PC);
+
+                $resValue = $this->readMemory($param->add($this->getRegisterX()));
+
+                $this->incrementPC();
+                $this->incrementPC();
+
+                $this->setRegisterA($resValue);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
+            } elseif ($opcode->value === 0xB9) {
+                // LDA Absolute Y
+                $param = $this->readMemoryUInt16($this->PC);
+
+                $resValue = $this->readMemory($param->add($this->getRegisterY()));
+
+                $this->incrementPC();
+                $this->incrementPC();
+
+                $this->setRegisterA($resValue);
+                $this->setFlagZByValue($this->getRegisterA());
+                $this->setFlagNByValue($this->getRegisterA());
             } elseif ($opcode->value === Opcodes::LDX) {
                 // LDX
                 $param = $this->readMemory($this->PC);
@@ -225,7 +261,7 @@ final class CPU
     public function readMemoryUInt16(UInt16 $addr): UInt16
     {
         $low = $this->memory[$addr->value];
-        $high = $this->memory[$addr->value + 1];
+        $high = $this->memory[$addr->increment()->value];
 
         $res = ($high << 8) | $low;
 
