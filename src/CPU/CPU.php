@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\CPU;
+
+use App\UInt16;
+use App\UInt8;
 
 final class CPU
 {

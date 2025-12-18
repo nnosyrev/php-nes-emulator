@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\CPU;
-use App\Opcodes;
+use App\CPU\CPU;
+use App\CPU\Opcodes;
 use App\UInt16;
 use App\UInt8;
 use PHPUnit\Framework\TestCase;
