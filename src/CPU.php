@@ -77,10 +77,11 @@ final class CPU
             } elseif ($opcode->value === 0xA1) {
                 // LDA Indirect X
                 $param = $this->readMemory($this->PC);
-                $value = $this->readMemory($param->add($this->getRegisterX())->toUInt16());
 
-                $low = $this->readMemory($value->toUInt16());
-                $high = $this->readMemory($value->increment()->toUInt16());
+                $ptr = $param->add($this->getRegisterX())->toUInt16();
+
+                $low = $this->readMemory($ptr);
+                $high = $this->readMemory($ptr->increment());
 
                 $result = ($high->value << 8) | $low->value;
 
@@ -132,7 +133,7 @@ final class CPU
         return $this->registerA;
     }
 
-    private function setRegisterX(UInt8 $byte): void
+    public function setRegisterX(UInt8 $byte): void
     {
         $this->registerX = $byte;
     }
@@ -172,12 +173,12 @@ final class CPU
         return $this->flagN;
     }
 
-    private function writeMemory(UInt16 $addr, UInt8 $data): void
+    public function writeMemory(UInt16 $addr, UInt8 $data): void
     {
         $this->memory[$addr->value] = $data->value;
     }
 
-    private function readMemory(UInt16 $addr): UInt8
+    public function readMemory(UInt16 $addr): UInt8
     {
         return new UInt8($this->memory[$addr->value]);
     }

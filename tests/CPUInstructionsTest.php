@@ -12,13 +12,53 @@ use PHPUnit\Framework\TestCase;
 
 final class CPUInstructionsTest extends TestCase
 {
-    public function testLDA(): void
+    public function testLDAImmediate(): void
     {
         $CPU = new CPU;
         $CPU->load([Opcodes::LDA, 0x05, Opcodes::BRK]);
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
+    public function testLDAZeroPage(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xA5, 0x05, Opcodes::BRK]);
+        $CPU->writeMemory(new UInt16(0x05), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
+    public function testLDAZeroPageX(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xB5, 0x05, Opcodes::BRK]);
+        $CPU->setRegisterX(new UInt8(0x01));
+        $CPU->writeMemory(new UInt16(0x06), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
+        $this->assertSame($CPU->getFlagZ(), false);
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
+    }
+
+    public function testLDAIndirectX(): void
+    {
+        $CPU = new CPU;
+        $CPU->load([0xA1, 0x00, Opcodes::BRK]);
+        $CPU->setRegisterX(new UInt8(0x01));
+        $CPU->writeMemory(new UInt16(0x01), new UInt8(0x05));
+        $CPU->writeMemory(new UInt16(0x02), new UInt8(0x07));
+        $CPU->writeMemory(new UInt16(0x0705), new UInt8(0x11));
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterA()->value, 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }
