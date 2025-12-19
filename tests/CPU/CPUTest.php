@@ -11,7 +11,7 @@ use App\CPU\Opcode\OpcodeCollection;
 use App\UInt16;
 use PHPUnit\Framework\TestCase;
 
-final class CPUInstructionsTest extends TestCase
+final class CPUTest extends TestCase
 {
     public function test5opcodes(): void
     {
