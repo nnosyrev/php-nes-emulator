@@ -3,10 +3,11 @@
 
 use App\CPU\CPU;
 use App\CPU\Instruction\InstructionFactory;
+use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$CPU = new CPU(new OpcodeCollection(), new InstructionFactory());
+$CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
 $CPU->load([0xa9, 0x05, 0x00]);
 $CPU->run();
