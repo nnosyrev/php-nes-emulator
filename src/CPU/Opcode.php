@@ -29,9 +29,8 @@ final class Opcode
         private int $code,
         private string $instructionClass,
         private int $length,
-        private string $modeClass
-    ) {
-    }
+        private string $modeClass,
+    ) {}
 
     public function getInstructionClass(): string
     {
@@ -88,4 +87,3 @@ final class Opcode
         Opcode::add(0x00, BRK::class, 1, NoneMode::class);
     }
 }
-
