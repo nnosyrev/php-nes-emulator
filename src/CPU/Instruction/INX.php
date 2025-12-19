@@ -7,7 +7,7 @@ namespace App\CPU\Instruction;
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
 
-final class INX
+final class INX implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {

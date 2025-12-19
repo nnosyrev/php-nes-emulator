@@ -8,7 +8,7 @@ use App\CPU\CPU;
 use App\CPU\Exception\BreakException;
 use App\CPU\Mode\ModeInterface;
 
-final class BRK
+final class BRK implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {

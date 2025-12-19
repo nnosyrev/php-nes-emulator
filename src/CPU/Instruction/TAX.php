@@ -7,7 +7,7 @@ namespace App\CPU\Instruction;
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
 
-final class TAX
+final class TAX implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
