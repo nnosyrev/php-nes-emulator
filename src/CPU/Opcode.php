@@ -33,7 +33,7 @@ final class Opcode
     ) {
     }
 
-    public function getinstructionClass(): string
+    public function getInstructionClass(): string
     {
         return $this->instructionClass;
     }
