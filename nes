@@ -2,12 +2,10 @@
 <?php
 
 use App\CPU\CPU;
-use App\CPU\Opcode;
+use App\CPU\Opcode\OpcodeCollection;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-Opcode::setUp();
-
-$CPU = new CPU();
+$CPU = new CPU(new OpcodeCollection());
 $CPU->load([0xa9, 0x05, 0x00]);
 $CPU->run();

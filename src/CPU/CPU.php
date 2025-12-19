@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CPU;
 
 use App\CPU\Exception\BreakException;
+use App\CPU\Opcode\OpcodeCollection;
 use App\UInt16;
 use App\UInt8;
 
@@ -29,6 +30,10 @@ final class CPU
 
     private array $memory = [];
 
+    public function __construct(
+        private readonly OpcodeCollection $opcodeCollection
+    ) {}
+
     public function load(array $program): void
     {
         $this->PC = new UInt16(self::PRG_ROM_START);
@@ -49,20 +54,17 @@ final class CPU
 
             $this->incrementPC();
 
-            $opcode = Opcode::get($code->value);
+            $opcode = $this->opcodeCollection->get($code->value);
 
-            $modeClass = $opcode->getModeClass();
-            $instructionClass = $opcode->getInstructionClass();
-
-            $instruction = new $instructionClass();
+            $instruction = new $opcode->instructionClass();
 
             try {
-                $instruction->execute($this, new $modeClass());
+                $instruction->execute($this, new $opcode->modeClass());
             } catch (BreakException $e) {
                 return;
             }
 
-            $this->addToPC(new UInt8($opcode->getLenght() - 1));
+            $this->addToPC(new UInt8($opcode->length - 1));
         }
     }
 
