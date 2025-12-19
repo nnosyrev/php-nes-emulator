@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CPU;
 
+use App\CPU\Exception\BreakException;
 use App\UInt16;
 use App\UInt8;
 
@@ -44,159 +45,43 @@ final class CPU
     public function run(): void
     {
         while (true) {
-            $opcode = $this->readMemory($this->PC);
+            $code = $this->readMemory($this->PC);
 
             $this->incrementPC();
 
-            if ($opcode->value === Opcodes::LDA) {
-                // LDA Immediate
-                $param = $this->readMemory($this->PC);
+            $opcode = Opcode::get($code->value);
 
-                $this->incrementPC();
+            $modeClass = $opcode->getModeClass();
+            $instructionClass = $opcode->getInstructionClass();
 
-                $this->setRegisterA($param);
-            } elseif ($opcode->value === 0xA5) {
-                // LDA zero page
-                $param = $this->readMemory($this->PC);
-                $value = $this->readMemory($param->toUInt16());
+            $instruction = new $instructionClass();
 
-                $this->incrementPC();
-
-                $this->setRegisterA($value);
-            } elseif ($opcode->value === 0xB5) {
-                // LDA zero page, X
-                $param = $this->readMemory($this->PC);
-                $value = $this->readMemory($param->add($this->getRegisterX())->toUInt16());
-
-                $this->incrementPC();
-
-                $this->setRegisterA($value);
-            } elseif ($opcode->value === 0xA1) {
-                // LDA Indirect X
-                $param = $this->readMemory($this->PC);
-
-                $ptr = $param->add($this->getRegisterX())->toUInt16();
-
-                $low = $this->readMemory($ptr);
-                $high = $this->readMemory($ptr->increment());
-
-                $result = ($high->value << 8) | $low->value;
-
-                $resValue = $this->readMemory(new UInt16($result));
-
-                $this->incrementPC();
-
-                $this->setRegisterA($resValue);
-            } elseif ($opcode->value === 0xB1) {
-                // LDA Indirect Y
-                $param = $this->readMemory($this->PC);
-
-                $ptr = $param->toUInt16();
-
-                $low = $this->readMemory($ptr);
-                $high = $this->readMemory($ptr->increment());
-
-                $result = ($high->value << 8) | $low->value;
-
-                $addr = (new UInt16($result))->add($this->getRegisterY());
-
-                $resValue = $this->readMemory($addr);
-
-                $this->incrementPC();
-
-                $this->setRegisterA($resValue);
-            } elseif ($opcode->value === 0xAD) {
-                // LDA Absolute
-                $param = $this->readMemoryUInt16($this->PC);
-
-                $resValue = $this->readMemory($param);
-
-                $this->incrementPC();
-                $this->incrementPC();
-
-                $this->setRegisterA($resValue);
-            } elseif ($opcode->value === 0xBD) {
-                // LDA Absolute X
-                $param = $this->readMemoryUInt16($this->PC);
-
-                $resValue = $this->readMemory($param->add($this->getRegisterX()));
-
-                $this->incrementPC();
-                $this->incrementPC();
-
-                $this->setRegisterA($resValue);
-            } elseif ($opcode->value === 0xB9) {
-                // LDA Absolute Y
-                $param = $this->readMemoryUInt16($this->PC);
-
-                $resValue = $this->readMemory($param->add($this->getRegisterY()));
-
-                $this->incrementPC();
-                $this->incrementPC();
-
-                $this->setRegisterA($resValue);
-            } elseif ($opcode->value === Opcodes::LDX) {
-                // LDX Immediate
-                $param = $this->readMemory($this->PC);
-
-                $this->incrementPC();
-
-                $this->setRegisterX($param);
-            } elseif ($opcode->value === 0xA6) {
-                // LDX Zero page
-                $param = $this->readMemory($this->PC);
-                $value = $this->readMemory($param->toUInt16());
-
-                $this->incrementPC();
-
-                $this->setRegisterX($value);
-            } elseif ($opcode->value === 0xB6) {
-                // LDX Zero page Y
-                $param = $this->readMemory($this->PC);
-                $value = $this->readMemory($param->add($this->getRegisterY())->toUInt16());
-
-                $this->incrementPC();
-
-                $this->setRegisterX($value);
-            } elseif ($opcode->value === 0xAE) {
-                // LDX Absolute
-                $param = $this->readMemoryUInt16($this->PC);
-
-                $resValue = $this->readMemory($param);
-
-                $this->incrementPC();
-                $this->incrementPC();
-
-                $this->setRegisterX($resValue);
-            } elseif ($opcode->value === 0xBE) {
-                // LDX Absolute Y
-                $param = $this->readMemoryUInt16($this->PC);
-
-                $resValue = $this->readMemory($param->add($this->getRegisterY()));
-
-                $this->incrementPC();
-                $this->incrementPC();
-
-                $this->setRegisterX($resValue);
-            } elseif ($opcode->value === Opcodes::TAX) {
-                // TAX
-                $this->setRegisterX($this->getRegisterA());
-            } elseif ($opcode->value === Opcodes::INX) {
-                // INX
-                $byte = $this->getRegisterX();
-                $this->setRegisterX($byte->increment());
-            } elseif ($opcode->value === Opcodes::BRK) {
+            try {
+                $instruction->execute($this, new $modeClass());
+            } catch (BreakException $e) {
                 return;
             }
+
+            $this->addToPC(new UInt8($opcode->getLenght() - 1));
         }
     }
 
-    private function incrementPC(): void
+    public function getPC(): UInt16
+    {
+        return $this->PC;
+    }
+
+    public function incrementPC(): void
     {
         $this->PC = $this->PC->increment();
     }
 
-    private function setRegisterA(UInt8 $byte): void
+    public function addToPC(UInt8 $add): void
+    {
+        $this->PC = $this->PC->add($add);
+    }
+
+    public function setRegisterA(UInt8 $byte): void
     {
         $this->registerA = $byte;
 
