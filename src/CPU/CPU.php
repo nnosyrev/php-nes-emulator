@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CPU;
 
 use App\CPU\Exception\BreakException;
+use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\UInt16;
 use App\UInt8;
@@ -31,7 +32,8 @@ final class CPU
     private array $memory = [];
 
     public function __construct(
-        private readonly OpcodeCollection $opcodeCollection
+        private readonly OpcodeCollection $opcodeCollection,
+        private readonly InstructionFactory $instructionFactory,
     ) {}
 
     public function load(array $program): void
@@ -56,7 +58,7 @@ final class CPU
 
             $opcode = $this->opcodeCollection->get($code->value);
 
-            $instruction = new $opcode->instructionClass();
+            $instruction = $this->instructionFactory->make($opcode->instructionClass);
 
             try {
                 $instruction->execute($this, new $opcode->modeClass());
