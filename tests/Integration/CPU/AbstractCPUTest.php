@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\CPU;
+namespace App\Tests\Integration\CPU;
 
 use App\CPU\CPU;
 use App\CPU\Instruction\InstructionFactory;

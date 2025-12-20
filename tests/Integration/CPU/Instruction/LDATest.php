@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\CPU\Instruction;
+namespace App\Tests\Integration\CPU\Instruction;
 
-use App\Tests\CPU\AbstractCPUTest;
+use App\Tests\Integration\CPU\AbstractCPUTest;
 use App\UInt16;
 use App\UInt8;
 
