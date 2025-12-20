@@ -6,6 +6,7 @@ namespace App\CPU\Opcode;
 
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
+use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
@@ -69,6 +70,15 @@ final class OpcodeCollection
         $this->add(0x19, ORA::class, 3, AbsoluteYMode::class);
         $this->add(0x01, ORA::class, 2, IndirectXMode::class);
         $this->add(0x11, ORA::class, 2, IndirectYMode::class);
+
+        $this->add(0x49, EOR::class, 2, ImmediateMode::class);
+        $this->add(0x45, EOR::class, 2, ZeroPageMode::class);
+        $this->add(0x55, EOR::class, 2, ZeroPageXMode::class);
+        $this->add(0x4D, EOR::class, 3, AbsoluteMode::class);
+        $this->add(0x5D, EOR::class, 3, AbsoluteXMode::class);
+        $this->add(0x59, EOR::class, 3, AbsoluteYMode::class);
+        $this->add(0x41, EOR::class, 2, IndirectXMode::class);
+        $this->add(0x51, EOR::class, 2, IndirectYMode::class);
 
         $this->add(0xA9, LDA::class, 2, ImmediateMode::class);
         $this->add(0xA5, LDA::class, 2, ZeroPageMode::class);

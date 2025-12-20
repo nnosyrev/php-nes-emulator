@@ -41,9 +41,16 @@ final class UInt8
         return new self($newValue);
     }
 
-    public function or(UInt8 $and): self
+    public function or(UInt8 $or): self
     {
-        $newValue = $this->value | $and->value;
+        $newValue = $this->value | $or->value;
+
+        return new self($newValue);
+    }
+
+    public function xor(UInt8 $xor): self
+    {
+        $newValue = $this->value ^ $xor->value;
 
         return new self($newValue);
     }
