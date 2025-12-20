@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CPU\Opcode;
 
+use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\LDA;
@@ -50,6 +51,15 @@ final class OpcodeCollection
 
     private function setUp(): void
     {
+        $this->add(0x29, ANDI::class, 2, ImmediateMode::class);
+        $this->add(0x25, ANDI::class, 2, ZeroPageMode::class);
+        $this->add(0x35, ANDI::class, 2, ZeroPageXMode::class);
+        $this->add(0x2D, ANDI::class, 3, AbsoluteMode::class);
+        $this->add(0x3D, ANDI::class, 3, AbsoluteXMode::class);
+        $this->add(0x39, ANDI::class, 3, AbsoluteYMode::class);
+        $this->add(0x21, ANDI::class, 2, IndirectXMode::class);
+        $this->add(0x31, ANDI::class, 2, IndirectYMode::class);
+
         $this->add(0xA9, LDA::class, 2, ImmediateMode::class);
         $this->add(0xA5, LDA::class, 2, ZeroPageMode::class);
         $this->add(0xB5, LDA::class, 2, ZeroPageXMode::class);

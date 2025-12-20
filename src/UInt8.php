@@ -34,6 +34,13 @@ final class UInt8
         return new self($newValue);
     }
 
+    public function and(UInt8 $and): self
+    {
+        $newValue = $this->value & $and->value;
+
+        return new self($newValue);
+    }
+
     public function toUInt16(): UInt16
     {
         return new UInt16($this->value);
