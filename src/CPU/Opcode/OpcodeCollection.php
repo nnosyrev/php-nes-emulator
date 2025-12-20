@@ -9,6 +9,7 @@ use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
+use App\CPU\Instruction\ORA;
 use App\CPU\Instruction\TAX;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
@@ -59,6 +60,15 @@ final class OpcodeCollection
         $this->add(0x39, ANDI::class, 3, AbsoluteYMode::class);
         $this->add(0x21, ANDI::class, 2, IndirectXMode::class);
         $this->add(0x31, ANDI::class, 2, IndirectYMode::class);
+
+        $this->add(0x09, ORA::class, 2, ImmediateMode::class);
+        $this->add(0x05, ORA::class, 2, ZeroPageMode::class);
+        $this->add(0x15, ORA::class, 2, ZeroPageXMode::class);
+        $this->add(0x0D, ORA::class, 3, AbsoluteMode::class);
+        $this->add(0x1D, ORA::class, 3, AbsoluteXMode::class);
+        $this->add(0x19, ORA::class, 3, AbsoluteYMode::class);
+        $this->add(0x01, ORA::class, 2, IndirectXMode::class);
+        $this->add(0x11, ORA::class, 2, IndirectYMode::class);
 
         $this->add(0xA9, LDA::class, 2, ImmediateMode::class);
         $this->add(0xA5, LDA::class, 2, ZeroPageMode::class);
