@@ -27,4 +27,5 @@ return (new Config())
             // ->ignoreDotFiles(false) // true by default in v3, false in v4 or future mode
             // ->ignoreVCS(true) // true by default
     )
+    ->setCacheFile('.cache/.php-cs-fixer.cache')
 ;
