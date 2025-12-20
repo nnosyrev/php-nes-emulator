@@ -118,6 +118,9 @@ final class CPU
     public function setRegisterY(UInt8 $byte): void
     {
         $this->registerY = $byte;
+
+        $this->setFlagZByValue($this->getRegisterY());
+        $this->setFlagNByValue($this->getRegisterY());
     }
 
     public function getRegisterY(): UInt8
