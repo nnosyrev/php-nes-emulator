@@ -1,5 +1,5 @@
 # Use the official PHP CLI image as the base
-FROM php:8.1-cli
+FROM php:8.1.34-cli
 
 # Set environment variables for user and group ID
 ARG UID=1000
@@ -60,6 +60,8 @@ USER www
 
 # Set the working directory
 WORKDIR /var/www
+
+ENV PATH="$PATH:/var/www/vendor/bin"
 
 # Override the entrypoint to avoid the default php entrypoint
 ENTRYPOINT []
