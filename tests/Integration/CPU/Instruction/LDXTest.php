@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\CPU\Instruction;
+namespace Tests\Integration\CPU\Instruction;
 
-use App\Tests\Integration\CPU\AbstractCPUTest;
 use App\UInt16;
 use App\UInt8;
+use Tests\Integration\CPU\AbstractCPUTest;
 
 final class LDXTest extends AbstractCPUTest
 {

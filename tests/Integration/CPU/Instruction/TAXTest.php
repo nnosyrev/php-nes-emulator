@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\CPU\Instruction;
+namespace Tests\Integration\CPU\Instruction;
 
-use App\Tests\Integration\CPU\AbstractCPUTest;
+use Tests\Integration\CPU\AbstractCPUTest;
 
 final class TAXTest extends AbstractCPUTest
 {

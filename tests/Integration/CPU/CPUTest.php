@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration\CPU;
+namespace Tests\Integration\CPU;
 
 final class CPUTest extends AbstractCPUTest
 {
