@@ -7,12 +7,14 @@ namespace App\CPU\Opcode;
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\EOR;
+use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
 use App\CPU\Instruction\ORA;
+use App\CPU\Instruction\STA;
 use App\CPU\Instruction\TAX;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
@@ -105,6 +107,19 @@ final class OpcodeCollection
 
         $this->add(0xE8, INX::class, 1, NoneMode::class);
         $this->add(0xC8, INY::class, 1, NoneMode::class);
+
+        $this->add(0xE6, INC::class, 2, ZeroPageMode::class);
+        $this->add(0xF6, INC::class, 2, ZeroPageXMode::class);
+        $this->add(0xEE, INC::class, 3, AbsoluteMode::class);
+        $this->add(0xFE, INC::class, 3, AbsoluteXMode::class);
+
+        $this->add(0x85, STA::class, 2, ZeroPageMode::class);
+        $this->add(0x95, STA::class, 2, ZeroPageXMode::class);
+        $this->add(0x8D, STA::class, 3, AbsoluteMode::class);
+        $this->add(0x9D, STA::class, 3, AbsoluteXMode::class);
+        $this->add(0x99, STA::class, 3, AbsoluteYMode::class);
+        $this->add(0x81, STA::class, 2, IndirectXMode::class);
+        $this->add(0x91, STA::class, 2, IndirectYMode::class);
 
         $this->add(0xAA, TAX::class, 1, NoneMode::class);
         $this->add(0x00, BRK::class, 1, NoneMode::class);

@@ -93,8 +93,7 @@ final class CPU
     {
         $this->registerA = $byte;
 
-        $this->setFlagZByValue($this->getRegisterA());
-        $this->setFlagNByValue($this->getRegisterA());
+        $this->setFlagsZNByValue($this->getRegisterA());
     }
 
     public function getRegisterA(): UInt8
@@ -106,8 +105,7 @@ final class CPU
     {
         $this->registerX = $byte;
 
-        $this->setFlagZByValue($this->getRegisterX());
-        $this->setFlagNByValue($this->getRegisterX());
+        $this->setFlagsZNByValue($this->getRegisterX());
     }
 
     public function getRegisterX(): UInt8
@@ -119,8 +117,7 @@ final class CPU
     {
         $this->registerY = $byte;
 
-        $this->setFlagZByValue($this->getRegisterY());
-        $this->setFlagNByValue($this->getRegisterY());
+        $this->setFlagsZNByValue($this->getRegisterY());
     }
 
     public function getRegisterY(): UInt8
@@ -156,6 +153,12 @@ final class CPU
     public function getFlagN(): bool
     {
         return $this->flagN;
+    }
+
+    public function setFlagsZNByValue(UInt8 $value): void
+    {
+        $this->setFlagZByValue($value);
+        $this->setFlagNByValue($value);
     }
 
     public function writeMemory(UInt16 $addr, UInt8 $data): void
