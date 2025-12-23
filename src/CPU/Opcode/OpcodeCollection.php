@@ -21,6 +21,9 @@ use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
 use App\CPU\Instruction\ORA;
+use App\CPU\Instruction\SEC;
+use App\CPU\Instruction\SED;
+use App\CPU\Instruction\SEI;
 use App\CPU\Instruction\STA;
 use App\CPU\Instruction\TAX;
 use App\CPU\Mode\AbsoluteMode;
@@ -143,5 +146,9 @@ final class OpcodeCollection
         $this->add(0xD8, CLD::class, 1, NoneMode::class);
         $this->add(0x58, CLI::class, 1, NoneMode::class);
         $this->add(0xB8, CLV::class, 1, NoneMode::class);
+
+        $this->add(0x38, SEC::class, 1, NoneMode::class);
+        $this->add(0xF8, SED::class, 1, NoneMode::class);
+        $this->add(0x78, SEI::class, 1, NoneMode::class);
     }
 }
