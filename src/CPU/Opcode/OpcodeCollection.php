@@ -6,6 +6,10 @@ namespace App\CPU\Opcode;
 
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
+use App\CPU\Instruction\CLC;
+use App\CPU\Instruction\CLD;
+use App\CPU\Instruction\CLI;
+use App\CPU\Instruction\CLV;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
@@ -134,5 +138,10 @@ final class OpcodeCollection
 
         $this->add(0xAA, TAX::class, 1, NoneMode::class);
         $this->add(0x00, BRK::class, 1, NoneMode::class);
+
+        $this->add(0x18, CLC::class, 1, NoneMode::class);
+        $this->add(0xD8, CLD::class, 1, NoneMode::class);
+        $this->add(0x58, CLI::class, 1, NoneMode::class);
+        $this->add(0xB8, CLV::class, 1, NoneMode::class);
     }
 }

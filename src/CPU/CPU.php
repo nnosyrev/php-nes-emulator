@@ -125,6 +125,46 @@ final class CPU
         return $this->registerY;
     }
 
+    public function getFlagC(): bool
+    {
+        return $this->flagC;
+    }
+
+    public function setFlagC(bool $flagC): void
+    {
+        $this->flagC = $flagC;
+    }
+
+    public function getFlagD(): bool
+    {
+        return $this->flagD;
+    }
+
+    public function setFlagD(bool $flagD): void
+    {
+        $this->flagD = $flagD;
+    }
+
+    public function getFlagI(): bool
+    {
+        return $this->flagI;
+    }
+
+    public function setFlagI(bool $flagI): void
+    {
+        $this->flagI = $flagI;
+    }
+
+    public function getFlagV(): bool
+    {
+        return $this->flagV;
+    }
+
+    public function setFlagV(bool $flagV): void
+    {
+        $this->flagV = $flagV;
+    }
+
     private function setFlagZ(bool $flagZ): void
     {
         $this->flagZ = $flagZ;
