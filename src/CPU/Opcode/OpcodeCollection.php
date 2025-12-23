@@ -8,6 +8,7 @@ use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
+use App\CPU\Instruction\DEY;
 use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
@@ -111,6 +112,7 @@ final class OpcodeCollection
         $this->add(0xC8, INY::class, 1, NoneMode::class);
 
         $this->add(0xCA, DEX::class, 1, NoneMode::class);
+        $this->add(0x88, DEY::class, 1, NoneMode::class);
 
         $this->add(0xE6, INC::class, 2, ZeroPageMode::class);
         $this->add(0xF6, INC::class, 2, ZeroPageXMode::class);

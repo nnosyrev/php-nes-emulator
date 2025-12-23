@@ -8,7 +8,7 @@ use Tests\Integration\CPU\AbstractCPUTest;
 
 final class DEXTest extends AbstractCPUTest
 {
-    public function testINX(): void
+    public function testDEX(): void
     {
         $CPU = $this->CPU;
         $CPU->load([0xA2, 0x05, 0xCA, 0x00]);
@@ -19,7 +19,7 @@ final class DEXTest extends AbstractCPUTest
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
 
-    public function testINXOverflow(): void
+    public function testDEXOverflow(): void
     {
         $CPU = $this->CPU;
         $CPU->load([0xA2, 0x01, 0xCA, 0xCA, 0x00]);
