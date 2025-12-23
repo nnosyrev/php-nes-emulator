@@ -26,6 +26,7 @@ use App\CPU\Instruction\SED;
 use App\CPU\Instruction\SEI;
 use App\CPU\Instruction\STA;
 use App\CPU\Instruction\STX;
+use App\CPU\Instruction\STY;
 use App\CPU\Instruction\TAX;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
@@ -143,6 +144,10 @@ final class OpcodeCollection
         $this->add(0x86, STX::class, 2, ZeroPageMode::class);
         $this->add(0x96, STX::class, 2, ZeroPageYMode::class);
         $this->add(0x8E, STX::class, 3, AbsoluteMode::class);
+
+        $this->add(0x84, STY::class, 2, ZeroPageMode::class);
+        $this->add(0x94, STY::class, 2, ZeroPageXMode::class);
+        $this->add(0x8C, STY::class, 3, AbsoluteMode::class);
 
         $this->add(0xAA, TAX::class, 1, NoneMode::class);
         $this->add(0x00, BRK::class, 1, NoneMode::class);
