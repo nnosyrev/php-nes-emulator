@@ -27,6 +27,13 @@ final class UInt8
         return new self($newValue);
     }
 
+    public function decrement(): self
+    {
+        $newValue = $this->mod($this->value - 1 + 256);
+
+        return new self($newValue);
+    }
+
     public function add(UInt8 $add): self
     {
         $newValue = $this->mod($this->value + $add->value);

@@ -6,6 +6,7 @@ namespace App\CPU\Opcode;
 
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BRK;
+use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
@@ -112,6 +113,11 @@ final class OpcodeCollection
         $this->add(0xF6, INC::class, 2, ZeroPageXMode::class);
         $this->add(0xEE, INC::class, 3, AbsoluteMode::class);
         $this->add(0xFE, INC::class, 3, AbsoluteXMode::class);
+
+        $this->add(0xC6, DEC::class, 2, ZeroPageMode::class);
+        $this->add(0xD6, DEC::class, 2, ZeroPageXMode::class);
+        $this->add(0xCE, DEC::class, 3, AbsoluteMode::class);
+        $this->add(0xDE, DEC::class, 3, AbsoluteXMode::class);
 
         $this->add(0x85, STA::class, 2, ZeroPageMode::class);
         $this->add(0x95, STA::class, 2, ZeroPageXMode::class);
