@@ -8,6 +8,8 @@ use Exception;
 
 final class UInt8
 {
+    private const BASE = 256;
+
     public function __construct(public readonly int $value)
     {
         self::validate($value);
@@ -29,7 +31,7 @@ final class UInt8
 
     public function decrement(): self
     {
-        $newValue = $this->mod($this->value - 1 + 256);
+        $newValue = $this->mod($this->value - 1 + self::BASE);
 
         return new self($newValue);
     }
@@ -69,6 +71,6 @@ final class UInt8
 
     private function mod(int $value): int
     {
-        return $value % 256;
+        return $value % self::BASE;
     }
 }
