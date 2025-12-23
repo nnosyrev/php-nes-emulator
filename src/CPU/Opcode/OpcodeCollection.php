@@ -29,6 +29,7 @@ use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
+use App\CPU\Instruction\TXA;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
 use App\CPU\Mode\AbsoluteYMode;
@@ -152,6 +153,8 @@ final class OpcodeCollection
 
         $this->add(0xAA, TAX::class, 1, NoneMode::class);
         $this->add(0xA8, TAY::class, 1, NoneMode::class);
+        $this->add(0x8A, TXA::class, 1, NoneMode::class);
+
         $this->add(0x00, BRK::class, 1, NoneMode::class);
 
         $this->add(0x18, CLC::class, 1, NoneMode::class);
