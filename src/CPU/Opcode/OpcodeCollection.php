@@ -29,6 +29,7 @@ use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
+use App\CPU\Instruction\TSX;
 use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
 use App\CPU\Instruction\TYA;
@@ -170,5 +171,6 @@ final class OpcodeCollection
         $this->add(0x78, SEI::class, 1, NoneMode::class);
 
         $this->add(0x9A, TXS::class, 1, NoneMode::class);
+        $this->add(0xBA, TSX::class, 1, NoneMode::class);
     }
 }
