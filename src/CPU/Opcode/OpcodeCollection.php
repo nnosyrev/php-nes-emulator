@@ -20,6 +20,7 @@ use App\CPU\Instruction\INY;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
+use App\CPU\Instruction\NOP;
 use App\CPU\Instruction\ORA;
 use App\CPU\Instruction\PHA;
 use App\CPU\Instruction\PLA;
@@ -177,5 +178,7 @@ final class OpcodeCollection
 
         $this->add(0x68, PLA::class, 1, NoneMode::class);
         $this->add(0x48, PHA::class, 1, NoneMode::class);
+
+        $this->add(0xEA, NOP::class, 1, NoneMode::class);
     }
 }
