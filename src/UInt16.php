@@ -8,6 +8,8 @@ use Exception;
 
 final class UInt16
 {
+    private const BASE = 65536;
+
     public function __construct(public readonly int $value)
     {
         if ($value < 0 || $value > 65535) {
@@ -22,6 +24,13 @@ final class UInt16
         return new self($newValue);
     }
 
+    public function decrement(): self
+    {
+        $newValue = $this->mod($this->value - 1 + self::BASE);
+
+        return new self($newValue);
+    }
+
     public function add(UInt8 $add): self
     {
         $newValue = $this->mod($this->value + $add->value);
@@ -31,6 +40,6 @@ final class UInt16
 
     private function mod(int $value): int
     {
-        return $value % 65536;
+        return $value % self::BASE;
     }
 }

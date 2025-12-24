@@ -14,6 +14,8 @@ use App\UInt8;
 final class CPU
 {
     private const PRG_ROM_START = 0x8000;
+    private const STACK_START = 0x0100;
+    private const SP_END = 0xFF;
 
     private UInt8 $registerA;
     private UInt8 $registerX;
@@ -27,7 +29,7 @@ final class CPU
     private bool $flagV;
     private bool $flagN;
 
-    private int $SP;
+    private UInt8 $SP;
     private UInt16 $PC;
 
     private array $memory = [];
@@ -41,6 +43,7 @@ final class CPU
     public function load(array $program): void
     {
         $this->PC = new UInt16(self::PRG_ROM_START);
+        $this->SP = new UInt8(self::SP_END);
 
         $current = self::PRG_ROM_START;
         foreach ($program as &$byte) {
@@ -72,6 +75,16 @@ final class CPU
 
             $this->addToPC(new UInt8($opcode->length - 1));
         }
+    }
+
+    public function setSP(UInt8 $data): void
+    {
+        $this->SP = $data;
+    }
+
+    public function getSP(): UInt8
+    {
+        return $this->SP;
     }
 
     public function getPC(): UInt16
@@ -228,5 +241,19 @@ final class CPU
         $res = ($high << 8) | $low;
 
         return new UInt16($res);
+    }
+
+    public function pushToStack(UInt8 $data): void
+    {
+        $this->writeMemory((new UInt16(self::STACK_START))->add($this->SP), $data);
+
+        $this->SP = $this->SP->decrement();
+    }
+
+    public function popFromStack(): UInt8
+    {
+        $this->SP = $this->SP->increment();
+
+        return $this->readMemory((new UInt16(self::STACK_START))->add($this->SP));
     }
 }
