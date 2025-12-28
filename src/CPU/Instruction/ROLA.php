@@ -7,19 +7,16 @@ namespace App\CPU\Instruction;
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
 
-final class ROL extends ROLAbstract
+final class ROLA extends ROLAbstract
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
-
-        $old = $CPU->readMemory($addr);
+        $old = $CPU->getRegisterA();
 
         $new = $this->getNew($CPU, $old);
 
         $this->setFlagC($CPU, $old);
 
-        $CPU->setFlagsZNByValue($new);
-        $CPU->writeMemory($addr, $new);
+        $CPU->setRegisterA($new);
     }
 }
