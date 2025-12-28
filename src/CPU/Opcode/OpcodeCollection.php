@@ -26,6 +26,8 @@ use App\CPU\Instruction\PHA;
 use App\CPU\Instruction\PLA;
 use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
+use App\CPU\Instruction\ROR;
+use App\CPU\Instruction\RORA;
 use App\CPU\Instruction\SEC;
 use App\CPU\Instruction\SED;
 use App\CPU\Instruction\SEI;
@@ -183,11 +185,16 @@ final class OpcodeCollection
 
         $this->add(0xEA, NOP::class, 1, NoneMode::class);
 
+        $this->add(0x2A, ROLA::class, 1, NoneMode::class);
         $this->add(0x26, ROL::class, 2, ZeroPageMode::class);
         $this->add(0x36, ROL::class, 2, ZeroPageXMode::class);
         $this->add(0x2E, ROL::class, 3, AbsoluteMode::class);
         $this->add(0x3E, ROL::class, 3, AbsoluteXMode::class);
 
-        $this->add(0x2A, ROLA::class, 1, NoneMode::class);
+        $this->add(0x6A, RORA::class, 1, NoneMode::class);
+        $this->add(0x66, ROR::class, 2, ZeroPageMode::class);
+        $this->add(0x76, ROR::class, 2, ZeroPageXMode::class);
+        $this->add(0x6E, ROR::class, 3, AbsoluteMode::class);
+        $this->add(0x7E, ROR::class, 3, AbsoluteXMode::class);
     }
 }
