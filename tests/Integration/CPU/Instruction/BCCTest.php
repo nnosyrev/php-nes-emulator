@@ -19,4 +19,16 @@ final class BCCTest extends AbstractCPUTest
 
         $this->assertSame($CPU->getRegisterX()->value, 0x06);
     }
+
+    public function testBCCFlagCIsTrue(): void
+    {
+        $CPU = $this->CPU;
+        $CPU->setFlagC(true);
+        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0x90, 0xFA, 0x00]);
+        $CPU->incrementPC();
+        $CPU->incrementPC();
+        $CPU->run();
+
+        $this->assertSame($CPU->getRegisterX()->value, 0x05);
+    }
 }
