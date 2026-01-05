@@ -7,6 +7,7 @@ namespace App\CPU\Opcode;
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
+use App\CPU\Instruction\BEQ;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\CLC;
 use App\CPU\Instruction\CLD;
@@ -201,5 +202,6 @@ final class OpcodeCollection
 
         $this->add(0x90, BCC::class, 2, NoneMode::class);
         $this->add(0xB0, BCS::class, 2, NoneMode::class);
+        $this->add(0xF0, BEQ::class, 2, NoneMode::class);
     }
 }

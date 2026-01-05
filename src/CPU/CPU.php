@@ -184,7 +184,7 @@ final class CPU
         $this->flagV = $flagV;
     }
 
-    private function setFlagZ(bool $flagZ): void
+    public function setFlagZ(bool $flagZ): void
     {
         $this->flagZ = $flagZ;
     }
