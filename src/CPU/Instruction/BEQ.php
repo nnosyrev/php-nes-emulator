@@ -9,14 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class BEQ implements InstructionInterface
 {
+    use BranchTrait;
+
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        if ($cpu->getFlagZ()) {
-            $displacement = $cpu->readMemory($cpu->getPC())->toInt8();
-
-            $cpu
-                ->incrementPC()
-                ->addToPC($displacement);
-        }
+        $this->branch($cpu->getFlagZ(), $cpu);
     }
 }

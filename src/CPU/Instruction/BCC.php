@@ -9,14 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class BCC implements InstructionInterface
 {
+    use BranchTrait;
+
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        if (!$cpu->getFlagC()) {
-            $displacement = $cpu->readMemory($cpu->getPC())->toInt8();
-
-            $cpu
-                ->incrementPC()
-                ->addToPC($displacement);
-        }
+        $this->branch(!$cpu->getFlagC(), $cpu);
     }
 }
