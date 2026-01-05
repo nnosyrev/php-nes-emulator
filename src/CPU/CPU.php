@@ -8,6 +8,7 @@ use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
+use App\Int8;
 use App\UInt16;
 use App\UInt8;
 
@@ -60,6 +61,7 @@ final class CPU
             $code = $this->readMemory($this->PC);
 
             $this->incrementPC();
+            $pcOld = $this->getPC();
 
             $opcode = $this->opcodeCollection->get($code->value);
 
@@ -73,7 +75,9 @@ final class CPU
                 return;
             }
 
-            $this->addToPC(new UInt8($opcode->length - 1));
+            if ($this->getPC() === $pcOld) {
+                $this->addToPC(new UInt8($opcode->length - 1));
+            }
         }
     }
 
@@ -92,12 +96,14 @@ final class CPU
         return $this->PC;
     }
 
-    public function incrementPC(): void
+    public function incrementPC(): self
     {
         $this->PC = $this->PC->increment();
+
+        return $this;
     }
 
-    public function addToPC(UInt8 $add): void
+    public function addToPC(UInt8|Int8 $add): void
     {
         $this->PC = $this->PC->add($add);
     }

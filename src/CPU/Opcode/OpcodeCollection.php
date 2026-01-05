@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CPU\Opcode;
 
 use App\CPU\Instruction\ANDI;
+use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\CLC;
 use App\CPU\Instruction\CLD;
@@ -196,5 +197,7 @@ final class OpcodeCollection
         $this->add(0x76, ROR::class, 2, ZeroPageXMode::class);
         $this->add(0x6E, ROR::class, 3, AbsoluteMode::class);
         $this->add(0x7E, ROR::class, 3, AbsoluteXMode::class);
+
+        $this->add(0x90, BCC::class, 2, NoneMode::class);
     }
 }

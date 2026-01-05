@@ -31,7 +31,7 @@ final class UInt16
         return new self($newValue);
     }
 
-    public function add(UInt8 $add): self
+    public function add(UInt8|Int8 $add): self
     {
         $newValue = $this->mod($this->value + $add->value);
 
