@@ -9,7 +9,5 @@ use App\CPU\Mode\ModeInterface;
 
 final class NOP implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
-    {
-    }
+    public function execute(CPU $CPU, ModeInterface $mode): void {}
 }
