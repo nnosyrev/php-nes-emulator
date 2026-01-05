@@ -20,7 +20,7 @@ final class BVSTest extends AbstractCPUTest
         $this->assertSame($CPU->getRegisterX()->value, 0x06);
     }
 
-    public function testBVSFlagCIsFalse(): void
+    public function testBVSFlagVIsFalse(): void
     {
         $CPU = $this->CPU;
         $CPU->setFlagV(false);
