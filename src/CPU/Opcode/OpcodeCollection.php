@@ -11,6 +11,7 @@ use App\CPU\Instruction\BEQ;
 use App\CPU\Instruction\BNE;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\BVC;
+use App\CPU\Instruction\BVS;
 use App\CPU\Instruction\CLC;
 use App\CPU\Instruction\CLD;
 use App\CPU\Instruction\CLI;
@@ -207,5 +208,6 @@ final class OpcodeCollection
         $this->add(0xF0, BEQ::class, 2, NoneMode::class);
         $this->add(0xD0, BNE::class, 2, NoneMode::class);
         $this->add(0x50, BVC::class, 2, NoneMode::class);
+        $this->add(0x70, BVS::class, 2, NoneMode::class);
     }
 }
