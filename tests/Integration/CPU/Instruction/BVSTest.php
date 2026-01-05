@@ -8,7 +8,7 @@ use Tests\Integration\CPU\AbstractCPUTest;
 
 final class BVSTest extends AbstractCPUTest
 {
-    public function testBVC(): void
+    public function testBVS(): void
     {
         $CPU = $this->CPU;
         $CPU->setFlagV(true);
@@ -20,7 +20,7 @@ final class BVSTest extends AbstractCPUTest
         $this->assertSame($CPU->getRegisterX()->value, 0x06);
     }
 
-    public function testBVCFlagCIsFalse(): void
+    public function testBVSFlagCIsFalse(): void
     {
         $CPU = $this->CPU;
         $CPU->setFlagV(false);
