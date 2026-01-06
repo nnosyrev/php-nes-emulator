@@ -19,6 +19,7 @@ use App\CPU\Instruction\CLD;
 use App\CPU\Instruction\CLI;
 use App\CPU\Instruction\CLV;
 use App\CPU\Instruction\CMP;
+use App\CPU\Instruction\CPX;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
@@ -223,5 +224,9 @@ final class OpcodeCollection
         $this->add(0xD9, CMP::class, 3, AbsoluteYMode::class);
         $this->add(0xC1, CMP::class, 2, IndirectXMode::class);
         $this->add(0xD1, CMP::class, 2, IndirectYMode::class);
+
+        $this->add(0xE0, CPX::class, 2, ImmediateMode::class);
+        $this->add(0xE4, CPX::class, 2, ZeroPageMode::class);
+        $this->add(0xEC, CPX::class, 3, AbsoluteMode::class);
     }
 }
