@@ -8,6 +8,7 @@ use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
+use App\CPU\Instruction\BMI;
 use App\CPU\Instruction\BNE;
 use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\BVC;
@@ -209,5 +210,6 @@ final class OpcodeCollection
         $this->add(0xD0, BNE::class, 2, NoneMode::class);
         $this->add(0x50, BVC::class, 2, NoneMode::class);
         $this->add(0x70, BVS::class, 2, NoneMode::class);
+        $this->add(0x30, BMI::class, 2, NoneMode::class);
     }
 }
