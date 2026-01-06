@@ -36,6 +36,7 @@ use App\CPU\Instruction\ORA;
 use App\CPU\Instruction\PHA;
 use App\CPU\Instruction\PHP;
 use App\CPU\Instruction\PLA;
+use App\CPU\Instruction\PLP;
 use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
 use App\CPU\Instruction\ROR;
@@ -236,5 +237,6 @@ final class OpcodeCollection
         $this->add(0xCC, CPY::class, 3, AbsoluteMode::class);
 
         $this->add(0x08, PHP::class, 1, NoneMode::class);
+        $this->add(0x28, PLP::class, 1, NoneMode::class);
     }
 }

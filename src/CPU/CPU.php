@@ -245,6 +245,19 @@ final class CPU
         return new UInt8(bindec($all));
     }
 
+    public function setFlagsFromUInt8(UInt8 $uint8): void
+    {
+        $value = $uint8->value;
+
+        $this->setFlagN(($value & 0b10000000) === 0b10000000);
+        $this->setFlagV(($value & 0b01000000) === 0b01000000);
+        $this->setFlagB(($value & 0b00010000) === 0b00010000);
+        $this->setFlagD(($value & 0b00001000) === 0b00001000);
+        $this->setFlagI(($value & 0b00000100) === 0b00000100);
+        $this->setFlagZ(($value & 0b00000010) === 0b00000010);
+        $this->setFlagC(($value & 0b00000001) === 0b00000001);
+    }
+
     public function writeMemory(UInt16 $addr, UInt8 $data): void
     {
         $this->memory[$addr->value] = $data->value;
