@@ -11,7 +11,6 @@ final class BMITest extends AbstractCPUTest
     public function testBMI(): void
     {
         $CPU = $this->CPU;
-        $CPU->setFlagV(true);
         $CPU->load([0xE8, 0x00, 0xA2, 0b11110010, 0x30, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
@@ -23,7 +22,6 @@ final class BMITest extends AbstractCPUTest
     public function testBMIFlagNIsFalse(): void
     {
         $CPU = $this->CPU;
-        $CPU->setFlagV(false);
         $CPU->load([0xE8, 0x00, 0xA2, 0b01110010, 0x30, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
