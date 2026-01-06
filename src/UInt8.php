@@ -43,6 +43,13 @@ final class UInt8
         return new self($newValue);
     }
 
+    public function subtract(UInt8 $sub): self
+    {
+        $newValue = $this->mod($this->value - $sub->value + self::BASE);
+
+        return new self($newValue);
+    }
+
     public function and(UInt8 $and): self
     {
         $newValue = $this->value & $and->value;
