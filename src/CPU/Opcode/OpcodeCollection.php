@@ -34,6 +34,7 @@ use App\CPU\Instruction\LDY;
 use App\CPU\Instruction\NOP;
 use App\CPU\Instruction\ORA;
 use App\CPU\Instruction\PHA;
+use App\CPU\Instruction\PHP;
 use App\CPU\Instruction\PLA;
 use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
@@ -233,5 +234,7 @@ final class OpcodeCollection
         $this->add(0xC0, CPY::class, 2, ImmediateMode::class);
         $this->add(0xC4, CPY::class, 2, ZeroPageMode::class);
         $this->add(0xCC, CPY::class, 3, AbsoluteMode::class);
+
+        $this->add(0x08, PHP::class, 1, NoneMode::class);
     }
 }

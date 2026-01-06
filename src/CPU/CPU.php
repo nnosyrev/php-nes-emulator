@@ -184,6 +184,16 @@ final class CPU
         $this->flagV = $flagV;
     }
 
+    public function getFlagB(): bool
+    {
+        return $this->flagB;
+    }
+
+    public function setFlagB(bool $flagB): void
+    {
+        $this->flagB = $flagB;
+    }
+
     public function setFlagZ(bool $flagZ): void
     {
         $this->flagZ = $flagZ;
@@ -199,7 +209,7 @@ final class CPU
         return $this->flagZ;
     }
 
-    private function setFlagN(bool $flagN): void
+    public function setFlagN(bool $flagN): void
     {
         $this->flagN = $flagN;
     }
@@ -218,6 +228,21 @@ final class CPU
     {
         $this->setFlagZByValue($value);
         $this->setFlagNByValue($value);
+    }
+
+    public function getFlagsAsUInt8(): UInt8
+    {
+        $all = '';
+        $all .= $this->getFlagN() ? '1' : '0';
+        $all .= $this->getFlagV() ? '1' : '0';
+        $all .= '0';
+        $all .= $this->getFlagB() ? '1' : '0';
+        $all .= $this->getFlagD() ? '1' : '0';
+        $all .= $this->getFlagI() ? '1' : '0';
+        $all .= $this->getFlagZ() ? '1' : '0';
+        $all .= $this->getFlagC() ? '1' : '0';
+
+        return new UInt8(bindec($all));
     }
 
     public function writeMemory(UInt16 $addr, UInt8 $data): void
