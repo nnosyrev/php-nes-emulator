@@ -11,6 +11,6 @@ final class NoneMode implements ModeInterface
 {
     public function getOperandAddress(CPU $CPU): UInt16
     {
-        return new UInt16(0);
+        throw new \Exception('Something went wrong.');
     }
 }
