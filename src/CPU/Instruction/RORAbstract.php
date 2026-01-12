@@ -11,12 +11,10 @@ abstract class RORAbstract implements InstructionInterface
 {
     protected function getNew(CPU $CPU, UInt8 $old): UInt8
     {
-        $old = $old->value;
+        $newValue = $old->shiftToRight(1)->value;
+        $newValue = $CPU->getFlagC() ? $newValue | 0b10000000 : $newValue & 0b01111111;
 
-        $new = $old >> 1;
-        $new = $CPU->getFlagC() ? $new | 0b10000000 : $new & 0b01111111;
-
-        return new UInt8($new);
+        return new UInt8($newValue);
     }
 
     // TODO: !!!

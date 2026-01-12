@@ -11,12 +11,10 @@ abstract class ROLAbstract implements InstructionInterface
 {
     protected function getNew(CPU $CPU, UInt8 $old): UInt8
     {
-        $old = $old->value;
+        $newValue = $old->shiftToLeft(1)->value;
+        $newValue = $CPU->getFlagC() ? $newValue | 0b00000001 : $newValue & 0b11111110;
 
-        $new = $old << 1;
-        $new = $CPU->getFlagC() ? $new | 0b00000001 : $new & 0b11111110;
-
-        return new UInt8($new);
+        return new UInt8($newValue);
     }
 
     // TODO: !!!
