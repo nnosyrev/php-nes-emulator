@@ -71,6 +71,20 @@ final class UInt8
         return new self($newValue);
     }
 
+    public function shiftToLeft(int $bits): self
+    {
+        $newValue = $this->mod($this->value << $bits);
+
+        return new self($newValue);
+    }
+
+    public function shiftToRight(int $bits): self
+    {
+        $newValue = $this->value >> $bits;
+
+        return new self($newValue);
+    }
+
     public function toUInt16(): UInt16
     {
         return new UInt16($this->value);

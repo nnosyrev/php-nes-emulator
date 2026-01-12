@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\CPU\Opcode;
 
 use App\CPU\Instruction\ANDI;
+use App\CPU\Instruction\ASL;
+use App\CPU\Instruction\ASLA;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
@@ -238,5 +240,11 @@ final class OpcodeCollection
 
         $this->add(0x08, PHP::class, 1, NoneMode::class);
         $this->add(0x28, PLP::class, 1, NoneMode::class);
+
+        $this->add(0x0A, ASLA::class, 1, NoneMode::class);
+        $this->add(0x06, ASL::class, 2, ZeroPageMode::class);
+        $this->add(0x16, ASL::class, 2, ZeroPageXMode::class);
+        $this->add(0x0E, ASL::class, 3, AbsoluteMode::class);
+        $this->add(0x1E, ASL::class, 3, AbsoluteXMode::class);
     }
 }
