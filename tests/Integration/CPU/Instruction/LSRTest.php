@@ -9,7 +9,7 @@ use Tests\Integration\CPU\AbstractCPUTest;
 
 final class LSRTest extends AbstractCPUTest
 {
-    public function testROR(): void
+    public function testLSR(): void
     {
         $CPU = $this->CPU;
         $CPU->load([0xA9, 0b00010100, 0x85, 0x02, 0x46, 0x02, 0x00]);
@@ -21,7 +21,7 @@ final class LSRTest extends AbstractCPUTest
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->readMemory(new UInt16(0x02))));
     }
 
-    public function testRORA(): void
+    public function testLSRA(): void
     {
         $CPU = $this->CPU;
         $CPU->load([0xA9, 0b00010101, 0x4A, 0x00]);
