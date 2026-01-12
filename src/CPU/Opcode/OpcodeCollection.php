@@ -33,6 +33,8 @@ use App\CPU\Instruction\INY;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
+use App\CPU\Instruction\LSR;
+use App\CPU\Instruction\LSRA;
 use App\CPU\Instruction\NOP;
 use App\CPU\Instruction\ORA;
 use App\CPU\Instruction\PHA;
@@ -246,5 +248,11 @@ final class OpcodeCollection
         $this->add(0x16, ASL::class, 2, ZeroPageXMode::class);
         $this->add(0x0E, ASL::class, 3, AbsoluteMode::class);
         $this->add(0x1E, ASL::class, 3, AbsoluteXMode::class);
+
+        $this->add(0x4A, LSRA::class, 1, NoneMode::class);
+        $this->add(0x46, LSR::class, 2, ZeroPageMode::class);
+        $this->add(0x56, LSR::class, 2, ZeroPageXMode::class);
+        $this->add(0x4E, LSR::class, 3, AbsoluteMode::class);
+        $this->add(0x5E, LSR::class, 3, AbsoluteXMode::class);
     }
 }
