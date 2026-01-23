@@ -30,6 +30,7 @@ use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
+use App\CPU\Instruction\JMP;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
@@ -61,6 +62,7 @@ use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
 use App\CPU\Mode\AbsoluteYMode;
 use App\CPU\Mode\ImmediateMode;
+use App\CPU\Mode\IndirectMode;
 use App\CPU\Mode\IndirectXMode;
 use App\CPU\Mode\IndirectYMode;
 use App\CPU\Mode\NoneMode;
@@ -254,5 +256,8 @@ final class OpcodeCollection
         $this->add(0x56, LSR::class, 2, ZeroPageXMode::class);
         $this->add(0x4E, LSR::class, 3, AbsoluteMode::class);
         $this->add(0x5E, LSR::class, 3, AbsoluteXMode::class);
+
+        $this->add(0x4C, JMP::class, 3, AbsoluteMode::class);
+        $this->add(0x6C, JMP::class, 3, IndirectMode::class);
     }
 }

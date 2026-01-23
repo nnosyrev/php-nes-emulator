@@ -96,6 +96,13 @@ final class CPU
         return $this->PC;
     }
 
+    public function setPC(UInt16 $new): self
+    {
+        $this->PC = $new;
+
+        return $this;
+    }
+
     public function incrementPC(): self
     {
         $this->PC = $this->PC->increment();
