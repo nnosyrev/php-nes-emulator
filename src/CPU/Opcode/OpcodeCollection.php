@@ -31,6 +31,7 @@ use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
 use App\CPU\Instruction\JMP;
+use App\CPU\Instruction\JSR;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
@@ -259,5 +260,7 @@ final class OpcodeCollection
 
         $this->add(0x4C, JMP::class, 3, AbsoluteMode::class);
         $this->add(0x6C, JMP::class, 3, IndirectMode::class);
+
+        $this->add(0x20, JSR::class, 3, AbsoluteMode::class);
     }
 }

@@ -307,4 +307,23 @@ final class CPU
 
         return $this->readMemory((new UInt16(self::STACK_START))->add($this->SP));
     }
+
+    public function pushToStackUInt16(UInt16 $data): void
+    {
+        $high = $data->value >> 8;
+        $low = $data->value & 0xFF;
+
+        $this->pushToStack(new UInt8($high));
+        $this->pushToStack(new UInt8($low));
+    }
+
+    public function popFromStackUInt16(): UInt16
+    {
+        $low = $this->popFromStack();
+        $high = $this->popFromStack();
+
+        $res = ($high->value << 8) | $low->value;
+
+        return new UInt16($res);
+    }
 }
