@@ -10,7 +10,7 @@ use Tests\Integration\CPU\CPUTestTrait;
 final class BMITest extends TestCase
 {
     use CPUTestTrait;
-    
+
     public function testBMI(): void
     {
         $CPU = $this->CPU;
