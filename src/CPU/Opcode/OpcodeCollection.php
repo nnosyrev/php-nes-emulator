@@ -47,6 +47,7 @@ use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
 use App\CPU\Instruction\ROR;
 use App\CPU\Instruction\RORA;
+use App\CPU\Instruction\RTS;
 use App\CPU\Instruction\SEC;
 use App\CPU\Instruction\SED;
 use App\CPU\Instruction\SEI;
@@ -262,5 +263,6 @@ final class OpcodeCollection
         $this->add(0x6C, JMP::class, 3, IndirectMode::class);
 
         $this->add(0x20, JSR::class, 3, AbsoluteMode::class);
+        $this->add(0x60, RTS::class, 1, NoneMode::class);
     }
 }
