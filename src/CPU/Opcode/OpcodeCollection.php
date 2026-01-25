@@ -10,6 +10,7 @@ use App\CPU\Instruction\ASLA;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
+use App\CPU\Instruction\BIT;
 use App\CPU\Instruction\BMI;
 use App\CPU\Instruction\BNE;
 use App\CPU\Instruction\BPL;
@@ -264,5 +265,8 @@ final class OpcodeCollection
 
         $this->add(0x20, JSR::class, 3, AbsoluteMode::class);
         $this->add(0x60, RTS::class, 1, NoneMode::class);
+
+        $this->add(0x24, BIT::class, 2, ZeroPageMode::class);
+        $this->add(0x2C, BIT::class, 3, AbsoluteMode::class);
     }
 }

@@ -206,7 +206,7 @@ final class CPU
         $this->flagZ = $flagZ;
     }
 
-    private function setFlagZByValue(UInt8 $byte): void
+    public function setFlagZByValue(UInt8 $byte): void
     {
         $this->setFlagZ($byte->value === 0);
     }
@@ -221,7 +221,7 @@ final class CPU
         $this->flagN = $flagN;
     }
 
-    private function setFlagNByValue(UInt8 $byte): void
+    public function setFlagNByValue(UInt8 $byte): void
     {
         $this->setFlagN(($byte->value & 0b10000000) === 0b10000000);
     }
