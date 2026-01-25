@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class ASLTest extends AbstractCPUTest
+final class ASLTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testASL(): void
     {
         $CPU = $this->CPU;

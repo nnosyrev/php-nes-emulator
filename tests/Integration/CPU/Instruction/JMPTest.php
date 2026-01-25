@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class JMPTest extends AbstractCPUTest
+final class JMPTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testJMPAbsolute(): void
     {
         $CPU = $this->CPU;

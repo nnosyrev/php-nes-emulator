@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class LSRTest extends AbstractCPUTest
+final class LSRTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testLSR(): void
     {
         $CPU = $this->CPU;

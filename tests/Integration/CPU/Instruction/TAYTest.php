@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class TAYTest extends AbstractCPUTest
+final class TAYTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testTAY(): void
     {
         $CPU = $this->CPU;

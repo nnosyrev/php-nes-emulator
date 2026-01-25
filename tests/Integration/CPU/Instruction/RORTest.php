@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class RORTest extends AbstractCPUTest
+final class RORTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testROR(): void
     {
         $CPU = $this->CPU;

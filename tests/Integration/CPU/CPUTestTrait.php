@@ -9,11 +9,10 @@ use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\UInt8;
-use PHPUnit\Framework\TestCase;
 
-abstract class AbstractCPUTest extends TestCase
+trait CPUTestTrait
 {
-    protected CPU $CPU;
+    private CPU $CPU;
 
     protected function setUp(): void
     {

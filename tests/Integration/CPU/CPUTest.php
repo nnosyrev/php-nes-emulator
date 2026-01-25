@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU;
 
-final class CPUTest extends AbstractCPUTest
+use PHPUnit\Framework\TestCase;
+
+final class CPUTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function test5opcodes(): void
     {
         $CPU = $this->CPU;

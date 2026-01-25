@@ -6,10 +6,13 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
 use App\UInt8;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class ANDTest extends AbstractCPUTest
+final class ANDTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testANDImmediate(): void
     {
         $CPU = $this->CPU;

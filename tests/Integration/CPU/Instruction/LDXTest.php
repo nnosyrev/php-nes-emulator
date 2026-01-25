@@ -6,10 +6,13 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
 use App\UInt8;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class LDXTest extends AbstractCPUTest
+final class LDXTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testLDX(): void
     {
         $CPU = $this->CPU;

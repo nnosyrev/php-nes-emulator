@@ -6,10 +6,13 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt16;
 use App\UInt8;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class STXTest extends AbstractCPUTest
+final class STXTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testSTXZeroPage(): void
     {
         $CPU = $this->CPU;

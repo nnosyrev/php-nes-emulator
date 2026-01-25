@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use App\UInt8;
-use Tests\Integration\CPU\AbstractCPUTest;
+use PHPUnit\Framework\TestCase;
+use Tests\Integration\CPU\CPUTestTrait;
 
-final class PLPTest extends AbstractCPUTest
+final class PLPTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testPLPTrue(): void
     {
         $CPU = $this->CPU;
