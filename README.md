@@ -1,2 +1,4 @@
 
-Just another nes emulator. In PHP!
+# NES Emulator
+
+Just another nes emulator. Written in PHP! 🤯
