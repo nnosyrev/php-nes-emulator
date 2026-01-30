@@ -21,7 +21,9 @@ final class ADCTest extends TestCase
         $result = 0x05 + 0xA1 + 1;
 
         $this->assertSame($CPU->getRegisterA()->value, $result);
+        // @phpstan-ignore greater.alwaysFalse
         $this->assertSame($CPU->getFlagC(), $result > 0xFF);
+        // @phpstan-ignore notIdentical.alwaysFalse
         $this->assertSame($CPU->getFlagV(), ((0xA1 ^ $result) & ($result ^ 0x05) & 0x80) !== 0);
     }
 
@@ -35,7 +37,9 @@ final class ADCTest extends TestCase
         $result = 0xC8 + 0xDC;
 
         $this->assertSame($CPU->getRegisterA()->value, $result % 256);
+        // @phpstan-ignore greater.alwaysTrue
         $this->assertSame($CPU->getFlagC(), $result > 0xFF);
+        // @phpstan-ignore notIdentical.alwaysFalse
         $this->assertSame($CPU->getFlagV(), ((0xDC ^ $result) & ($result ^ 0xC8) & 0x80) !== 0);
     }
 }
