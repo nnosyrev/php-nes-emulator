@@ -50,6 +50,7 @@ use App\CPU\Instruction\ROLA;
 use App\CPU\Instruction\ROR;
 use App\CPU\Instruction\RORA;
 use App\CPU\Instruction\RTS;
+use App\CPU\Instruction\SBC;
 use App\CPU\Instruction\SEC;
 use App\CPU\Instruction\SED;
 use App\CPU\Instruction\SEI;
@@ -278,5 +279,14 @@ final class OpcodeCollection
         $this->add(0x79, ADC::class, 3, AbsoluteYMode::class);
         $this->add(0x61, ADC::class, 2, IndirectXMode::class);
         $this->add(0x71, ADC::class, 2, IndirectYMode::class);
+
+        $this->add(0xE9, SBC::class, 2, ImmediateMode::class);
+        $this->add(0xE5, SBC::class, 2, ZeroPageMode::class);
+        $this->add(0xF5, SBC::class, 2, ZeroPageXMode::class);
+        $this->add(0xED, SBC::class, 3, AbsoluteMode::class);
+        $this->add(0xFD, SBC::class, 3, AbsoluteXMode::class);
+        $this->add(0xF9, SBC::class, 3, AbsoluteYMode::class);
+        $this->add(0xE1, SBC::class, 2, IndirectXMode::class);
+        $this->add(0xF1, SBC::class, 2, IndirectYMode::class);
     }
 }
