@@ -20,9 +20,7 @@ final class SBCTest extends TestCase
 
         $result = 0xA1 - 0x05 - 1;
 
-        $this->assertSame($CPU->getRegisterA()->value, $result);
-        $this->assertSame($CPU->getFlagC(), !($result > 0xFF));
-        $this->assertSame($CPU->getFlagV(), ((0x05 ^ $result) & ($result ^ 0xA1) & 0x80) !== 0);
+        $this->assertValues($result);
     }
 
     public function testSBCImmediateOverflow(): void
@@ -33,6 +31,13 @@ final class SBCTest extends TestCase
         $CPU->run();
 
         $result = (0x05 - 0xA1 + 256) % 256;
+
+        $this->assertValues($result);
+    }
+
+    private function assertValues(int $result): void
+    {
+        $CPU = $this->CPU;
 
         $this->assertSame($CPU->getRegisterA()->value, $result);
         $this->assertSame($CPU->getFlagC(), !($result > 0xFF));
