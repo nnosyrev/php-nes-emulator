@@ -49,6 +49,7 @@ use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
 use App\CPU\Instruction\ROR;
 use App\CPU\Instruction\RORA;
+use App\CPU\Instruction\RTI;
 use App\CPU\Instruction\RTS;
 use App\CPU\Instruction\SBC;
 use App\CPU\Instruction\SEC;
@@ -288,5 +289,7 @@ final class OpcodeCollection
         $this->add(0xF9, SBC::class, 3, AbsoluteYMode::class);
         $this->add(0xE1, SBC::class, 2, IndirectXMode::class);
         $this->add(0xF1, SBC::class, 2, IndirectYMode::class);
+
+        $this->add(0x40, RTI::class, 1, NoneMode::class);
     }
 }
