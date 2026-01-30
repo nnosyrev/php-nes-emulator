@@ -66,7 +66,6 @@ final class CPU
             $opcode = $this->opcodeCollection->get($code->value);
 
             $instruction = $this->instructionFactory->make($opcode->instructionClass);
-
             $mode = $this->modeFactory->make($opcode->modeClass);
 
             try {

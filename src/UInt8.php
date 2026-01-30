@@ -22,6 +22,11 @@ final class UInt8
         }
     }
 
+    public static function createFromUInt16(UInt16 $uInt16): self
+    {
+        return new self($uInt16->value % self::BASE);
+    }
+
     public function increment(): self
     {
         $newValue = $this->mod($this->value + 1);

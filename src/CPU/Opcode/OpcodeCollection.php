@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CPU\Opcode;
 
+use App\CPU\Instruction\ADC;
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\ASL;
 use App\CPU\Instruction\ASLA;
@@ -268,5 +269,14 @@ final class OpcodeCollection
 
         $this->add(0x24, BIT::class, 2, ZeroPageMode::class);
         $this->add(0x2C, BIT::class, 3, AbsoluteMode::class);
+
+        $this->add(0x69, ADC::class, 2, ImmediateMode::class);
+        $this->add(0x65, ADC::class, 2, ZeroPageMode::class);
+        $this->add(0x75, ADC::class, 2, ZeroPageXMode::class);
+        $this->add(0x6D, ADC::class, 3, AbsoluteMode::class);
+        $this->add(0x7D, ADC::class, 3, AbsoluteXMode::class);
+        $this->add(0x79, ADC::class, 3, AbsoluteYMode::class);
+        $this->add(0x61, ADC::class, 2, IndirectXMode::class);
+        $this->add(0x71, ADC::class, 2, IndirectYMode::class);
     }
 }

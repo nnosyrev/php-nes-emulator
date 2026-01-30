@@ -45,6 +45,11 @@ final class UInt16
         return new self($newValue);
     }
 
+    public function toUInt8(): UInt8
+    {
+        return UInt8::createFromUInt16($this);
+    }
+
     private function mod(int $value): int
     {
         return $value % self::BASE;
