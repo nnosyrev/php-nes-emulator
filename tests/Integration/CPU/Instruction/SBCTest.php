@@ -18,29 +18,34 @@ final class SBCTest extends TestCase
         $CPU->load([0xA9, 0xA1, 0xE9, 0x05, 0x00]);
         $CPU->run();
 
-        $result = 0xA1 - 0x05 - 1;
+        $result = 0xA1 + (0x05 ^ 0xFF);
 
-        $this->assertValues($result);
+        // @phpstan-ignore greater.alwaysTrue
+        $this->assertSame($CPU->getFlagC(), $result > 0xFF);
+
+        $result = $result % 256;
+
+        $this->assertSame($CPU->getRegisterA()->value, $result);
+        // @phpstan-ignore notIdentical.alwaysFalse
+        $this->assertSame($CPU->getFlagV(), ((0xA1 ^ $result) & ($result ^ (0x05 ^ 0xFF)) & 0x80) !== 0);
     }
 
-    public function testSBCImmediateOverflow(): void
+    public function testSBCImmediate2(): void
     {
         $CPU = $this->CPU;
         $CPU->setFlagC(true);
         $CPU->load([0xA9, 0x05, 0xE9, 0xA1, 0x00]);
         $CPU->run();
 
-        $result = (0x05 - 0xA1 + 256) % 256;
+        $result = 0x05 + (0xA1 ^ 0xFF) + 1;
 
-        $this->assertValues($result);
-    }
+        // @phpstan-ignore greater.alwaysFalse
+        $this->assertSame($CPU->getFlagC(), $result > 0xFF);
 
-    private function assertValues(int $result): void
-    {
-        $CPU = $this->CPU;
+        $result = $result % 256;
 
         $this->assertSame($CPU->getRegisterA()->value, $result);
-        $this->assertSame($CPU->getFlagC(), !($result > 0xFF));
-        $this->assertSame($CPU->getFlagV(), ((0xA1 ^ $result) & ($result ^ 0x05) & 0x80) !== 0);
+        // @phpstan-ignore notIdentical.alwaysFalse
+        $this->assertSame($CPU->getFlagV(), (((0xA1 ^ 0xFF) ^ $result) & ($result ^ 0x05) & 0x80) !== 0);
     }
 }
