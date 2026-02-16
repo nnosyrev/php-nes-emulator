@@ -61,6 +61,7 @@ use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
+use App\CPU\Instruction\TOP;
 use App\CPU\Instruction\TSX;
 use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
@@ -309,5 +310,13 @@ final class OpcodeCollection
         $this->add(0xD4, DOP::class, 2, ZeroPageXMode::class);
         $this->add(0xE2, DOP::class, 2, ImmediateMode::class);
         $this->add(0xF4, DOP::class, 2, ZeroPageXMode::class);
+
+        $this->add(0x0C, TOP::class, 3, AbsoluteMode::class);
+        $this->add(0x1C, TOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x3C, TOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x5C, TOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x7C, TOP::class, 3, AbsoluteXMode::class);
+        $this->add(0xDC, TOP::class, 3, AbsoluteXMode::class);
+        $this->add(0xFC, TOP::class, 3, AbsoluteXMode::class);
     }
 }
