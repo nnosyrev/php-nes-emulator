@@ -28,6 +28,7 @@ use App\CPU\Instruction\CPY;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
+use App\CPU\Instruction\DOP;
 use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
@@ -291,5 +292,22 @@ final class OpcodeCollection
         $this->add(0xF1, SBC::class, 2, IndirectYMode::class);
 
         $this->add(0x40, RTI::class, 1, NoneMode::class);
+
+        // Unofficial CPU instructions:
+
+        $this->add(0x04, DOP::class, 2, ZeroPageMode::class);
+        $this->add(0x14, DOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x34, DOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x44, DOP::class, 2, ZeroPageMode::class);
+        $this->add(0x54, DOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x64, DOP::class, 2, ZeroPageMode::class);
+        $this->add(0x74, DOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x80, DOP::class, 2, ImmediateMode::class);
+        $this->add(0x82, DOP::class, 2, ImmediateMode::class);
+        $this->add(0x89, DOP::class, 2, ImmediateMode::class);
+        $this->add(0xC2, DOP::class, 2, ImmediateMode::class);
+        $this->add(0xD4, DOP::class, 2, ZeroPageXMode::class);
+        $this->add(0xE2, DOP::class, 2, ImmediateMode::class);
+        $this->add(0xF4, DOP::class, 2, ZeroPageXMode::class);
     }
 }
