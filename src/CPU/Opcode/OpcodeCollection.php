@@ -327,5 +327,12 @@ final class OpcodeCollection
         $this->add(0x5B, SRE::class, 3, AbsoluteYMode::class);
         $this->add(0x43, SRE::class, 2, IndirectXMode::class);
         $this->add(0x53, SRE::class, 2, IndirectYMode::class);
+
+        $this->add(0x1A, NOP::class, 1, NoneMode::class);
+        $this->add(0x3A, NOP::class, 1, NoneMode::class);
+        $this->add(0x5A, NOP::class, 1, NoneMode::class);
+        $this->add(0x7A, NOP::class, 1, NoneMode::class);
+        $this->add(0xDA, NOP::class, 1, NoneMode::class);
+        $this->add(0xFA, NOP::class, 1, NoneMode::class);
     }
 }
