@@ -56,6 +56,7 @@ use App\CPU\Instruction\SBC;
 use App\CPU\Instruction\SEC;
 use App\CPU\Instruction\SED;
 use App\CPU\Instruction\SEI;
+use App\CPU\Instruction\SRE;
 use App\CPU\Instruction\STA;
 use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
@@ -318,5 +319,13 @@ final class OpcodeCollection
         $this->add(0x7C, TOP::class, 3, AbsoluteXMode::class);
         $this->add(0xDC, TOP::class, 3, AbsoluteXMode::class);
         $this->add(0xFC, TOP::class, 3, AbsoluteXMode::class);
+
+        $this->add(0x47, SRE::class, 2, ZeroPageMode::class);
+        $this->add(0x57, SRE::class, 2, ZeroPageXMode::class);
+        $this->add(0x4F, SRE::class, 3, AbsoluteMode::class);
+        $this->add(0x5F, SRE::class, 3, AbsoluteXMode::class);
+        $this->add(0x5B, SRE::class, 3, AbsoluteYMode::class);
+        $this->add(0x43, SRE::class, 2, IndirectXMode::class);
+        $this->add(0x53, SRE::class, 2, IndirectYMode::class);
     }
 }
