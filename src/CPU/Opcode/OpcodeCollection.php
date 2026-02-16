@@ -35,6 +35,7 @@ use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
 use App\CPU\Instruction\JMP;
 use App\CPU\Instruction\JSR;
+use App\CPU\Instruction\LAX;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
 use App\CPU\Instruction\LDY;
@@ -334,5 +335,12 @@ final class OpcodeCollection
         $this->add(0x7A, NOP::class, 1, NoneMode::class);
         $this->add(0xDA, NOP::class, 1, NoneMode::class);
         $this->add(0xFA, NOP::class, 1, NoneMode::class);
+
+        $this->add(0xA7, LAX::class, 2, ZeroPageMode::class);
+        $this->add(0xB7, LAX::class, 2, ZeroPageYMode::class);
+        $this->add(0xAF, LAX::class, 3, AbsoluteMode::class);
+        $this->add(0xBF, LAX::class, 3, AbsoluteYMode::class);
+        $this->add(0xA3, LAX::class, 2, IndirectXMode::class);
+        $this->add(0xB3, LAX::class, 2, IndirectYMode::class);
     }
 }
