@@ -298,28 +298,30 @@ final class OpcodeCollection
 
         // Unofficial CPU instructions:
 
-        $this->add(0x04, DOP::class, 2, ZeroPageMode::class);
-        $this->add(0x14, DOP::class, 2, ZeroPageXMode::class);
-        $this->add(0x34, DOP::class, 2, ZeroPageXMode::class);
-        $this->add(0x44, DOP::class, 2, ZeroPageMode::class);
-        $this->add(0x54, DOP::class, 2, ZeroPageXMode::class);
-        $this->add(0x64, DOP::class, 2, ZeroPageMode::class);
-        $this->add(0x74, DOP::class, 2, ZeroPageXMode::class);
-        $this->add(0x80, DOP::class, 2, ImmediateMode::class);
-        $this->add(0x82, DOP::class, 2, ImmediateMode::class);
-        $this->add(0x89, DOP::class, 2, ImmediateMode::class);
-        $this->add(0xC2, DOP::class, 2, ImmediateMode::class);
-        $this->add(0xD4, DOP::class, 2, ZeroPageXMode::class);
-        $this->add(0xE2, DOP::class, 2, ImmediateMode::class);
-        $this->add(0xF4, DOP::class, 2, ZeroPageXMode::class);
+        // DOP
+        $this->add(0x04, NOP::class, 2, ZeroPageMode::class);
+        $this->add(0x14, NOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x34, NOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x44, NOP::class, 2, ZeroPageMode::class);
+        $this->add(0x54, NOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x64, NOP::class, 2, ZeroPageMode::class);
+        $this->add(0x74, NOP::class, 2, ZeroPageXMode::class);
+        $this->add(0x80, NOP::class, 2, ImmediateMode::class);
+        $this->add(0x82, NOP::class, 2, ImmediateMode::class);
+        $this->add(0x89, NOP::class, 2, ImmediateMode::class);
+        $this->add(0xC2, NOP::class, 2, ImmediateMode::class);
+        $this->add(0xD4, NOP::class, 2, ZeroPageXMode::class);
+        $this->add(0xE2, NOP::class, 2, ImmediateMode::class);
+        $this->add(0xF4, NOP::class, 2, ZeroPageXMode::class);
 
-        $this->add(0x0C, TOP::class, 3, AbsoluteMode::class);
-        $this->add(0x1C, TOP::class, 3, AbsoluteXMode::class);
-        $this->add(0x3C, TOP::class, 3, AbsoluteXMode::class);
-        $this->add(0x5C, TOP::class, 3, AbsoluteXMode::class);
-        $this->add(0x7C, TOP::class, 3, AbsoluteXMode::class);
-        $this->add(0xDC, TOP::class, 3, AbsoluteXMode::class);
-        $this->add(0xFC, TOP::class, 3, AbsoluteXMode::class);
+        // TOP
+        $this->add(0x0C, NOP::class, 3, AbsoluteMode::class);
+        $this->add(0x1C, NOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x3C, NOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x5C, NOP::class, 3, AbsoluteXMode::class);
+        $this->add(0x7C, NOP::class, 3, AbsoluteXMode::class);
+        $this->add(0xDC, NOP::class, 3, AbsoluteXMode::class);
+        $this->add(0xFC, NOP::class, 3, AbsoluteXMode::class);
 
         $this->add(0x47, SRE::class, 2, ZeroPageMode::class);
         $this->add(0x57, SRE::class, 2, ZeroPageXMode::class);
