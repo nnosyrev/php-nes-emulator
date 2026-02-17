@@ -30,7 +30,6 @@ use App\CPU\Instruction\CPY;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
-use App\CPU\Instruction\DOP;
 use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
@@ -65,7 +64,6 @@ use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
-use App\CPU\Instruction\TOP;
 use App\CPU\Instruction\TSX;
 use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
@@ -367,5 +365,8 @@ final class OpcodeCollection
 
         $this->add(0x0B, AAC::class, 2, ImmediateMode::class);
         $this->add(0x2B, AAC::class, 2, ImmediateMode::class);
+
+        // ATX
+        $this->add(0xAB, LAX::class, 2, ImmediateMode::class);
     }
 }
