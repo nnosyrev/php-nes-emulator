@@ -27,6 +27,7 @@ use App\CPU\Instruction\CLV;
 use App\CPU\Instruction\CMP;
 use App\CPU\Instruction\CPX;
 use App\CPU\Instruction\CPY;
+use App\CPU\Instruction\DCP;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
@@ -368,5 +369,13 @@ final class OpcodeCollection
 
         // ATX
         $this->add(0xAB, LAX::class, 2, ImmediateMode::class);
+
+        $this->add(0xC7, DCP::class, 2, ZeroPageMode::class);
+        $this->add(0xD7, DCP::class, 2, ZeroPageXMode::class);
+        $this->add(0xCF, DCP::class, 3, AbsoluteMode::class);
+        $this->add(0xDF, DCP::class, 3, AbsoluteXMode::class);
+        $this->add(0xDB, DCP::class, 3, AbsoluteYMode::class);
+        $this->add(0xC3, DCP::class, 2, IndirectXMode::class);
+        $this->add(0xD3, DCP::class, 2, IndirectYMode::class);
     }
 }
