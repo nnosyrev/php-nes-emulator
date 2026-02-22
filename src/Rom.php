@@ -15,7 +15,7 @@ final class Rom
     private Mirroring $mirroring;
 
     private array $prgRom;
-    
+
     private array $chrRom;
 
     private UInt8 $mapper;
