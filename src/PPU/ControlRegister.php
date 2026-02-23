@@ -34,7 +34,12 @@ final class ControlRegister
     private const MASTER_SLAVE_SELECT    = 0b01000000;
     private const GENERATE_NMI           = 0b10000000;
 
-    private UInt8 $bits = new UInt8(0b00000000);
+    private UInt8 $bits;
+
+    public function __construct()
+    {
+        $this->bits = new UInt8(0b00000000);
+    }
 
     public function update(UInt8 $value): void
     {

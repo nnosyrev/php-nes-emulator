@@ -9,10 +9,16 @@ use App\Type\UInt8;
 
 final class AddressRegister
 {
-    private UInt8 $value0 = 0;
-    private UInt8 $value1 = 0;
+    private UInt8 $value0;
+    private UInt8 $value1;
 
     private bool $hiPtr = true;
+
+    public function __construct()
+    {
+        $this->value0 = new UInt8(0);
+        $this->value1 = new UInt8(0);
+    }
 
     public function update(UInt8 $data): void
     {
