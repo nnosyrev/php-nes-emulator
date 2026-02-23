@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\CPU\Mode;
 
 use App\CPU\CPU;
-use App\UInt16;
+use App\Type\UInt16;
 
 final class AbsoluteXMode implements ModeInterface
 {

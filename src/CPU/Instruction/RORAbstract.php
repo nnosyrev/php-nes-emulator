@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
-use App\UInt8;
+use App\Type\UInt8;
 
 abstract class RORAbstract implements InstructionInterface
 {

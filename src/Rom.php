@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Type\UInt8;
 use Exception;
 
 final class Rom

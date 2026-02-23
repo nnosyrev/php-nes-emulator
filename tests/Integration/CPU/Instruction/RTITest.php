@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
-use App\UInt16;
-use App\UInt8;
+use App\Type\UInt16;
+use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 use Tests\Integration\CPU\CPUTestTrait;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\PPU;
 
-use App\UInt8;
+use App\Type\UInt8;
 
 final class ControlRegister
 {

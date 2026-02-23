@@ -8,9 +8,9 @@ use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
-use App\Int8;
-use App\UInt16;
-use App\UInt8;
+use App\Type\Int8;
+use App\Type\UInt16;
+use App\Type\UInt8;
 
 final class CPU
 {

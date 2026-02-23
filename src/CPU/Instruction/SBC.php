@@ -6,7 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
-use App\UInt8;
+use App\Type\UInt8;
 
 final class SBC implements InstructionInterface
 {

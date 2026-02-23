@@ -8,8 +8,8 @@ use App\CPU\CPU;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
-use App\UInt16;
-use App\UInt8;
+use App\Type\UInt16;
+use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 
 final class CPUTest extends TestCase
