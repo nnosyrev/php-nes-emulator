@@ -45,6 +45,34 @@ final class UInt16
         return new self($newValue);
     }
 
+    public function and(UInt16 $and): self
+    {
+        $newValue = $this->value & $and->value;
+
+        return new self($newValue);
+    }
+
+    public function or(UInt16 $or): self
+    {
+        $newValue = $this->value | $or->value;
+
+        return new self($newValue);
+    }
+
+    public function shiftToLeft(int $bits): self
+    {
+        $newValue = $this->mod($this->value << $bits);
+
+        return new self($newValue);
+    }
+
+    public function shiftToRight(int $bits): self
+    {
+        $newValue = $this->value >> $bits;
+
+        return new self($newValue);
+    }
+
     public function toUInt8(): UInt8
     {
         return UInt8::createFromUInt16($this);
