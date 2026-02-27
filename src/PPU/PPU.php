@@ -12,9 +12,10 @@ use SplFixedArray;
 
 final class PPU
 {
+    // TODO: it's may be wrong (32)
     private SplFixedArray $palleteTable = new \SplFixedArray(32);
 
-    private SplFixedArray $ram = new \SplFixedArray(2048);
+    private SplFixedArray $vram = new \SplFixedArray(2048);
 
     private SplFixedArray $oamData = new \SplFixedArray(256);
 
@@ -27,17 +28,26 @@ final class PPU
         private readonly ControlRegister $controlRegister,
     ) {}
 
-    public function writeToAddressRegister(UInt8 $value): void
-    {
-        $this->addressRegister->update($value);
-    }
-
+    /**
+     * Writing to Controller (0x2000) register
+     */
     public function writeToControl(UInt8 $value): void
     {
         $this->controlRegister->update($value);
     }
 
-    public function readMemory(): UInt8
+    /**
+     * Writing to Address (0x2006) register
+     */
+    public function writeToAddressRegister(UInt8 $value): void
+    {
+        $this->addressRegister->update($value);
+    }
+
+    /**
+     * Reading from Data (0x2007) register
+     */
+    public function readData(): UInt8
     {
         $addr = $this->addressRegister->get();
 
@@ -48,7 +58,7 @@ final class PPU
         if (0x0000 <= $addr <= 0x1FFF) {
             $this->dataBuf = new UInt8($this->chrRom[$addr->value]);
         } elseif (0x2000 <= $addr <= 0x2FFF) {
-            $this->dataBuf = new UInt8($this->ram[$this->mirrorRamAddress($addr)]);
+            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress($addr)]);
         } elseif (0x3000 <= $addr <= 0x3EFF) {
             throw new Exception('Addres space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr->value));
         } elseif (0x3F00 <= $addr <= 0x3FFF) {
@@ -60,9 +70,22 @@ final class PPU
         return $result;
     }
 
-    private function mirrorRamAddress(UInt16 $addr): UInt16
+    private function mirrorVRamAddress(UInt16 $addr): UInt16
     {
-        // TODO:!!!
-        return $addr;
+        $mirroredAddr = $addr->and(new UInt16(0b10111111111111))->value;
+
+        $vramIndex = $mirroredAddr - 0x2000;
+
+        $nameTable = (int) floor($vramIndex / 0x400);
+
+        if ($this->mirroring === Mirroring::Vertical && in_array($nameTable, [2, 3])) {
+            $vramIndex = $vramIndex - 0x800;
+        } elseif ($this->mirroring === Mirroring::Horizontal && in_array($nameTable, [1, 2])) {
+            $vramIndex = $vramIndex - 0x400;
+        } elseif ($this->mirroring === Mirroring::Horizontal && $nameTable === 3) {
+            $vramIndex = $vramIndex - 0x800;
+        }
+
+        return new UInt16($vramIndex);
     }
 }
