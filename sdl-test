@@ -1,9 +1,63 @@
 #!/usr/bin/env php
 <?php
 
-const WINDOW_WIDTH = 800;
-const WINDOW_HEIGHT = 800;
+use App\Frame;
+use App\Rom;
+use App\Type\Rgb;
+use App\Type\UInt8;
 
+require_once __DIR__ . '/vendor/autoload.php';
+
+const SQUARE_WIDTH = 3;
+const WINDOW_WIDTH = Frame::WIDTH * SQUARE_WIDTH;
+const WINDOW_HEIGHT = Frame::HEIGHT * SQUARE_WIDTH;
+
+$pallete = [
+    new Rgb(new UInt8(50), new UInt8(100), new UInt8(200)),
+    new Rgb(new UInt8(200), new UInt8(100), new UInt8(50)),
+    new Rgb(new UInt8(100), new UInt8(50), new UInt8(200)),
+    new Rgb(new UInt8(100), new UInt8(100), new UInt8(100)),
+];
+
+function getFrame(array $chrRom, int $bank, array $pallete): Frame
+{
+    if ($bank > 1 || $bank < 0) {
+        throw new \Exception('Incorrect bank');
+    }
+
+    $bankStart = $bank * 0x1000;
+
+    $frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
+
+    foreach (range(0, 255) as $tileN) {
+        $tile = array_slice($chrRom, $bankStart + $tileN * 16, 16);
+
+        foreach (range(0, 7) as $y) {
+            $upper = $tile[$y];
+            $lower = $tile[$y + 8];
+
+            foreach (range(7, 0) as $x) {
+                $value = (1 & $upper) << 1 | (1 & $lower);
+                $upper = $upper >> 1;
+                $lower = $lower >> 1;
+
+                $baseX = ($tileN % 32) * 8;
+                $baseY = floor($tileN / 32) * 8;
+
+                $frame->setPixel($baseX + $x, $baseY + $y, $pallete[$value]);
+            }
+        }
+    }
+
+    return $frame;
+}
+
+$file = file_get_contents(__DIR__ . '/.cache/Sgt. Helmet - Training Day (2013)(The Mojon Twins)[!].nes');
+$rom = new Rom($file);
+
+$frame = getFrame($rom->getChrRom(), 0, $pallete);
+
+// Init
 SDL_Init(SDL_INIT_VIDEO);
 $window = SDL_CreateWindow("Drawing lines on screen", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 $renderer = SDL_CreateRenderer($window, 0, SDL_RENDERER_ACCELERATED);
@@ -12,30 +66,35 @@ $renderer = SDL_CreateRenderer($window, 0, SDL_RENDERER_ACCELERATED);
 SDL_SetRenderDrawColor($renderer, 100, 0, 0, 0);
 SDL_RenderClear($renderer);
 
+// Show frame
+for ($x = 0; $x < Frame::WIDTH; $x++) {
+    for ($y = 0; $y < Frame::HEIGHT; $y++) {
+        $rgb = $frame->getPixel($x, $y);
 
-// Draw lines
-SDL_SetRenderDrawColor($renderer, 255, 0, 0, 255);
-$offset = WINDOW_WIDTH;
-$x1 = $y1 = 0;
-for ($iteration = 0; $offset > 0; ++$iteration) {
-    $side = $iteration % 4;
-    $sign = $side < 2 ? 1 : -1;
+        SDL_SetRenderDrawColor($renderer, $rgb->r->value, $rgb->g->value, $rgb->b->value, 255);
 
-    $x2 = $side % 2 ? $x1 + $sign * $offset : $x1;
-    $y2 = $side % 2 ? $y1 : $y1 + $sign * $offset;
-
-    SDL_RenderDrawLine($renderer, $x1, $y1, $x2, $y2);
-
-    $x1 = $x2;
-    $y1 = $y2;
-    $offset -= 10;
+        $rect = new SDL_Rect($x * SQUARE_WIDTH, $y * SQUARE_WIDTH, SQUARE_WIDTH, SQUARE_WIDTH);
+        SDL_RenderFillRect($renderer, $rect);
+    }
 }
 SDL_RenderPresent($renderer);
 
-$line = readline("Command: ");
+// Wait for quit event
+$event = new SDL_Event;
+while (true) {
+    if (SDL_PollEvent($event)) {
+        if ($event->type == SDL_QUIT) {
+            break;
+        } elseif ($event->type == SDL_KEYDOWN) {
+            $symChar = chr($event->key->keysym->sym);
+            if ($symChar == 'q') {
+                break;
+            }
+        }
+    }
+}
 
-echo $line . "\n";
-
+// Destroy
 SDL_DestroyRenderer($renderer);
 SDL_DestroyWindow($window);
 SDL_Quit();
