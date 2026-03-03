@@ -52,7 +52,7 @@ function getFrame(array $chrRom, int $bank, array $pallete): Frame
     return $frame;
 }
 
-$file = file_get_contents(__DIR__ . '/.cache/Sgt. Helmet - Training Day (2013)(The Mojon Twins)[!].nes');
+$file = file_get_contents($argv[1]);
 $rom = new Rom($file);
 
 $frame = getFrame($rom->getChrRom(), 0, $pallete);
