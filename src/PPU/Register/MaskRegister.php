@@ -20,7 +20,6 @@ final class MaskRegister
     // ||+------- Emphasize red (green on PAL/Dendy)
     // |+-------- Emphasize green (red on PAL/Dendy)
     // +--------- Emphasize blue
-
     private UInt8 $bits;
 
     public function __construct()

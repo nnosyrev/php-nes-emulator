@@ -16,7 +16,6 @@ final class StatusRegister
     // ||+------- Sprite overflow flag
     // |+-------- Sprite 0 hit flag
     // +--------- Vblank flag, cleared on read. Unreliable; see below.
-
     private UInt8 $bits;
 
     public function __construct()

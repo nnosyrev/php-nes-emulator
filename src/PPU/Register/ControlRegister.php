@@ -8,6 +8,8 @@ use App\Type\UInt8;
 
 final class ControlRegister
 {
+    private const VRAM_ADDR_INCREMENT = 0b00000100;
+
     // 7  bit  0
     // ---- ----
     // VPHB SINN
@@ -24,16 +26,6 @@ final class ControlRegister
     // |          (0: read backdrop from EXT pins; 1: output color on EXT pins)
     // +--------- Generate an NMI at the start of the
     //            vertical blanking interval (0: off; 1: on)
-
-    private const NAMETABLE1             = 0b00000001;
-    private const NAMETABLE2             = 0b00000010;
-    private const VRAM_ADDR_INCREMENT    = 0b00000100;
-    private const SPRITE_PATTERN_ADDR    = 0b00001000;
-    private const BACKROUND_PATTERN_ADDR = 0b00010000;
-    private const SPRITE_SIZE            = 0b00100000;
-    private const MASTER_SLAVE_SELECT    = 0b01000000;
-    private const GENERATE_NMI           = 0b10000000;
-
     private UInt8 $bits;
 
     public function __construct()
