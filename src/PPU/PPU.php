@@ -119,22 +119,22 @@ final class PPU
 
     public function readData(): UInt8
     {
-        $addr = $this->addressRegister->get();
+        $addr = $this->addressRegister->get()->value;
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
         $result = $this->dataBuf;
 
-        if (0x0000 <= $addr <= 0x1FFF) {
-            $this->dataBuf = new UInt8($this->chrRom[$addr->value]);
-        } elseif (0x2000 <= $addr <= 0x2FFF) {
-            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress($addr)]);
-        } elseif (0x3000 <= $addr <= 0x3EFF) {
-            throw new Exception('Addres space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr->value));
-        } elseif (0x3F00 <= $addr <= 0x3FFF) {
-            $this->dataBuf = new UInt8($this->palleteTable[$addr->value - 0x3f00]);
+        if (0x0000 <= $addr && $addr <= 0x1FFF) {
+            $this->dataBuf = new UInt8($this->chrRom[$addr]);
+        } elseif (0x2000 <= $addr && $addr <= 0x2FFF) {
+            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress(new UInt16($addr))->value]);
+        } elseif (0x3000 <= $addr && $addr <= 0x3EFF) {
+            throw new Exception('Addres space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
+        } elseif (0x3F00 <= $addr && $addr <= 0x3FFF) {
+            $this->dataBuf = new UInt8($this->palleteTable[$addr - 0x3f00]);
         } else {
-            throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr->value));
+            throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr));
         }
 
         return $result;
