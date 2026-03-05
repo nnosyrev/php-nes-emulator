@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\PPU;
+namespace App\PPU\Register;
 
 use App\Type\UInt8;
 

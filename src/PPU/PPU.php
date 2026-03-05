@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\PPU;
 
 use App\Mirroring;
+use App\PPU\Register\AddressRegister;
+use App\PPU\Register\ControlRegister;
+use App\PPU\Register\MaskRegister;
+use App\PPU\Register\StatusRegister;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use Exception;
