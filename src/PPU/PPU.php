@@ -19,8 +19,6 @@ final class PPU
 
     private SplFixedArray $vram = new \SplFixedArray(2048);
 
-    private SplFixedArray $oamData = new \SplFixedArray(256);
-
     private UInt8 $dataBuf = new UInt8(0);
 
     /*
@@ -66,6 +64,11 @@ final class PPU
      */
     private UInt8 $oamAddr;
 
+    /*
+     * OAMDATA - Sprite RAM data ($2004 read/write)
+     */
+    private SplFixedArray $oamData = new \SplFixedArray(256);
+
     public function __construct(
         private readonly array $chrRom,
         private readonly Mirroring $mirroring,
@@ -85,12 +88,28 @@ final class PPU
 
     public function getStatus(): UInt8
     {
-        return $this->status;
+        $status = $this->status;
+
+        $this->status = $this->status->and(new UInt8(0b01111111));
+
+        return $status;
     }
 
     public function setOamAddr(UInt8 $value): void
     {
         $this->oamAddr = $value;
+    }
+
+    public function setOamData(UInt8 $data): void
+    {
+        $this->oamData[$this->oamAddr->value] = $data->value;
+
+        $this->oamAddr = $this->oamAddr->increment();
+    }
+
+    public function getOamData(): UInt8
+    {
+        return new UInt8($this->oamData[$this->oamAddr->value]);
     }
 
     public function setAddress(UInt8 $value): void
