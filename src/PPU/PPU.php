@@ -26,6 +26,7 @@ final class PPU
         private readonly Mirroring $mirroring,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
+        private readonly MaskRegister $maskRegister,
     ) {}
 
     /**
@@ -34,6 +35,14 @@ final class PPU
     public function writeToControl(UInt8 $value): void
     {
         $this->controlRegister->update($value);
+    }
+
+    /**
+     * Writing to Mask (0x2001) register
+     */
+    public function writeToMask(UInt8 $value): void
+    {
+        $this->maskRegister->update($value);
     }
 
     /**
