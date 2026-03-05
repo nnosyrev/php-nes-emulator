@@ -27,6 +27,7 @@ final class PPU
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
         private readonly MaskRegister $maskRegister,
+        private readonly StatusRegister $statusRegister,
     ) {}
 
     /**
@@ -43,6 +44,14 @@ final class PPU
     public function setMask(UInt8 $value): void
     {
         $this->maskRegister->set($value);
+    }
+
+    /**
+     * Read from Status (0x2002) register
+     */
+    public function getStatus(UInt8 $value): void
+    {
+        $this->statusRegister->get();
     }
 
     /**
