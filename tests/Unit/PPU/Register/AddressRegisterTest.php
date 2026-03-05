@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\PPU;
+namespace Tests\Unit\PPU\Register;
 
 use App\PPU\Register\AddressRegister;
 use App\Type\UInt8;
