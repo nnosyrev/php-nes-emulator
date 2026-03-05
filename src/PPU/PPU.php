@@ -7,8 +7,6 @@ namespace App\PPU;
 use App\Mirroring;
 use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
-use App\PPU\Register\MaskRegister;
-use App\PPU\Register\StatusRegister;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use Exception;
@@ -25,50 +23,81 @@ final class PPU
 
     private UInt8 $dataBuf = new UInt8(0);
 
+    /*
+     * PPUMASK - Rendering settings ($2001 write)
+     *
+     * 7  bit  0
+     * ---- ----
+     * BGRs bMmG
+     * |||| ||||
+     * |||| |||+- Greyscale (0: normal color, 1: greyscale)
+     * |||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide
+     * |||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide
+     * |||| +---- 1: Enable background rendering
+     * |||+------ 1: Enable sprite rendering
+     * ||+------- Emphasize red (green on PAL/Dendy)
+     * |+-------- Emphasize green (red on PAL/Dendy)
+     * +--------- Emphasize blue
+     */
+    private UInt8 $mask;
+
+    /*
+     * PPUSTATUS - Rendering events ($2002 read)
+     *
+     * 7  bit  0
+     * ---- ----
+     * VSOx xxxx
+     * |||| ||||
+     * |||+-++++- (PPU open bus or 2C05 PPU identifier)
+     * ||+------- Sprite overflow flag
+     * |+-------- Sprite 0 hit flag
+     * +--------- Vblank flag, cleared on read. Unreliable; see below.
+     */
+    private UInt8 $status;
+
+    /*
+     * OAMADDR - Sprite RAM address ($2003 write)
+     *
+     * 7  bit  0
+     * ---- ----
+     * AAAA AAAA
+     * |||| ||||
+     * ++++-++++- OAM address
+     */
+    private UInt8 $oamAddr;
+
     public function __construct(
         private readonly array $chrRom,
         private readonly Mirroring $mirroring,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
-        private readonly MaskRegister $maskRegister,
-        private readonly StatusRegister $statusRegister,
     ) {}
 
-    /**
-     * Writing to Controller (0x2000) register
-     */
     public function setControl(UInt8 $value): void
     {
         $this->controlRegister->set($value);
     }
 
-    /**
-     * Writing to Mask (0x2001) register
-     */
     public function setMask(UInt8 $value): void
     {
-        $this->maskRegister->set($value);
+        $this->mask = $value;
     }
 
-    /**
-     * Read from Status (0x2002) register
-     */
-    public function getStatus(UInt8 $value): void
+    public function getStatus(): UInt8
     {
-        $this->statusRegister->get();
+        return $this->status;
     }
 
-    /**
-     * Writing to Address (0x2006) register
-     */
+    public function setOamAddr(UInt8 $value): void
+    {
+        $this->oamAddr = $value;
+    }
+
     public function setAddress(UInt8 $value): void
     {
         $this->addressRegister->set($value);
     }
 
-    /**
-     * Reading from Data (0x2007) register
-     */
     public function readData(): UInt8
     {
         $addr = $this->addressRegister->get();
