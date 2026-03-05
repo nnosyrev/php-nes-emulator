@@ -113,6 +113,18 @@ final class PPU
         $this->oamAddr = $this->oamAddr->increment();
     }
 
+    public function setOamDma(array $data): void
+    {
+        if (count($data) > 256) {
+            throw new Exception('The number of array elements cannot exceed 256');
+        }
+
+        foreach ($data as $value) {
+            $this->oamData[$this->oamAddr->value] = $value;
+            $this->oamAddr = $this->oamAddr->increment();
+        }
+    }
+
     public function getOamData(): UInt8
     {
         return new UInt8($this->oamData[$this->oamAddr->value]);
