@@ -61,6 +61,11 @@ final class AddressRegister
         $this->mirror();
     }
 
+    public function resetLatch(): void
+    {
+        $this->hiPtr = true;
+    }
+
     private function mirror(): void
     {
         if ($this->get()->value > 0x3FFF) {

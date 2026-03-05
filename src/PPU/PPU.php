@@ -7,6 +7,7 @@ namespace App\PPU;
 use App\Mirroring;
 use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
+use App\PPU\Register\ScrollRegister;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use Exception;
@@ -74,6 +75,7 @@ final class PPU
         private readonly Mirroring $mirroring,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
+        private readonly ScrollRegister $scrollRegister,
     ) {}
 
     public function setControl(UInt8 $value): void
@@ -90,7 +92,11 @@ final class PPU
     {
         $status = $this->status;
 
+        // Vblank flag, cleared on read.
         $this->status = $this->status->and(new UInt8(0b01111111));
+
+        $this->addressRegister->resetLatch();
+        $this->scrollRegister->resetLatch();
 
         return $status;
     }
@@ -110,6 +116,11 @@ final class PPU
     public function getOamData(): UInt8
     {
         return new UInt8($this->oamData[$this->oamAddr->value]);
+    }
+
+    public function setScroll(UInt8 $value): void
+    {
+        $this->scrollRegister->set($value);
     }
 
     public function setAddress(UInt8 $value): void
