@@ -32,25 +32,25 @@ final class PPU
     /**
      * Writing to Controller (0x2000) register
      */
-    public function writeToControl(UInt8 $value): void
+    public function setControl(UInt8 $value): void
     {
-        $this->controlRegister->update($value);
+        $this->controlRegister->set($value);
     }
 
     /**
      * Writing to Mask (0x2001) register
      */
-    public function writeToMask(UInt8 $value): void
+    public function setMask(UInt8 $value): void
     {
-        $this->maskRegister->update($value);
+        $this->maskRegister->set($value);
     }
 
     /**
      * Writing to Address (0x2006) register
      */
-    public function writeToAddressRegister(UInt8 $value): void
+    public function setAddress(UInt8 $value): void
     {
-        $this->addressRegister->update($value);
+        $this->addressRegister->set($value);
     }
 
     /**

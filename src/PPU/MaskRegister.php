@@ -28,7 +28,7 @@ final class MaskRegister
         $this->bits = new UInt8(0b00000000);
     }
 
-    public function update(UInt8 $value): void
+    public function set(UInt8 $value): void
     {
         $this->bits = $value;
     }

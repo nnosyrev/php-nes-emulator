@@ -20,7 +20,7 @@ final class AddressRegister
         $this->value1 = new UInt8(0);
     }
 
-    public function update(UInt8 $data): void
+    public function set(UInt8 $data): void
     {
         if ($this->hiPtr) {
             $this->value0 = $data;
@@ -33,7 +33,7 @@ final class AddressRegister
         $this->hiPtr = !$this->hiPtr;
     }
 
-    private function set(UInt16 $data): void
+    private function update(UInt16 $data): void
     {
         $this->value0 = $data->shiftToRight(8)->toUInt8();
         $this->value1 = $data->and(new UInt16(0xFF))->toUInt8();
@@ -64,7 +64,7 @@ final class AddressRegister
     private function mirror(): void
     {
         if ($this->get()->value > 0x3FFF) {
-            $this->set($this->get()->and(new UInt16(0b11111111111111)));
+            $this->update($this->get()->and(new UInt16(0b11111111111111)));
         }
     }
 }
