@@ -106,6 +106,11 @@ final class PPU
         $this->oamAddr = $value;
     }
 
+    public function getOamData(): UInt8
+    {
+        return new UInt8($this->oamData[$this->oamAddr->value]);
+    }
+
     public function setOamData(UInt8 $data): void
     {
         $this->oamData[$this->oamAddr->value] = $data->value;
@@ -125,11 +130,6 @@ final class PPU
         }
     }
 
-    public function getOamData(): UInt8
-    {
-        return new UInt8($this->oamData[$this->oamAddr->value]);
-    }
-
     public function setScroll(UInt8 $value): void
     {
         $this->scrollRegister->set($value);
@@ -140,27 +140,57 @@ final class PPU
         $this->addressRegister->set($value);
     }
 
-    public function readData(): UInt8
+    public function getData(): UInt8
     {
         $addr = $this->addressRegister->get()->value;
 
-        $this->addressRegister->add($this->controlRegister->getAddressIncrement());
-
         $result = $this->dataBuf;
+
+        $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
         if (0x0000 <= $addr && $addr <= 0x1FFF) {
             $this->dataBuf = new UInt8($this->chrRom[$addr]);
         } elseif (0x2000 <= $addr && $addr <= 0x2FFF) {
             $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress(new UInt16($addr))->value]);
         } elseif (0x3000 <= $addr && $addr <= 0x3EFF) {
-            throw new Exception('Addres space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
         } elseif (0x3F00 <= $addr && $addr <= 0x3FFF) {
+            // These reads work differently than standard VRAM reads, as palette RAM is a separate memory
+            // space internal to the PPU that is overlaid onto the PPU address space. The referenced 6-bit
+            // palette data is returned immediately instead of going to the internal read buffer, and hence
+            // no priming read is required. Simultaneously, the PPU also performs a normal read from PPU
+            // memory at the specified address, "underneath" the palette data, and the result of this read
+            // goes into the read buffer as normal. The old contents of the read buffer are discarded when
+            // reading palettes, but by changing the address to point outside palette RAM and performing
+            // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
             $this->dataBuf = new UInt8($this->palleteTable[$addr - 0x3f00]);
+
+            return $this->dataBuf;
         } else {
             throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr));
         }
 
         return $result;
+    }
+
+    public function setData(UInt8 $data): void
+    {
+        $addr = $this->addressRegister->get()->value;
+        $value = $data->value;
+
+        if (0x0000 <= $addr && $addr <= 0x1FFF) {
+            throw new Exception('Attempt to write to CHR ROM space 0x' . dechex($addr));
+        } elseif (0x2000 <= $addr && $addr <= 0x2FFF) {
+            $this->vram[$this->mirrorVRamAddress(new UInt16($addr))->value] = $value;
+        } elseif (0x3000 <= $addr && $addr <= 0x3EFF) {
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
+        } elseif (0x3F00 <= $addr && $addr <= 0x3FFF) {
+            $this->palleteTable[$addr - 0x3f00] = $value;
+        } else {
+            throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr));
+        }
+
+        $this->addressRegister->add($this->controlRegister->getAddressIncrement());
     }
 
     private function mirrorVRamAddress(UInt16 $addr): UInt16
