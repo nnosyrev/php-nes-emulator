@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU;
 
+use App\Bus;
 use App\CPU\CPU;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
@@ -16,7 +17,12 @@ trait CPUTestTrait
 
     protected function setUp(): void
     {
-        $this->CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
+        $this->CPU = new CPU(
+            new Bus(),
+            new OpcodeCollection(),
+            new InstructionFactory(),
+            new ModeFactory()
+        );
     }
 
     protected function getFlagNValue(UInt8 $byte): bool

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\CPU;
 
+use App\Bus;
 use App\CPU\CPU;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
@@ -18,7 +19,7 @@ final class CPUTest extends TestCase
     {
         $addr = new UInt16(0);
 
-        $CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
+        $CPU = new CPU(new Bus(), new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
         $CPU->setMemoryUInt16($addr, new UInt16(0x8000));
 
         $readed = $CPU->getMemoryUInt16($addr);
@@ -28,7 +29,7 @@ final class CPUTest extends TestCase
 
     public function testPushPopStack(): void
     {
-        $CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
+        $CPU = new CPU(new Bus(), new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
         $CPU->load([]);
         $CPU->pushToStack(new UInt8(1));
         $CPU->pushToStack(new UInt8(2));

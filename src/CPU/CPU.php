@@ -34,9 +34,8 @@ final class CPU
     private UInt8 $SP;
     private UInt16 $PC;
 
-    private array $memory = [];
-
     public function __construct(
+        private readonly Bus $bus,
         private readonly OpcodeCollection $opcodeCollection,
         private readonly InstructionFactory $instructionFactory,
         private readonly ModeFactory $modeFactory,
@@ -51,7 +50,7 @@ final class CPU
         foreach ($program as &$byte) {
             UInt8::validate($byte);
 
-            $this->memory[$current] = $byte;
+            $this->setMemory(new UInt16($current), new UInt8($byte));
             $current++;
         }
     }
@@ -267,31 +266,22 @@ final class CPU
 
     public function setMemory(UInt16 $addr, UInt8 $data): void
     {
-        $this->memory[$addr->value] = $data->value;
+        $this->bus->setMemory($addr, $data);
     }
 
     public function getMemory(UInt16 $addr): UInt8
     {
-        return new UInt8($this->memory[$addr->value]);
+        return $this->bus->getMemory($addr);
     }
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
     {
-        $high = $data->value >> 8;
-        $low = $data->value & 0xFF;
-
-        $this->memory[$addr->value] = $low;
-        $this->memory[$addr->value + 1] = $high;
+        $this->bus->setMemoryUInt16($addr, $data);
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16
     {
-        $low = $this->memory[$addr->value];
-        $high = $this->memory[$addr->increment()->value];
-
-        $res = ($high << 8) | $low;
-
-        return new UInt16($res);
+        return $this->bus->getMemoryUInt16($addr);
     }
 
     public function pushToStack(UInt8 $data): void
