@@ -13,7 +13,7 @@ trait CompareTrait
     public function compare(UInt8 $register, CPU $cpu, ModeInterface $mode): void
     {
         $addr = $mode->getOperandAddress($cpu);
-        $mem = $cpu->readMemory($addr);
+        $mem = $cpu->getMemory($addr);
 
         $cpu->setFlagC($register->value >= $mem->value);
         $cpu->setFlagsZNByValue($register->subtract($mem));

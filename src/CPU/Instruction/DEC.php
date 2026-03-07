@@ -13,10 +13,10 @@ final class DEC implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $orig = $CPU->readMemory($addr);
+        $orig = $CPU->getMemory($addr);
         $dec = $orig->decrement();
 
-        $CPU->writeMemory($addr, $dec);
+        $CPU->setMemory($addr, $dec);
 
         $CPU->setFlagsZNByValue($dec);
     }

@@ -13,6 +13,6 @@ final class STY implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $CPU->writeMemory($addr, $CPU->getRegisterY());
+        $CPU->setMemory($addr, $CPU->getRegisterY());
     }
 }

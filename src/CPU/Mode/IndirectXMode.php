@@ -11,12 +11,12 @@ final class IndirectXMode implements ModeInterface
 {
     public function getOperandAddress(CPU $CPU): UInt16
     {
-        $param = $CPU->readMemory($CPU->getPC());
+        $param = $CPU->getMemory($CPU->getPC());
 
         $ptr = $param->add($CPU->getRegisterX())->toUInt16();
 
-        $low = $CPU->readMemory($ptr);
-        $high = $CPU->readMemory($ptr->increment());
+        $low = $CPU->getMemory($ptr);
+        $high = $CPU->getMemory($ptr->increment());
 
         $result = ($high->value << 8) | $low->value;
 

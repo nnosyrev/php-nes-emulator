@@ -19,10 +19,10 @@ final class RORTest extends TestCase
         $CPU->load([0xA9, 0b00010100, 0x85, 0x02, 0x66, 0x02, 0x00]);
         $CPU->run();
 
-        $this->assertSame($CPU->readMemory(new UInt16(0x02))->value, 0b10001010);
+        $this->assertSame($CPU->getMemory(new UInt16(0x02))->value, 0b10001010);
         $this->assertSame($CPU->getFlagC(), false);
         $this->assertSame($CPU->getFlagZ(), false);
-        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->readMemory(new UInt16(0x02))));
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(new UInt16(0x02))));
     }
 
     public function testRORA(): void

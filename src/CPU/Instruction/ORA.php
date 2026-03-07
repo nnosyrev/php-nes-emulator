@@ -13,7 +13,7 @@ final class ORA implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $data = $CPU->readMemory($addr);
+        $data = $CPU->getMemory($addr);
 
         $CPU->setRegisterA($data->or($CPU->getRegisterA()));
     }

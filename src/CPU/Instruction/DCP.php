@@ -13,11 +13,11 @@ final class DCP implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        $value = $cpu->readMemory($addr);
+        $value = $cpu->getMemory($addr);
 
         $result = $value->decrement();
 
-        $cpu->writeMemory($addr, $result);
+        $cpu->setMemory($addr, $result);
 
         $cpu->setFlagC($cpu->getRegisterA()->value >= $result->value);
         $cpu->setFlagsZNByValue($cpu->getRegisterA()->subtract($result));

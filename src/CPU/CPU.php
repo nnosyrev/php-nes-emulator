@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\CPU;
 
+use App\Bus;
 use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
@@ -58,7 +59,7 @@ final class CPU
     public function run(): void
     {
         while (true) {
-            $code = $this->readMemory($this->PC);
+            $code = $this->getMemory($this->PC);
 
             $this->incrementPC();
             $pcOld = $this->getPC();
@@ -264,17 +265,17 @@ final class CPU
         $this->setFlagC(($value & 0b00000001) === 0b00000001);
     }
 
-    public function writeMemory(UInt16 $addr, UInt8 $data): void
+    public function setMemory(UInt16 $addr, UInt8 $data): void
     {
         $this->memory[$addr->value] = $data->value;
     }
 
-    public function readMemory(UInt16 $addr): UInt8
+    public function getMemory(UInt16 $addr): UInt8
     {
         return new UInt8($this->memory[$addr->value]);
     }
 
-    public function writeMemoryUInt16(UInt16 $addr, UInt16 $data): void
+    public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
     {
         $high = $data->value >> 8;
         $low = $data->value & 0xFF;
@@ -283,7 +284,7 @@ final class CPU
         $this->memory[$addr->value + 1] = $high;
     }
 
-    public function readMemoryUInt16(UInt16 $addr): UInt16
+    public function getMemoryUInt16(UInt16 $addr): UInt16
     {
         $low = $this->memory[$addr->value];
         $high = $this->memory[$addr->increment()->value];
@@ -295,7 +296,7 @@ final class CPU
 
     public function pushToStack(UInt8 $data): void
     {
-        $this->writeMemory((new UInt16(self::STACK_START))->add($this->SP), $data);
+        $this->setMemory((new UInt16(self::STACK_START))->add($this->SP), $data);
 
         $this->SP = $this->SP->decrement();
     }
@@ -304,7 +305,7 @@ final class CPU
     {
         $this->SP = $this->SP->increment();
 
-        return $this->readMemory((new UInt16(self::STACK_START))->add($this->SP));
+        return $this->getMemory((new UInt16(self::STACK_START))->add($this->SP));
     }
 
     public function pushToStackUInt16(UInt16 $data): void

@@ -13,7 +13,7 @@ final class LDA implements InstructionInterface
     {
         $operandAddr = $mode->getOperandAddress($CPU);
 
-        $value = $CPU->readMemory($operandAddr);
+        $value = $CPU->getMemory($operandAddr);
 
         $CPU->setRegisterA($value);
     }

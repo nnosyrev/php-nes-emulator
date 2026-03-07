@@ -11,17 +11,17 @@ final class IndirectMode implements ModeInterface
 {
     public function getOperandAddress(CPU $CPU): UInt16
     {
-        $addr = $CPU->readMemoryUInt16($CPU->getPC());
+        $addr = $CPU->getMemoryUInt16($CPU->getPC());
 
         if (($addr->value & 0x00FF) === 0x00FF) {
-            $low = $CPU->readMemory($addr);
-            $high = $CPU->readMemory(new UInt16($addr->value & 0xFF00));
+            $low = $CPU->getMemory($addr);
+            $high = $CPU->getMemory(new UInt16($addr->value & 0xFF00));
 
             $result = ($high->value << 8) | $low->value;
 
             return new UInt16($result);
         }
 
-        return $CPU->readMemoryUInt16($addr);
+        return $CPU->getMemoryUInt16($addr);
     }
 }

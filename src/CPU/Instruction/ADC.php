@@ -15,7 +15,7 @@ final class ADC implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        $data = $cpu->readMemory($addr);
+        $data = $cpu->getMemory($addr);
 
         $this->doWithCarry($data, $cpu);
     }

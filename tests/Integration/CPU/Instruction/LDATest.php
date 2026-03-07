@@ -28,7 +28,7 @@ final class LDATest extends TestCase
     {
         $CPU = $this->CPU;
         $CPU->load([0xA5, 0x05, 0x00]);
-        $CPU->writeMemory(new UInt16(0x05), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -41,7 +41,7 @@ final class LDATest extends TestCase
         $CPU = $this->CPU;
         $CPU->load([0xB5, 0x05, 0x00]);
         $CPU->setRegisterX(new UInt8(0x01));
-        $CPU->writeMemory(new UInt16(0x06), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -54,9 +54,9 @@ final class LDATest extends TestCase
         $CPU = $this->CPU;
         $CPU->load([0xA1, 0x00, 0x00]);
         $CPU->setRegisterX(new UInt8(0x01));
-        $CPU->writeMemory(new UInt16(0x01), new UInt8(0x05));
-        $CPU->writeMemory(new UInt16(0x02), new UInt8(0x07));
-        $CPU->writeMemory(new UInt16(0x0705), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x01), new UInt8(0x05));
+        $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
+        $CPU->setMemory(new UInt16(0x0705), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -69,9 +69,9 @@ final class LDATest extends TestCase
         $CPU = $this->CPU;
         $CPU->load([0xB1, 0x01, 0x00]);
         $CPU->setRegisterY(new UInt8(0x01));
-        $CPU->writeMemory(new UInt16(0x01), new UInt8(0x03));
-        $CPU->writeMemory(new UInt16(0x02), new UInt8(0x07));
-        $CPU->writeMemory(new UInt16(0x0704), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x01), new UInt8(0x03));
+        $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
+        $CPU->setMemory(new UInt16(0x0704), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -83,7 +83,7 @@ final class LDATest extends TestCase
     {
         $CPU = $this->CPU;
         $CPU->load([0xAD, 0x10, 0x22, 0x00]);
-        $CPU->writeMemory(new UInt16(0x2210), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x2210), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -96,7 +96,7 @@ final class LDATest extends TestCase
         $CPU = $this->CPU;
         $CPU->load([0xBD, 0x10, 0x22, 0x00]);
         $CPU->setRegisterX(new UInt8(0x03));
-        $CPU->writeMemory(new UInt16(0x2213), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);
@@ -109,7 +109,7 @@ final class LDATest extends TestCase
         $CPU = $this->CPU;
         $CPU->load([0xB9, 0x10, 0x22, 0x00]);
         $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->writeMemory(new UInt16(0x2213), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x11);

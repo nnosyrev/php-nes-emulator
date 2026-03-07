@@ -19,7 +19,7 @@ final class DCPTest extends TestCase
         $CPU->load([0xA9, 0x05, 0x85, 0x01, 0xC7, 0x01, 0x00]);
         $CPU->run();
 
-        $this->assertSame($CPU->readMemory(new UInt16(0x01))->value, 0x05 - 1);
+        $this->assertSame($CPU->getMemory(new UInt16(0x01))->value, 0x05 - 1);
         // @phpstan-ignore greaterOrEqual.alwaysTrue
         $this->assertSame($CPU->getFlagC(), 0x05 >= 0x05 - 1);
         $this->assertSame($CPU->getFlagZ(), false);

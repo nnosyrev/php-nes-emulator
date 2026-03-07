@@ -13,7 +13,7 @@ final class EOR implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $data = $CPU->readMemory($addr);
+        $data = $CPU->getMemory($addr);
 
         $CPU->setRegisterA($data->xor($CPU->getRegisterA()));
     }

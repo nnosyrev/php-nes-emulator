@@ -13,6 +13,6 @@ final class STA implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $CPU->writeMemory($addr, $CPU->getRegisterA());
+        $CPU->setMemory($addr, $CPU->getRegisterA());
     }
 }

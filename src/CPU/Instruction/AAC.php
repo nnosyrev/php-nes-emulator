@@ -13,7 +13,7 @@ final class AAC implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        $data = $cpu->readMemory($addr);
+        $data = $cpu->getMemory($addr);
 
         $cpu->setRegisterA($data->and($cpu->getRegisterA()));
 

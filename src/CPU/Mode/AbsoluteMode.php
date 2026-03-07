@@ -11,6 +11,6 @@ final class AbsoluteMode implements ModeInterface
 {
     public function getOperandAddress(CPU $CPU): UInt16
     {
-        return $CPU->readMemoryUInt16($CPU->getPC());
+        return $CPU->getMemoryUInt16($CPU->getPC());
     }
 }

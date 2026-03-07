@@ -13,6 +13,6 @@ final class AAX implements InstructionInterface
     {
         $result = $cpu->getRegisterA()->and($cpu->getRegisterX());
 
-        $cpu->writeMemory($mode->getOperandAddress($cpu), $result);
+        $cpu->setMemory($mode->getOperandAddress($cpu), $result);
     }
 }

@@ -19,9 +19,9 @@ final class CPUTest extends TestCase
         $addr = new UInt16(0);
 
         $CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
-        $CPU->writeMemoryUInt16($addr, new UInt16(0x8000));
+        $CPU->setMemoryUInt16($addr, new UInt16(0x8000));
 
-        $readed = $CPU->readMemoryUInt16($addr);
+        $readed = $CPU->getMemoryUInt16($addr);
 
         $this->assertSame($readed->value, 0x8000);
     }

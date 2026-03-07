@@ -13,13 +13,13 @@ final class ROR extends RORAbstract
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $old = $CPU->readMemory($addr);
+        $old = $CPU->getMemory($addr);
 
         $new = $this->getNew($CPU, $old);
 
         $this->setFlagC($CPU, $old);
 
         $CPU->setFlagsZNByValue($new);
-        $CPU->writeMemory($addr, $new);
+        $CPU->setMemory($addr, $new);
     }
 }

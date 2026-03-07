@@ -13,7 +13,7 @@ final class LDY implements InstructionInterface
     {
         $operandAddr = $mode->getOperandAddress($CPU);
 
-        $value = $CPU->readMemory($operandAddr);
+        $value = $CPU->getMemory($operandAddr);
 
         $CPU->setRegisterY($value);
     }

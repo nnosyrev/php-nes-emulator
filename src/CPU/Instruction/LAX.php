@@ -13,7 +13,7 @@ final class LAX implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $value = $CPU->readMemory($addr);
+        $value = $CPU->getMemory($addr);
 
         $CPU->setRegisterA($value);
         $CPU->setRegisterX($value);

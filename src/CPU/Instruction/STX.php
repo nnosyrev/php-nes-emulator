@@ -13,6 +13,6 @@ final class STX implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $CPU->writeMemory($addr, $CPU->getRegisterX());
+        $CPU->setMemory($addr, $CPU->getRegisterX());
     }
 }

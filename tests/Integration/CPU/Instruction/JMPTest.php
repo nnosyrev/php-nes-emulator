@@ -25,7 +25,7 @@ final class JMPTest extends TestCase
     {
         $CPU = $this->CPU;
         $CPU->load([0xA9, 0x05, 0x6C, 0x10, 0x22, 0xA9, 0x29, 0x00]);
-        $CPU->writeMemoryUInt16(new UInt16(0x2210), new UInt16(0x8007));
+        $CPU->setMemoryUInt16(new UInt16(0x2210), new UInt16(0x8007));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);

@@ -13,7 +13,7 @@ final class BIT implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        $value = $cpu->readMemory($addr);
+        $value = $cpu->getMemory($addr);
 
         $cpu->setFlagNByValue($value);
         $cpu->setFlagZByValue($value->and($cpu->getRegisterA()));

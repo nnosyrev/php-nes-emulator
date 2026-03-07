@@ -13,10 +13,10 @@ final class INC implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($CPU);
 
-        $orig = $CPU->readMemory($addr);
+        $orig = $CPU->getMemory($addr);
         $inc = $orig->increment();
 
-        $CPU->writeMemory($addr, $inc);
+        $CPU->setMemory($addr, $inc);
 
         $CPU->setFlagsZNByValue($inc);
     }
