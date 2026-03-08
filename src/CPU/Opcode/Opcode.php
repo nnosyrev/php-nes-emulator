@@ -10,7 +10,7 @@ final class Opcode
         public readonly int $code,
         public readonly string $instructionClass,
         public readonly int $bytes,
-        public readonly int $cycles,
+        public readonly ?int $cycles,
         public readonly string $modeClass,
     ) {}
 }
