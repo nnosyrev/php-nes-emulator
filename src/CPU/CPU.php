@@ -75,7 +75,7 @@ final class CPU
             }
 
             if ($this->getPC() === $pcOld) {
-                $this->addToPC(new UInt8($opcode->length - 1));
+                $this->addToPC(new UInt8($opcode->bytes - 1));
             }
         }
     }

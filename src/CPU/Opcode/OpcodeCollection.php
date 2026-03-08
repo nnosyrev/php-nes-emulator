@@ -91,13 +91,13 @@ final class OpcodeCollection
         $this->setUp();
     }
 
-    private function add(int $code, string $instructionClass, int $length, string $modeClass): void
+    private function add(int $code, string $instructionClass, int $bytes, $cycles, string $modeClass): void
     {
         if (array_key_exists($code, $this->opcodes)) {
             throw new Exception(sprintf('The "0x%s" opcode already exists', mb_strtoupper(dechex($code))));
         }
 
-        $this->opcodes[$code] = new Opcode($code, $instructionClass, $length, $modeClass);
+        $this->opcodes[$code] = new Opcode($code, $instructionClass, $bytes, $cycles, $modeClass);
     }
 
     public function get(int $code): Opcode
@@ -111,41 +111,41 @@ final class OpcodeCollection
 
     private function setUp(): void
     {
-        $this->add(0x29, ANDI::class, 2, ImmediateMode::class);
-        $this->add(0x25, ANDI::class, 2, ZeroPageMode::class);
-        $this->add(0x35, ANDI::class, 2, ZeroPageXMode::class);
-        $this->add(0x2D, ANDI::class, 3, AbsoluteMode::class);
-        $this->add(0x3D, ANDI::class, 3, AbsoluteXMode::class);
-        $this->add(0x39, ANDI::class, 3, AbsoluteYMode::class);
-        $this->add(0x21, ANDI::class, 2, IndirectXMode::class);
-        $this->add(0x31, ANDI::class, 2, IndirectYMode::class);
+        $this->add(0x29, ANDI::class, 2, 2, ImmediateMode::class);
+        $this->add(0x25, ANDI::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x35, ANDI::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x2D, ANDI::class, 3, 4, AbsoluteMode::class);
+        $this->add(0x3D, ANDI::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x39, ANDI::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
+        $this->add(0x21, ANDI::class, 2, 6, IndirectXMode::class);
+        $this->add(0x31, ANDI::class, 2, 5 /* +1 if page crossed */ , IndirectYMode::class);
 
-        $this->add(0x09, ORA::class, 2, ImmediateMode::class);
-        $this->add(0x05, ORA::class, 2, ZeroPageMode::class);
-        $this->add(0x15, ORA::class, 2, ZeroPageXMode::class);
-        $this->add(0x0D, ORA::class, 3, AbsoluteMode::class);
-        $this->add(0x1D, ORA::class, 3, AbsoluteXMode::class);
-        $this->add(0x19, ORA::class, 3, AbsoluteYMode::class);
-        $this->add(0x01, ORA::class, 2, IndirectXMode::class);
-        $this->add(0x11, ORA::class, 2, IndirectYMode::class);
+        $this->add(0x09, ORA::class, 2, 2, ImmediateMode::class);
+        $this->add(0x05, ORA::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x15, ORA::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x0D, ORA::class, 3, 4, AbsoluteMode::class);
+        $this->add(0x1D, ORA::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x19, ORA::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
+        $this->add(0x01, ORA::class, 2, 6, IndirectXMode::class);
+        $this->add(0x11, ORA::class, 2, 5 /* +1 if page crossed */, IndirectYMode::class);
 
-        $this->add(0x49, EOR::class, 2, ImmediateMode::class);
-        $this->add(0x45, EOR::class, 2, ZeroPageMode::class);
-        $this->add(0x55, EOR::class, 2, ZeroPageXMode::class);
-        $this->add(0x4D, EOR::class, 3, AbsoluteMode::class);
-        $this->add(0x5D, EOR::class, 3, AbsoluteXMode::class);
-        $this->add(0x59, EOR::class, 3, AbsoluteYMode::class);
-        $this->add(0x41, EOR::class, 2, IndirectXMode::class);
-        $this->add(0x51, EOR::class, 2, IndirectYMode::class);
+        $this->add(0x49, EOR::class, 2, 2, ImmediateMode::class);
+        $this->add(0x45, EOR::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x55, EOR::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x4D, EOR::class, 3, 4, AbsoluteMode::class);
+        $this->add(0x5D, EOR::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x59, EOR::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
+        $this->add(0x41, EOR::class, 2, 6, IndirectXMode::class);
+        $this->add(0x51, EOR::class, 2, 5 /* +1 if page crossed */, IndirectYMode::class);
 
-        $this->add(0xA9, LDA::class, 2, ImmediateMode::class);
-        $this->add(0xA5, LDA::class, 2, ZeroPageMode::class);
-        $this->add(0xB5, LDA::class, 2, ZeroPageXMode::class);
-        $this->add(0xA1, LDA::class, 2, IndirectXMode::class);
-        $this->add(0xB1, LDA::class, 2, IndirectYMode::class);
-        $this->add(0xAD, LDA::class, 3, AbsoluteMode::class);
-        $this->add(0xBD, LDA::class, 3, AbsoluteXMode::class);
-        $this->add(0xB9, LDA::class, 3, AbsoluteYMode::class);
+        $this->add(0xA9, LDA::class, 2, 2, ImmediateMode::class);
+        $this->add(0xA5, LDA::class, 2, 3, ZeroPageMode::class);
+        $this->add(0xB5, LDA::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0xAD, LDA::class, 3, 4, AbsoluteMode::class);
+        $this->add(0xBD, LDA::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0xB9, LDA::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
+        $this->add(0xA1, LDA::class, 2, 6, IndirectXMode::class);
+        $this->add(0xB1, LDA::class, 2, 5 /* +1 if page crossed */, IndirectYMode::class);
 
         $this->add(0xA2, LDX::class, 2, ImmediateMode::class);
         $this->add(0xA6, LDX::class, 2, ZeroPageMode::class);

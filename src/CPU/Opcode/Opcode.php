@@ -9,7 +9,8 @@ final class Opcode
     public function __construct(
         public readonly int $code,
         public readonly string $instructionClass,
-        public readonly int $length,
+        public readonly int $bytes,
+        public readonly int $cycles,
         public readonly string $modeClass,
     ) {}
 }
