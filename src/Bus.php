@@ -15,7 +15,7 @@ final class Bus
 
     public function __construct(
         private readonly PPU $ppu,
-        private readonly Rom $rom
+        private readonly Rom $rom,
     ) {}
 
     public function getMemory(UInt16 $addr): UInt8
@@ -87,20 +87,32 @@ final class Bus
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
     {
-        $high = $data->value >> 8;
-        $low = $data->value & 0xFF;
+        $addrValue = $addr->value;
 
-        $this->memory[$addr->value] = $low;
-        $this->memory[$addr->value + 1] = $high;
+        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+            $high = $data->value >> 8;
+            $low = $data->value & 0xFF;
+
+            $this->memory[$addr->value] = $low;
+            $this->memory[$addr->value + 1] = $high;
+        }
+
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16
     {
-        $low = $this->memory[$addr->value];
-        $high = $this->memory[$addr->increment()->value];
+        $addrValue = $addr->value;
 
-        $res = ($high << 8) | $low;
+        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+            $low = $this->memory[$addr->value];
+            $high = $this->memory[$addr->increment()->value];
 
-        return new UInt16($res);
+            $res = ($high << 8) | $low;
+
+            return new UInt16($res);
+        }
+
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
     }
 }
