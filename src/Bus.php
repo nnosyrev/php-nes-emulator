@@ -20,76 +20,70 @@ final class Bus
 
     public function getMemory(UInt16 $addr): UInt8
     {
-        $addrValue = $addr->value;
-
-        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+        if ($addr->isInInterval(0, 0x1FFF)) {
             return $this->getMemory($addr->and(new UInt16(0x11111111111)));
-        } elseif (in_array($addrValue, [0x2000, 0x2001, 0x2003, 0x2005, 0x2006, 0x4014])) {
-            throw new Exception('An attempt to read from register intended for writing (0x' . dechex($addrValue) . ')');
-        } elseif ($addrValue === 0x2002) {
+        } elseif ($addr->isIn(0x2000, 0x2001, 0x2003, 0x2005, 0x2006, 0x4014)) {
+            throw new Exception('An attempt to read from register intended for writing (0x' . dechex($addr->value) . ')');
+        } elseif ($addr->isEqual(0x2002)) {
             return $this->ppu->getStatus();
-        } elseif ($addrValue === 0x2004) {
+        } elseif ($addr->isEqual(0x2004)) {
             return $this->ppu->getOamData();
-        } elseif ($addrValue === 0x2007) {
+        } elseif ($addr->isEqual(0x2007)) {
             return $this->ppu->getData();
-        } elseif (0x2008 <= $addrValue && $addrValue <= 0x3FFF) {
+        } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             return $this->getMemory($addr->and(new UInt16(0x2007)));
-        } elseif (0x4000 <= $addrValue && $addrValue <= 0x4017) {
+        } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
-        } elseif (0x4018 <= $addrValue && $addrValue <= 0x401F) {
+        } elseif ($addr->isInInterval(0x4018, 0x401F)) {
             // APU and I/O functionality that is normally disabled
-        } elseif (0x8000 <= $addrValue && $addrValue <= 0xFFFF) {
+        } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
             // TODO: offset
-            $value = $this->rom->getPrgRom()[$addrValue];
+            $value = $this->rom->getPrgRom()[$addr->value];
             return new UInt8($value);
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
     }
 
     public function setMemory(UInt16 $addr, UInt8 $data): void
     {
-        $addrValue = $addr->value;
-
-        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+        if ($addr->isInInterval(0, 0x1FFF)) {
             $this->setMemory($addr->and(new UInt16(0x11111111111)), $data);
-        } elseif ($addrValue === 0x2000) {
+        } elseif ($addr->isEqual(0x2000)) {
             $this->ppu->setControl($data);
-        } elseif ($addrValue === 0x2001) {
+        } elseif ($addr->isEqual(0x2001)) {
             $this->ppu->setMask($data);
-        } elseif ($addrValue === 0x2002) {
+        } elseif ($addr->isEqual(0x2002)) {
             throw new Exception('An attempt to write a value to PPUSTATUS');
-        } elseif ($addrValue === 0x2003) {
+        } elseif ($addr->isEqual(0x2003)) {
             $this->ppu->setOamAddr($data);
-        } elseif ($addrValue === 0x2004) {
+        } elseif ($addr->isEqual(0x2004)) {
             $this->ppu->setOamData($data);
-        } elseif ($addrValue === 0x2005) {
+        } elseif ($addr->isEqual(0x2005)) {
             $this->ppu->setScroll($data);
-        } elseif ($addrValue === 0x2006) {
+        } elseif ($addr->isEqual(0x2006)) {
             $this->ppu->setAddress($data);
-        } elseif ($addrValue === 0x2007) {
+        } elseif ($addr->isEqual(0x2007)) {
             $this->ppu->setData($data);
-        } elseif (0x2008 <= $addrValue && $addrValue <= 0x3FFF) {
+        } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             $this->setMemory($addr->and(new UInt16(0x2007)), $data);
-        } elseif ($addrValue === 0x4014) {
+        } elseif ($addr->isEqual(0x4014)) {
             // TODO: writing to OAMDMA
             //$this->ppu->setOamDma($data);
-        } elseif (0x4000 <= $addrValue && $addrValue <= 0x4017) {
+        } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
-        } elseif (0x4018 <= $addrValue && $addrValue <= 0x401F) {
+        } elseif ($addr->isInInterval(0x4018, 0x401F)) {
             // APU and I/O functionality that is normally disabled
-        } elseif (0x8000 <= $addrValue && $addrValue <= 0xFFFF) {
+        } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
             // An attempt to write to PRG ROM
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
     }
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
     {
-        $addrValue = $addr->value;
-
-        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+        if ($addr->isInInterval(0, 0x1FFF)) {
             $high = $data->value >> 8;
             $low = $data->value & 0xFF;
 
@@ -97,14 +91,12 @@ final class Bus
             $this->memory[$addr->value + 1] = $high;
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16
     {
-        $addrValue = $addr->value;
-
-        if (0 <= $addrValue && $addrValue <= 0x1FFF) {
+        if ($addr->isInInterval(0, 0x1FFF)) {
             $low = $this->memory[$addr->value];
             $high = $this->memory[$addr->increment()->value];
 
@@ -113,6 +105,6 @@ final class Bus
             return new UInt16($res);
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addrValue));
+        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
     }
 }

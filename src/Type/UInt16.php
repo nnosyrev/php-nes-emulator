@@ -78,6 +78,21 @@ final class UInt16
         return UInt8::createFromUInt16($this);
     }
 
+    public function isInInterval(int $from, int $to): bool
+    {
+        return ($from <= $this->value && $this->value <= $to);
+    }
+
+    public function isIn(int ...$args): bool
+    {
+        return in_array($this->value, [...$args]);
+    }
+
+    public function isEqual(int $equal): bool
+    {
+        return $this->value === $equal;
+    }
+
     private function mod(int $value): int
     {
         return $value % self::BASE;
