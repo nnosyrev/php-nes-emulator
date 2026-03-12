@@ -23,7 +23,7 @@ final class Bus
         if ($addr->isInInterval(0, 0x1FFF)) {
             return $this->getMemory($addr->and(new UInt16(0x11111111111)));
         } elseif ($addr->isIn(0x2000, 0x2001, 0x2003, 0x2005, 0x2006, 0x4014)) {
-            throw new Exception('An attempt to read from register intended for writing (0x' . dechex($addr->value) . ')');
+            throw new Exception('An attempt to read from register intended for writing (' . $addr->hexString() . ')');
         } elseif ($addr->isEqual(0x2002)) {
             return $this->ppu->getStatus();
         } elseif ($addr->isEqual(0x2004)) {
@@ -42,7 +42,7 @@ final class Bus
             return new UInt8($value);
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
+        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 
     public function setMemory(UInt16 $addr, UInt8 $data): void
@@ -78,7 +78,7 @@ final class Bus
             // An attempt to write to PRG ROM
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
+        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
@@ -91,7 +91,7 @@ final class Bus
             $this->memory[$addr->value + 1] = $high;
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
+        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16
@@ -105,6 +105,6 @@ final class Bus
             return new UInt16($res);
         }
 
-        throw new Exception('An attempt to access an invalid memory address 0x' . dechex($addr->value));
+        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 }

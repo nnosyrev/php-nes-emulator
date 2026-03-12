@@ -142,19 +142,19 @@ final class PPU
 
     public function getData(): UInt8
     {
-        $addr = $this->addressRegister->get()->value;
+        $addr = $this->addressRegister->get();
 
         $result = $this->dataBuf;
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
-        if (0x0000 <= $addr && $addr <= 0x1FFF) {
+        if ($addr->isInInterval(0x0000, 0x1FFF)) {
             $this->dataBuf = new UInt8($this->chrRom[$addr]);
-        } elseif (0x2000 <= $addr && $addr <= 0x2FFF) {
-            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress(new UInt16($addr))->value]);
-        } elseif (0x3000 <= $addr && $addr <= 0x3EFF) {
-            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
-        } elseif (0x3F00 <= $addr && $addr <= 0x3FFF) {
+        } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
+            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress($addr)->value]);
+        } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . $addr->hexString());
+        } elseif ($addr->isInInterval(0x3F00, 0x3FFF)) {
             // These reads work differently than standard VRAM reads, as palette RAM is a separate memory
             // space internal to the PPU that is overlaid onto the PPU address space. The referenced 6-bit
             // palette data is returned immediately instead of going to the internal read buffer, and hence
@@ -163,11 +163,11 @@ final class PPU
             // goes into the read buffer as normal. The old contents of the read buffer are discarded when
             // reading palettes, but by changing the address to point outside palette RAM and performing
             // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
-            $this->dataBuf = new UInt8($this->palleteTable[$addr - 0x3f00]);
+            $this->dataBuf = new UInt8($this->palleteTable[$addr->value - 0x3f00]);
 
             return $this->dataBuf;
         } else {
-            throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr));
+            throw new Exception('Unexpected access to mirrored space ' . $addr->hexString());
         }
 
         return $result;
@@ -175,19 +175,19 @@ final class PPU
 
     public function setData(UInt8 $data): void
     {
-        $addr = $this->addressRegister->get()->value;
+        $addr = $this->addressRegister->get();
         $value = $data->value;
 
-        if (0x0000 <= $addr && $addr <= 0x1FFF) {
-            throw new Exception('Attempt to write to CHR ROM space 0x' . dechex($addr));
-        } elseif (0x2000 <= $addr && $addr <= 0x2FFF) {
-            $this->vram[$this->mirrorVRamAddress(new UInt16($addr))->value] = $value;
-        } elseif (0x3000 <= $addr && $addr <= 0x3EFF) {
-            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: 0x' . dechex($addr));
-        } elseif (0x3F00 <= $addr && $addr <= 0x3FFF) {
-            $this->palleteTable[$addr - 0x3f00] = $value;
+        if ($addr->isInInterval(0x0000, 0x1FFF)) {
+            throw new Exception('Attempt to write to CHR ROM space ' . $addr->hexString());
+        } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
+            $this->vram[$this->mirrorVRamAddress($addr)->value] = $value;
+        } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . $addr->hexString());
+        } elseif ($addr->isInInterval(0x3F00, 0x3FFF)) {
+            $this->palleteTable[$addr->value - 0x3f00] = $value;
         } else {
-            throw new Exception('Unexpected access to mirrored space 0x' . dechex($addr));
+            throw new Exception('Unexpected access to mirrored space ' . $addr->hexString());
         }
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
