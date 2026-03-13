@@ -50,45 +50,38 @@ final class Bus
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
             $this->memory[$addr->and(new UInt16(0b11111111111))->value] = $data->value;
-            return;
         } elseif ($addr->isEqual(0x2000)) {
             $this->ppu->setControl($data);
-            return;
         } elseif ($addr->isEqual(0x2001)) {
             $this->ppu->setMask($data);
-            return;
         } elseif ($addr->isEqual(0x2002)) {
             throw new Exception('An attempt to write a value to PPUSTATUS');
         } elseif ($addr->isEqual(0x2003)) {
             $this->ppu->setOamAddr($data);
-            return;
         } elseif ($addr->isEqual(0x2004)) {
             $this->ppu->setOamData($data);
-            return;
         } elseif ($addr->isEqual(0x2005)) {
             $this->ppu->setScroll($data);
-            return;
         } elseif ($addr->isEqual(0x2006)) {
             $this->ppu->setAddress($data);
-            return;
         } elseif ($addr->isEqual(0x2007)) {
             $this->ppu->setData($data);
-            return;
         } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             $this->setMemory($addr->and(new UInt16(0x2007)), $data);
-            return;
         } elseif ($addr->isEqual(0x4014)) {
             // TODO: writing to OAMDMA
+            throw new Exception('TODO: writing to OAMDMA ' . $addr->hexString());
             //$this->ppu->setOamDma($data);
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
+            throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x4018, 0x401F)) {
-            // APU and I/O functionality that is normally disabled
+            throw new Exception('APU and I/O functionality that is normally disabled ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
-            // An attempt to write to PRG ROM
+            throw new Exception('An attempt to write to PRG ROM ' . $addr->hexString());
+        } else {
+            throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
         }
-
-        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
@@ -109,24 +102,16 @@ final class Bus
         if ($addr->isInInterval(0, 0x1FFF)) {
             $low = $this->memory[$addr->value];
             $high = $this->memory[$addr->increment()->value];
-
-            $res = ($high << 8) | $low;
-
-            return new UInt16($res);
-        } elseif ($addr->isInInterval(0x4000, 0x4017)) {
-            // TODO: NES APU and I/O registers
-        } elseif ($addr->isInInterval(0x4018, 0x401F)) {
-            // APU and I/O functionality that is normally disabled
         } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
             // TODO: offset
             $low = $this->rom->getPrgRom()[$addr->value - 0x8000];
             $high = $this->rom->getPrgRom()[$addr->increment()->value - 0x8000];
-
-            $res = ($high << 8) | $low;
-
-            return new UInt16($res);
+        } else {
+            throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
         }
 
-        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
+        $result = ($high << 8) | $low;
+
+        return new UInt16($result);
     }
 }
