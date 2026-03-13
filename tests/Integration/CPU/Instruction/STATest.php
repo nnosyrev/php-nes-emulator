@@ -15,8 +15,9 @@ final class STATest extends TestCase
 
     public function testSTAZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x85, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x85, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05);
@@ -24,8 +25,9 @@ final class STATest extends TestCase
 
     public function testSTAZeroPageX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA2, 0x01, 0x95, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x01, 0x95, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x35))->value, 0x05);
@@ -33,8 +35,9 @@ final class STATest extends TestCase
 
     public function testSTAAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x8D, 0x34, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x8D, 0x34, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x0134))->value, 0x05);
@@ -42,8 +45,9 @@ final class STATest extends TestCase
 
     public function testSTAAbsoluteX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA2, 0x01, 0x9D, 0x34, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x01, 0x9D, 0x34, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x0135))->value, 0x05);
@@ -51,8 +55,9 @@ final class STATest extends TestCase
 
     public function testSTAAbsoluteY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA0, 0x01, 0x99, 0x34, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA0, 0x01, 0x99, 0x34, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x0135))->value, 0x05);
@@ -60,8 +65,9 @@ final class STATest extends TestCase
 
     public function testSTAIndirectX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA2, 0x01, 0x81, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x01, 0x81, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x35), new UInt8(0x02));
         $CPU->setMemory(new UInt16(0x36), new UInt8(0x01));
         $CPU->run();
@@ -71,8 +77,9 @@ final class STATest extends TestCase
 
     public function testSTAIndirectY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA0, 0x01, 0x91, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA0, 0x01, 0x91, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x34), new UInt8(0x02));
         $CPU->setMemory(new UInt16(0x35), new UInt8(0x01));
         $CPU->run();

@@ -15,8 +15,9 @@ final class EORTest extends TestCase
 
     public function testEORImmediate(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x49, 0xA6, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x49, 0xA6, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05 ^ 0xA6);
@@ -26,8 +27,9 @@ final class EORTest extends TestCase
 
     public function testEORZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x45, 0x08, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x45, 0x08, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x08), new UInt8(0xA1));
         $CPU->run();
 
@@ -38,8 +40,9 @@ final class EORTest extends TestCase
 
     public function testEORZeroPageX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x23, 0xA2, 0x01, 0x55, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x23, 0xA2, 0x01, 0x55, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
         $CPU->run();
 
@@ -50,8 +53,9 @@ final class EORTest extends TestCase
 
     public function testEORAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x4D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x4D, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x09));
         $CPU->run();
 
@@ -62,8 +66,9 @@ final class EORTest extends TestCase
 
     public function testEORAbsoluteX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0xA2, 0x03, 0x5D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x5D, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
         $CPU->run();
 
@@ -74,8 +79,9 @@ final class EORTest extends TestCase
 
     public function testEORAbsoluteY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x59, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x59, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
         $CPU->run();
@@ -87,8 +93,9 @@ final class EORTest extends TestCase
 
     public function testEORIndirectX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0xA2, 0x01, 0x41, 0x00, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x01, 0x41, 0x00, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x01), new UInt8(0x05));
         $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
         $CPU->setMemory(new UInt16(0x0705), new UInt8(0x11));
@@ -101,8 +108,9 @@ final class EORTest extends TestCase
 
     public function testEORIndirectY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x51, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x51, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x01));
         $CPU->setMemory(new UInt16(0x01), new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));

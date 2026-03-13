@@ -13,9 +13,10 @@ final class SECTest extends TestCase
 
     public function testSEC(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x38, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(false);
-        $CPU->load([0x38, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);

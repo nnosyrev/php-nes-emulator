@@ -13,9 +13,10 @@ final class CLITest extends TestCase
 
     public function testCLI(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x58, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagI(true);
-        $CPU->load([0x58, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagI(), false);

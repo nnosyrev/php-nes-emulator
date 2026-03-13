@@ -13,8 +13,9 @@ final class TAYTest extends TestCase
 
     public function testTAY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA8, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, $CPU->getRegisterA()->value);

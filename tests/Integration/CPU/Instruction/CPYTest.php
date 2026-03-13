@@ -13,8 +13,9 @@ final class CPYTest extends TestCase
 
     public function testCPYImmediate1(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0xC0, 0x04, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0xC0, 0x04, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);
@@ -24,8 +25,9 @@ final class CPYTest extends TestCase
 
     public function testCPYImmediate2(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0xC0, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0xC0, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);
@@ -35,8 +37,9 @@ final class CPYTest extends TestCase
 
     public function testCPYImmediate3(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x04, 0xC0, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x04, 0xC0, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), false);

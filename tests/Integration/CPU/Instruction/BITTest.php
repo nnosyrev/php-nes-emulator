@@ -15,8 +15,9 @@ final class BITTest extends TestCase
 
     public function testBITZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x80, 0x24, 0x00, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x80, 0x24, 0x00, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x00), new UInt8(0x7F));
         $CPU->run();
 
@@ -27,8 +28,9 @@ final class BITTest extends TestCase
 
     public function testBITAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x80, 0x2C, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x80, 0x2C, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x00));
         $CPU->run();
 

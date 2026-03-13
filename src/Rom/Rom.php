@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Rom;
 
+use App\Mirroring;
 use App\Type\UInt8;
 use Exception;
 
-final class Rom
+final class Rom implements RomInterface
 {
     private const NES_TAG = [0x4E, 0x45, 0x53, 0x1A];
     private const PRG_ROM_PAGE_SIZE = 16384;

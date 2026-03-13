@@ -15,8 +15,9 @@ final class LDXTest extends TestCase
 
     public function testLDX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x05);
@@ -26,8 +27,9 @@ final class LDXTest extends TestCase
 
     public function testLDXZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA6, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA6, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
         $CPU->run();
 
@@ -38,8 +40,9 @@ final class LDXTest extends TestCase
 
     public function testLDXZeroPageY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xB6, 0x05, 0x00]);
+        $this->loadProgramToRom([0xB6, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x01));
         $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
         $CPU->run();
@@ -51,8 +54,9 @@ final class LDXTest extends TestCase
 
     public function testLDXAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xAE, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xAE, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x11));
         $CPU->run();
 
@@ -63,8 +67,9 @@ final class LDXTest extends TestCase
 
     public function testLDXAbsoluteY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xBE, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xBE, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x11));
         $CPU->run();

@@ -13,8 +13,9 @@ final class TXATest extends TestCase
 
     public function testTXA(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0x8A, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0x8A, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, $CPU->getRegisterA()->value);

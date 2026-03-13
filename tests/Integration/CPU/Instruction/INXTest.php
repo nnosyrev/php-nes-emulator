@@ -13,8 +13,9 @@ final class INXTest extends TestCase
 
     public function testINX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0xE8, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0xE8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x05 + 1);
@@ -24,8 +25,9 @@ final class INXTest extends TestCase
 
     public function testINXOverflow(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0xFF, 0xE8, 0xE8, 0x00]);
+        $this->loadProgramToRom([0xA2, 0xFF, 0xE8, 0xE8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x01);

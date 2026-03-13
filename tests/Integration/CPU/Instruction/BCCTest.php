@@ -13,9 +13,10 @@ final class BCCTest extends TestCase
 
     public function testBCC(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x05, 0x90, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(false);
-        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0x90, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();
@@ -25,9 +26,10 @@ final class BCCTest extends TestCase
 
     public function testBCCFlagCIsTrue(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x05, 0x90, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(true);
-        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0x90, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();

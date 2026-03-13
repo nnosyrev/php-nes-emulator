@@ -15,8 +15,9 @@ final class DCPTest extends TestCase
 
     public function testDCPZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x85, 0x01, 0xC7, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x85, 0x01, 0xC7, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x01))->value, 0x05 - 1);

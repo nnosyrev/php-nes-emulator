@@ -13,8 +13,9 @@ final class PLATest extends TestCase
 
     public function testPLA(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x48, 0xA9, 0x11, 0x68, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x48, 0xA9, 0x11, 0x68, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);

@@ -13,8 +13,9 @@ final class AACTest extends TestCase
 
     public function testAAC(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x0B, 0xA6, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x0B, 0xA6, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05 & 0xA6);

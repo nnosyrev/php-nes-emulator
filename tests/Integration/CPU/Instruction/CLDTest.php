@@ -13,9 +13,10 @@ final class CLDTest extends TestCase
 
     public function testCLD(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xD8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagD(true);
-        $CPU->load([0xD8, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagD(), false);

@@ -8,6 +8,7 @@ use App\Mirroring;
 use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
 use App\PPU\Register\ScrollRegister;
+use App\Rom\RomInterface;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use Exception;
@@ -15,12 +16,11 @@ use SplFixedArray;
 
 final class PPU
 {
-    // TODO: it's may be wrong (32)
-    private SplFixedArray $palleteTable = new \SplFixedArray(32);
+    private SplFixedArray $palleteTable;
 
-    private SplFixedArray $vram = new \SplFixedArray(2048);
+    private SplFixedArray $vram;
 
-    private UInt8 $dataBuf = new UInt8(0);
+    private UInt8 $dataBuf;
 
     /*
      * PPUMASK - Rendering settings ($2001 write)
@@ -68,15 +68,20 @@ final class PPU
     /*
      * OAMDATA - Sprite RAM data ($2004 read/write)
      */
-    private SplFixedArray $oamData = new \SplFixedArray(256);
+    private SplFixedArray $oamData;
 
     public function __construct(
-        private readonly array $chrRom,
-        private readonly Mirroring $mirroring,
+        private readonly RomInterface $rom,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
         private readonly ScrollRegister $scrollRegister,
-    ) {}
+    ) {
+        // TODO: it's may be wrong (32)
+        $this->palleteTable = new SplFixedArray(32);
+        $this->vram = new SplFixedArray(2048);
+        $this->dataBuf = new UInt8(0);
+        $this->oamData = new SplFixedArray(256);
+    }
 
     public function setControl(UInt8 $value): void
     {
@@ -149,7 +154,7 @@ final class PPU
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
         if ($addr->isInInterval(0x0000, 0x1FFF)) {
-            $this->dataBuf = new UInt8($this->chrRom[$addr]);
+            $this->dataBuf = new UInt8($this->rom->getChrRom()[$addr->value]);
         } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
             $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress($addr)->value]);
         } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
@@ -176,16 +181,15 @@ final class PPU
     public function setData(UInt8 $data): void
     {
         $addr = $this->addressRegister->get();
-        $value = $data->value;
 
         if ($addr->isInInterval(0x0000, 0x1FFF)) {
             throw new Exception('Attempt to write to CHR ROM space ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
-            $this->vram[$this->mirrorVRamAddress($addr)->value] = $value;
+            $this->vram[$this->mirrorVRamAddress($addr)->value] = $data->value;
         } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
             throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x3F00, 0x3FFF)) {
-            $this->palleteTable[$addr->value - 0x3f00] = $value;
+            $this->palleteTable[$addr->value - 0x3f00] = $data->value;
         } else {
             throw new Exception('Unexpected access to mirrored space ' . $addr->hexString());
         }
@@ -201,11 +205,13 @@ final class PPU
 
         $nameTable = (int) floor($vramIndex / 0x400);
 
-        if ($this->mirroring === Mirroring::Vertical && in_array($nameTable, [2, 3])) {
+        $mirroring = $this->rom->getMirroring();
+
+        if ($mirroring === Mirroring::Vertical && in_array($nameTable, [2, 3])) {
             $vramIndex = $vramIndex - 0x800;
-        } elseif ($this->mirroring === Mirroring::Horizontal && in_array($nameTable, [1, 2])) {
+        } elseif ($mirroring === Mirroring::Horizontal && in_array($nameTable, [1, 2])) {
             $vramIndex = $vramIndex - 0x400;
-        } elseif ($this->mirroring === Mirroring::Horizontal && $nameTable === 3) {
+        } elseif ($mirroring === Mirroring::Horizontal && $nameTable === 3) {
             $vramIndex = $vramIndex - 0x800;
         }
 

@@ -13,8 +13,9 @@ final class BPLTest extends TestCase
 
     public function testBPL(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0b01110010, 0x10, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0b01110010, 0x10, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();
@@ -24,8 +25,9 @@ final class BPLTest extends TestCase
 
     public function testBPLFlagNIsTrue(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0b11110010, 0x10, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0b11110010, 0x10, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();

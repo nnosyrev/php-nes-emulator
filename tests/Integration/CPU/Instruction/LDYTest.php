@@ -15,8 +15,9 @@ final class LDYTest extends TestCase
 
     public function testLDYImmediate(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, 0x05);
@@ -26,8 +27,9 @@ final class LDYTest extends TestCase
 
     public function testLDYZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA4, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA4, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
         $CPU->run();
 
@@ -38,8 +40,9 @@ final class LDYTest extends TestCase
 
     public function testLDYZeroPageX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xB4, 0x05, 0x00]);
+        $this->loadProgramToRom([0xB4, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterX(new UInt8(0x01));
         $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
         $CPU->run();
@@ -51,8 +54,9 @@ final class LDYTest extends TestCase
 
     public function testLDYAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xAC, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xAC, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x11));
         $CPU->run();
 
@@ -63,8 +67,9 @@ final class LDYTest extends TestCase
 
     public function testLDYAbsoluteX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xBC, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xBC, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterX(new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x11));
         $CPU->run();

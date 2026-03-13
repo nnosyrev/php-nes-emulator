@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 use App\Mirroring;
-use App\Rom;
+use App\Rom\Rom;
 use PHPUnit\Framework\TestCase;
 
 final class RomTest extends TestCase

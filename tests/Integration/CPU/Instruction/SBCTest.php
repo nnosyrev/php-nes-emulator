@@ -13,9 +13,10 @@ final class SBCTest extends TestCase
 
     public function testSBCImmediate(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0xA1, 0xE9, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(false);
-        $CPU->load([0xA9, 0xA1, 0xE9, 0x05, 0x00]);
         $CPU->run();
 
         $result = 0xA1 + (0x05 ^ 0xFF);
@@ -32,9 +33,10 @@ final class SBCTest extends TestCase
 
     public function testSBCImmediate2(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0x05, 0xE9, 0xA1, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(true);
-        $CPU->load([0xA9, 0x05, 0xE9, 0xA1, 0x00]);
         $CPU->run();
 
         $result = 0x05 + (0xA1 ^ 0xFF) + 1;

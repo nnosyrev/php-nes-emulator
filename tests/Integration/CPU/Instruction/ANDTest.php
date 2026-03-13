@@ -15,8 +15,9 @@ final class ANDTest extends TestCase
 
     public function testANDImmediate(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x29, 0xA6, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x29, 0xA6, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05 & 0xA6);
@@ -26,8 +27,9 @@ final class ANDTest extends TestCase
 
     public function testANDZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x25, 0x08, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x25, 0x08, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x08), new UInt8(0xA1));
         $CPU->run();
 
@@ -38,8 +40,9 @@ final class ANDTest extends TestCase
 
     public function testANDZeroPageX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x23, 0xA2, 0x01, 0x35, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x23, 0xA2, 0x01, 0x35, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
         $CPU->run();
 
@@ -50,8 +53,9 @@ final class ANDTest extends TestCase
 
     public function testANDIndirectX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0xA2, 0x01, 0x21, 0x00, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x01, 0x21, 0x00, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x01), new UInt8(0x05));
         $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
         $CPU->setMemory(new UInt16(0x0705), new UInt8(0x11));
@@ -64,8 +68,9 @@ final class ANDTest extends TestCase
 
     public function testANDIndirectY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x31, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x31, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x01));
         $CPU->setMemory(new UInt16(0x01), new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
@@ -79,8 +84,9 @@ final class ANDTest extends TestCase
 
     public function testANDAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x2D, 0x10, 0x22, 0x00]);
+        $CPU->loadProgramToRom([0xA9, 0x75, 0x2D, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x09));
         $CPU->run();
 
@@ -91,8 +97,9 @@ final class ANDTest extends TestCase
 
     public function testANDAbsoluteX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0xA2, 0x03, 0x3D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x3D, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
         $CPU->run();
 
@@ -103,8 +110,9 @@ final class ANDTest extends TestCase
 
     public function testANDAbsoluteY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x75, 0x39, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x39, 0x10, 0x22, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
         $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
         $CPU->run();

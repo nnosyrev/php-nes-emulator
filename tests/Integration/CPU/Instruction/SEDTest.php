@@ -13,9 +13,10 @@ final class SEDTest extends TestCase
 
     public function testSED(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xF8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagD(false);
-        $CPU->load([0xF8, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagD(), true);

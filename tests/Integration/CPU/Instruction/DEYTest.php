@@ -13,8 +13,9 @@ final class DEYTest extends TestCase
 
     public function testDEY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0x88, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0x88, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, 0x05 - 1);
@@ -24,8 +25,9 @@ final class DEYTest extends TestCase
 
     public function testDEYOverflow(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x01, 0x88, 0x88, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x01, 0x88, 0x88, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, 0xFF);

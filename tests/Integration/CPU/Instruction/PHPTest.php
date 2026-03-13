@@ -13,7 +13,9 @@ final class PHPTest extends TestCase
 
     public function testPHPTrue(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x08, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagN(true);
         $CPU->setFlagV(true);
         $CPU->setFlagB(true);
@@ -21,7 +23,6 @@ final class PHPTest extends TestCase
         $CPU->setFlagI(true);
         $CPU->setFlagZ(true);
         $CPU->setFlagC(true);
-        $CPU->load([0x08, 0x00]);
         $CPU->run();
 
         $stackValue = $CPU->popFromStack()->value;
@@ -37,7 +38,9 @@ final class PHPTest extends TestCase
 
     public function testPHPFalse(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x08, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagN(false);
         $CPU->setFlagV(false);
         $CPU->setFlagB(false);
@@ -45,7 +48,6 @@ final class PHPTest extends TestCase
         $CPU->setFlagI(false);
         $CPU->setFlagZ(false);
         $CPU->setFlagC(false);
-        $CPU->load([0x08, 0x00]);
         $CPU->run();
 
         $stackValue = $CPU->popFromStack()->value;

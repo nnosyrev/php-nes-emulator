@@ -15,8 +15,9 @@ final class RTITest extends TestCase
 
     public function testRTITrue(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0x40, 0x00]);
+        $this->loadProgramToRom([0x40, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->pushToStackUInt16(new UInt16(0x8000 + 1));
         $CPU->pushToStack(new UInt8(0b11111111));
         $CPU->run();
@@ -32,8 +33,9 @@ final class RTITest extends TestCase
 
     public function testRTIFalse(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0x40, 0x00]);
+        $this->loadProgramToRom([0x40, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->pushToStackUInt16(new UInt16(0x8000 + 1));
         $CPU->pushToStack(new UInt8(0b00000000));
         $CPU->run();

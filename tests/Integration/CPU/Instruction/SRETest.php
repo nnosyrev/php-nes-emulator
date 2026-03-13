@@ -14,8 +14,9 @@ final class SRETest extends TestCase
 
     public function testSRE(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0b00010100, 0x85, 0x02, 0x47, 0x02, 0x00]);
+        $this->loadProgramToRom([0xA9, 0b00010100, 0x85, 0x02, 0x47, 0x02, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x02))->value, 0b00001010);

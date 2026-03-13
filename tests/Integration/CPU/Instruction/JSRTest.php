@@ -13,8 +13,9 @@ final class JSRTest extends TestCase
 
     public function testJSRAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x20, 0x07, 0x80, 0xA9, 0x29, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x20, 0x07, 0x80, 0xA9, 0x29, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);

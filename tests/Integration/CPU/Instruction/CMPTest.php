@@ -13,8 +13,9 @@ final class CMPTest extends TestCase
 
     public function testCMPImmediate1(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xC9, 0x04, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xC9, 0x04, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);
@@ -24,8 +25,9 @@ final class CMPTest extends TestCase
 
     public function testCMPImmediate2(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xC9, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xC9, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);
@@ -35,8 +37,9 @@ final class CMPTest extends TestCase
 
     public function testCMPImmediate3(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x04, 0xC9, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x04, 0xC9, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), false);

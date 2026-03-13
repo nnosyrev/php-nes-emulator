@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU;
 
-use App\Bus;
 use App\CPU\CPU;
-use App\CPU\Instruction\InstructionFactory;
-use App\CPU\Mode\ModeFactory;
-use App\CPU\Opcode\OpcodeCollection;
+use App\Rom\RomInterface;
 use App\Type\UInt8;
+use DI\Container;
 
 trait CPUTestTrait
 {
-    private CPU $CPU;
+    private Container $container;
 
     protected function setUp(): void
     {
-        $this->CPU = new CPU(
-            new Bus(),
-            new OpcodeCollection(),
-            new InstructionFactory(),
-            new ModeFactory()
-        );
+        $this->container = new Container();
+    }
+
+    protected function loadProgramToRom(array $program): void
+    {
+        $rom = $this->createStub(RomInterface::class);
+        $rom->method('getPrgRom')
+            ->willReturn($program);
+
+        $this->container->set(RomInterface::class, $rom);
+    }
+
+    protected function getCpu(): CPU
+    {
+        return $this->container->get(CPU::class);
     }
 
     protected function getFlagNValue(UInt8 $byte): bool

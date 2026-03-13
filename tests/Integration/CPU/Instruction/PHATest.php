@@ -13,8 +13,9 @@ final class PHATest extends TestCase
 
     public function testPHA(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0x48, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x48, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $stackValue = $CPU->popFromStack()->value;

@@ -12,8 +12,9 @@ final class CPUTest extends TestCase
 
     public function test5opcodes(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
+        $this->loadProgramToRom([0xA9, 0xC0, 0xAA, 0xE8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0xC1);

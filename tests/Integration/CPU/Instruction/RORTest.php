@@ -14,9 +14,10 @@ final class RORTest extends TestCase
 
     public function testROR(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0b00010100, 0x85, 0x02, 0x66, 0x02, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(true);
-        $CPU->load([0xA9, 0b00010100, 0x85, 0x02, 0x66, 0x02, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x02))->value, 0b10001010);
@@ -27,9 +28,10 @@ final class RORTest extends TestCase
 
     public function testRORA(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0b00010101, 0x6A, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(false);
-        $CPU->load([0xA9, 0b00010101, 0x6A, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0b00001010);

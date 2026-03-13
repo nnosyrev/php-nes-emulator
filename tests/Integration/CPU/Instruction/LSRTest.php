@@ -14,8 +14,9 @@ final class LSRTest extends TestCase
 
     public function testLSR(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0b00010100, 0x85, 0x02, 0x46, 0x02, 0x00]);
+        $this->loadProgramToRom([0xA9, 0b00010100, 0x85, 0x02, 0x46, 0x02, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x02))->value, 0b00001010);
@@ -26,8 +27,9 @@ final class LSRTest extends TestCase
 
     public function testLSRA(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0b00010101, 0x4A, 0x00]);
+        $this->loadProgramToRom([0xA9, 0b00010101, 0x4A, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0b00001010);

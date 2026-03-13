@@ -13,9 +13,10 @@ final class BVSTest extends TestCase
 
     public function testBVS(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x05, 0x70, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagV(true);
-        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0x70, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();
@@ -25,9 +26,10 @@ final class BVSTest extends TestCase
 
     public function testBVSFlagVIsFalse(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x05, 0x70, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagV(false);
-        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0x70, 0xFA, 0x00]);
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();

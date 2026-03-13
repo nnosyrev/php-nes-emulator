@@ -13,8 +13,9 @@ final class DEXTest extends TestCase
 
     public function testDEX(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0xCA, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0xCA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x05 - 1);
@@ -24,8 +25,9 @@ final class DEXTest extends TestCase
 
     public function testDEXOverflow(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x01, 0xCA, 0xCA, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x01, 0xCA, 0xCA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0xFF);

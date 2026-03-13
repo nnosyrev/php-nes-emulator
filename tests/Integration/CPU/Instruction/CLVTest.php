@@ -13,9 +13,10 @@ final class CLVTest extends TestCase
 
     public function testCLV(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xB8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagV(true);
-        $CPU->load([0xB8, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagV(), false);

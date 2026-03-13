@@ -13,9 +13,10 @@ final class CLCTest extends TestCase
 
     public function testCLC(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x18, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(true);
-        $CPU->load([0x18, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), false);

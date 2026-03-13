@@ -13,8 +13,9 @@ final class TSXTest extends TestCase
 
     public function testTXS(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xBA, 0x00]);
+        $this->loadProgramToRom([0xBA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getSP()->value, $CPU->getRegisterX()->value);

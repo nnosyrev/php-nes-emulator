@@ -13,9 +13,10 @@ final class ADCTest extends TestCase
 
     public function testADCImmediate(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0x05, 0x69, 0xA1, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(true);
-        $CPU->load([0xA9, 0x05, 0x69, 0xA1, 0x00]);
         $CPU->run();
 
         $result = 0x05 + 0xA1 + 1;
@@ -29,9 +30,10 @@ final class ADCTest extends TestCase
 
     public function testADCImmediateOverflow(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA9, 0xC8, 0x69, 0xDC, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagC(false);
-        $CPU->load([0xA9, 0xC8, 0x69, 0xDC, 0x00]);
         $CPU->run();
 
         $result = 0xC8 + 0xDC;

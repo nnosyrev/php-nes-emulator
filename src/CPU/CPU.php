@@ -39,20 +39,9 @@ final class CPU
         private readonly OpcodeCollection $opcodeCollection,
         private readonly InstructionFactory $instructionFactory,
         private readonly ModeFactory $modeFactory,
-    ) {}
-
-    public function load(array $program): void
-    {
+    ) {
         $this->PC = new UInt16(self::PRG_ROM_START);
         $this->SP = new UInt8(self::SP_END);
-
-        $current = self::PRG_ROM_START;
-        foreach ($program as &$byte) {
-            UInt8::validate($byte);
-
-            $this->setMemory(new UInt16($current), new UInt8($byte));
-            $current++;
-        }
     }
 
     public function run(): void

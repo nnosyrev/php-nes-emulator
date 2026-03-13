@@ -13,8 +13,9 @@ final class INYTest extends TestCase
 
     public function testINY(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0xC8, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0xC8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, 0x05 + 1);
@@ -24,8 +25,9 @@ final class INYTest extends TestCase
 
     public function testINYOverflow(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0xFF, 0xC8, 0xC8, 0x00]);
+        $this->loadProgramToRom([0xA0, 0xFF, 0xC8, 0xC8, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, 0x01);

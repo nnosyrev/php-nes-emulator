@@ -15,8 +15,9 @@ final class STXTest extends TestCase
 
     public function testSTXZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0x86, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0x86, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05);
@@ -24,9 +25,10 @@ final class STXTest extends TestCase
 
     public function testSTXZeroPageY(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0xA2, 0x05, 0x96, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x01));
-        $CPU->load([0xA2, 0x05, 0x96, 0x34, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x35))->value, 0x05);
@@ -34,8 +36,9 @@ final class STXTest extends TestCase
 
     public function testSTXAbsolute(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA2, 0x05, 0x8E, 0x34, 0x01, 0x00]);
+        $this->loadProgramToRom([0xA2, 0x05, 0x8E, 0x34, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x0134))->value, 0x05);

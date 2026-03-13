@@ -13,8 +13,9 @@ final class TYATest extends TestCase
 
     public function testTYA(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA0, 0x05, 0x98, 0x00]);
+        $this->loadProgramToRom([0xA0, 0x05, 0x98, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterY()->value, $CPU->getRegisterA()->value);

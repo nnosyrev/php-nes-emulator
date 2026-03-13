@@ -13,9 +13,10 @@ final class SEITest extends TestCase
 
     public function testSEI(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x78, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setFlagI(false);
-        $CPU->load([0x78, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagI(), true);

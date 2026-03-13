@@ -14,9 +14,10 @@ final class PLPTest extends TestCase
 
     public function testPLPTrue(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x48, 0x28, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterA(new UInt8(0b11111111));
-        $CPU->load([0x48, 0x28, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagN(), true);
@@ -30,9 +31,10 @@ final class PLPTest extends TestCase
 
     public function testPLPFalse(): void
     {
-        $CPU = $this->CPU;
+        $this->loadProgramToRom([0x48, 0x28, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setRegisterA(new UInt8(0b00000000));
-        $CPU->load([0x48, 0x28, 0x00]);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagN(), false);

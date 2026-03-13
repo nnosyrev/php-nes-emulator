@@ -15,8 +15,9 @@ final class LAXTest extends TestCase
 
     public function testLAXZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA7, 0x05, 0x00]);
+        $this->loadProgramToRom([0xA7, 0x05, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
         $CPU->run();
 

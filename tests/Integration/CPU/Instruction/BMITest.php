@@ -13,8 +13,9 @@ final class BMITest extends TestCase
 
     public function testBMI(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0b11110010, 0x30, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0b11110010, 0x30, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();
@@ -24,8 +25,9 @@ final class BMITest extends TestCase
 
     public function testBMIFlagNIsFalse(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0b01110010, 0x30, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0b01110010, 0x30, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();

@@ -13,8 +13,9 @@ final class BNETest extends TestCase
 
     public function testBNEFlagZIsFalse(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0x05, 0xD0, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x05, 0xD0, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();
@@ -24,8 +25,9 @@ final class BNETest extends TestCase
 
     public function testBNEFlagZIsTrue(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xE8, 0x00, 0xA2, 0x00, 0xD0, 0xFA, 0x00]);
+        $this->loadProgramToRom([0xE8, 0x00, 0xA2, 0x00, 0xD0, 0xFA, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->incrementPC();
         $CPU->incrementPC();
         $CPU->run();

@@ -14,8 +14,9 @@ final class AAXTest extends TestCase
 
     public function testAAXZeroPage(): void
     {
-        $CPU = $this->CPU;
-        $CPU->load([0xA9, 0x05, 0xA2, 0x11, 0x87, 0x34, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x11, 0x87, 0x34, 0x00]);
+
+        $CPU = $this->getCpu();
         $CPU->run();
 
         $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05 & 0x11);
