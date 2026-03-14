@@ -24,10 +24,10 @@ final class JMPTest extends TestCase
 
     public function testJMPIndirect(): void
     {
-        $this->loadProgramToRom([0xA9, 0x05, 0x6C, 0x10, 0x22, 0xA9, 0x29, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x05, 0x6C, 0x10, 0x02, 0xA9, 0x29, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemoryUInt16(new UInt16(0x2210), new UInt16(0x8007));
+        $CPU->setMemoryUInt16(new UInt16(0x0210), new UInt16(0x8007));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x05);

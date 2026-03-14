@@ -84,10 +84,10 @@ final class ANDTest extends TestCase
 
     public function testANDAbsolute(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0x2D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x2D, 0x20, 0x01, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x2210), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0120), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 & 0x09);
@@ -97,10 +97,10 @@ final class ANDTest extends TestCase
 
     public function testANDAbsoluteX(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x3D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x3D, 0x20, 0x01, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0123), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 & 0x09);
@@ -110,11 +110,11 @@ final class ANDTest extends TestCase
 
     public function testANDAbsoluteY(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0x39, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x39, 0x20, 0x01, 0x00]);
 
         $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0123), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 & 0x09);

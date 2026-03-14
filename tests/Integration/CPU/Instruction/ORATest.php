@@ -84,10 +84,10 @@ final class ORATest extends TestCase
 
     public function testORAAbsolute(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0x0D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x0D, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x2210), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0210), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 | 0x09);
@@ -97,10 +97,10 @@ final class ORATest extends TestCase
 
     public function testORAAbsoluteX(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x1D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0xA2, 0x03, 0x1D, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 | 0x09);
@@ -110,11 +110,11 @@ final class ORATest extends TestCase
 
     public function testORAAbsoluteY(): void
     {
-        $this->loadProgramToRom([0xA9, 0x75, 0x19, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x19, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x09));
+        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x09));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterA()->value, 0x75 | 0x09);

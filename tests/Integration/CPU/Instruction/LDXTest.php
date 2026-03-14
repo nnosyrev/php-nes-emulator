@@ -54,10 +54,10 @@ final class LDXTest extends TestCase
 
     public function testLDXAbsolute(): void
     {
-        $this->loadProgramToRom([0xAE, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xAE, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x2210), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x0210), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x11);
@@ -67,11 +67,11 @@ final class LDXTest extends TestCase
 
     public function testLDXAbsoluteY(): void
     {
-        $this->loadProgramToRom([0xBE, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xBE, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
         $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x2213), new UInt8(0x11));
+        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x11));
         $CPU->run();
 
         $this->assertSame($CPU->getRegisterX()->value, 0x11);
