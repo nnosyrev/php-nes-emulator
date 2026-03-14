@@ -6,7 +6,7 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\Type\UInt16;
 use PHPUnit\Framework\TestCase;
-use Tests\Integration\CPU\CPUTestTrait;
+use Tests\CPUTestTrait;
 
 final class LSRTest extends TestCase
 {

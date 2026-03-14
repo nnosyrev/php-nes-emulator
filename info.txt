@@ -1,0 +1,201 @@
+PHPUnit 10.5.60 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.1.34
+Configuration: /var/www/phpunit.xml
+
+...F.............EEE.........E.................................  63 / 150 ( 42%)
+...EEE...........E.......EE.E...EE...EE.......EEE.............. 126 / 150 ( 84%)
+........................                                        150 / 150 (100%)
+
+Time: 00:00.447, Memory: 16.00 MB
+
+There were 18 errors:
+
+1) Tests\Integration\CPU\Instruction\ANDTest::testANDAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ANDI.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ANDTest.php:91
+
+2) Tests\Integration\CPU\Instruction\ANDTest::testANDAbsoluteX
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ANDI.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ANDTest.php:104
+
+3) Tests\Integration\CPU\Instruction\ANDTest::testANDAbsoluteY
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ANDI.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ANDTest.php:118
+
+4) Tests\Integration\CPU\Instruction\BITTest::testBITAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/BIT.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/BITTest.php:35
+
+5) Tests\Integration\CPU\Instruction\EORTest::testEORAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/EOR.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/EORTest.php:60
+
+6) Tests\Integration\CPU\Instruction\EORTest::testEORAbsoluteX
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/EOR.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/EORTest.php:73
+
+7) Tests\Integration\CPU\Instruction\EORTest::testEORAbsoluteY
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/EOR.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/EORTest.php:87
+
+8) Tests\Integration\CPU\Instruction\JMPTest::testJMPIndirect
+Exception: An attempt to access an invalid memory address 0x2210
+
+/var/www/src/Bus.php:96
+/var/www/src/CPU/CPU.php:268
+/var/www/tests/Integration/CPU/Instruction/JMPTest.php:30
+
+9) Tests\Integration\CPU\Instruction\LDATest::testLDAAbsoluteX
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDATest.php:107
+
+10) Tests\Integration\CPU\Instruction\LDATest::testLDAAbsoluteY
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDATest.php:121
+
+11) Tests\Integration\CPU\Instruction\LDATest::testLDAAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDATest.php:93
+
+12) Tests\Integration\CPU\Instruction\LDXTest::testLDXAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDX.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDXTest.php:61
+
+13) Tests\Integration\CPU\Instruction\LDXTest::testLDXAbsoluteY
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDX.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDXTest.php:75
+
+14) Tests\Integration\CPU\Instruction\LDYTest::testLDYAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDY.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDYTest.php:61
+
+15) Tests\Integration\CPU\Instruction\LDYTest::testLDYAbsoluteX
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/LDY.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/LDYTest.php:75
+
+16) Tests\Integration\CPU\Instruction\ORATest::testORAAbsolute
+Exception: An attempt to read from register intended for writing (0x2000)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ORA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ORATest.php:91
+
+17) Tests\Integration\CPU\Instruction\ORATest::testORAAbsoluteX
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ORA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ORATest.php:104
+
+18) Tests\Integration\CPU\Instruction\ORATest::testORAAbsoluteY
+Exception: An attempt to read from register intended for writing (0x2003)
+
+/var/www/src/Bus.php:27
+/var/www/src/Bus.php:35
+/var/www/src/CPU/CPU.php:263
+/var/www/src/CPU/Instruction/ORA.php:16
+/var/www/src/CPU/CPU.php:61
+/var/www/tests/Integration/CPU/Instruction/ORATest.php:118
+
+--
+
+There was 1 failure:
+
+1) Tests\Unit\PPU\PPUTest::test
+Failed asserting that false is identical to true.
+
+/var/www/tests/Unit/PPU/PPUTest.php:14
+
+ERRORS!
+Tests: 150, Assertions: 343, Errors: 18, Failures: 1.

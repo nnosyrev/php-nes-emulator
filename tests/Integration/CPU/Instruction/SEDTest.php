@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\Instruction;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Integration\CPU\CPUTestTrait;
+use Tests\CPUTestTrait;
 
 final class SEDTest extends TestCase
 {

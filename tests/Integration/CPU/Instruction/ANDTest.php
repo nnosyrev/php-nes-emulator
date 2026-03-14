@@ -7,7 +7,7 @@ namespace Tests\Integration\CPU\Instruction;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
-use Tests\Integration\CPU\CPUTestTrait;
+use Tests\CPUTestTrait;
 
 final class ANDTest extends TestCase
 {
@@ -84,7 +84,7 @@ final class ANDTest extends TestCase
 
     public function testANDAbsolute(): void
     {
-        $CPU->loadProgramToRom([0xA9, 0x75, 0x2D, 0x10, 0x22, 0x00]);
+        $this->loadProgramToRom([0xA9, 0x75, 0x2D, 0x10, 0x22, 0x00]);
 
         $CPU = $this->getCpu();
         $CPU->setMemory(new UInt16(0x2210), new UInt8(0x09));

@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Tests\Unit\CPU;
 
-use App\Bus;
-use App\CPU\CPU;
-use App\CPU\Instruction\InstructionFactory;
-use App\CPU\Mode\ModeFactory;
-use App\CPU\Opcode\OpcodeCollection;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
+use Tests\CPUTestTrait;
 
 final class CPUTest extends TestCase
 {
+    use CPUTestTrait;
+
     public function testReadWriteMemoryUInt16(): void
     {
+        $this->loadProgramToRom([]);
+
         $addr = new UInt16(0);
 
-        $CPU = new CPU(new Bus(), new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
+        $CPU = $this->getCpu();
         $CPU->setMemoryUInt16($addr, new UInt16(0x8000));
 
         $readed = $CPU->getMemoryUInt16($addr);
@@ -29,8 +29,9 @@ final class CPUTest extends TestCase
 
     public function testPushPopStack(): void
     {
-        $CPU = new CPU(new Bus(), new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
-        $CPU->load([]);
+        $this->loadProgramToRom([]);
+
+        $CPU = $this->getCpu();
         $CPU->pushToStack(new UInt8(1));
         $CPU->pushToStack(new UInt8(2));
         $CPU->pushToStack(new UInt8(3));

@@ -92,9 +92,9 @@ final class Bus
 
             $this->memory[$addr->value] = $low;
             $this->memory[$addr->value + 1] = $high;
+        } else {
+            throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
         }
-
-        throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16

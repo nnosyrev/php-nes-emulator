@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Integration\CPU;
+namespace Tests;
 
 use App\CPU\CPU;
 use App\Rom\RomInterface;

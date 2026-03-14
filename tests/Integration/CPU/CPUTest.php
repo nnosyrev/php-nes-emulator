@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU;
 
 use PHPUnit\Framework\TestCase;
+use Tests\CPUTestTrait;
 
 final class CPUTest extends TestCase
 {

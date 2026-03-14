@@ -7,7 +7,7 @@ namespace Tests\Integration\CPU\Instruction;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
-use Tests\Integration\CPU\CPUTestTrait;
+use Tests\CPUTestTrait;
 
 final class STATest extends TestCase
 {
