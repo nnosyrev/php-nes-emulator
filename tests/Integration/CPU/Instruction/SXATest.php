@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Integration\CPU\Instruction;
+
+use App\Type\UInt16;
+use PHPUnit\Framework\TestCase;
+use Tests\CPUTestTrait;
+
+final class SXATest extends TestCase
+{
+    use CPUTestTrait;
+
+    public function testSXA(): void
+    {
+        $this->loadProgramToRom([0xA2, 0x05, 0xA0, 0x03, 0x9E, 0x20, 0x01, 0x00]);
+
+        $CPU = $this->getCpu();
+        $CPU->run();
+
+        $this->assertSame($CPU->getMemory(new UInt16(0x0123))->value, 0x05 & (0x01 + 1));
+    }
+}

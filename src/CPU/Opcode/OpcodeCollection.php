@@ -63,6 +63,7 @@ use App\CPU\Instruction\SRE;
 use App\CPU\Instruction\STA;
 use App\CPU\Instruction\STX;
 use App\CPU\Instruction\STY;
+use App\CPU\Instruction\SXA;
 use App\CPU\Instruction\SYA;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
@@ -380,5 +381,6 @@ final class OpcodeCollection
         $this->add(0xD3, DCP::class, 2, 8, IndirectYMode::class);
 
         $this->add(0x9C, SYA::class, 3, 5, AbsoluteXMode::class);
+        $this->add(0x9E, SXA::class, 3, 5, AbsoluteYMode::class);
     }
 }
