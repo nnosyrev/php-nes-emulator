@@ -2,7 +2,7 @@
 <?php
 
 use App\Frame;
-use App\Rom;
+use App\Rom\Rom;
 use App\Type\Rgb;
 use App\Type\UInt8;
 
@@ -32,6 +32,9 @@ function getFrame(array $chrRom, int $bank, array $pallete): Frame
     foreach (range(0, 255) as $tileN) {
         $tile = array_slice($chrRom, $bankStart + $tileN * 16, 16);
 
+        $baseX = ($tileN % 32) * 8;
+        $baseY = floor($tileN / 32) * 8;
+
         foreach (range(0, 7) as $y) {
             $upper = $tile[$y];
             $lower = $tile[$y + 8];
@@ -40,9 +43,6 @@ function getFrame(array $chrRom, int $bank, array $pallete): Frame
                 $value = (1 & $upper) << 1 | (1 & $lower);
                 $upper = $upper >> 1;
                 $lower = $lower >> 1;
-
-                $baseX = ($tileN % 32) * 8;
-                $baseY = floor($tileN / 32) * 8;
 
                 $frame->setPixel($baseX + $x, $baseY + $y, $pallete[$value]);
             }
