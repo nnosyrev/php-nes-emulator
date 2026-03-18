@@ -391,5 +391,7 @@ final class OpcodeCollection
         $this->add(0x1B, SLO::class, 3, 7, AbsoluteYMode::class);
         $this->add(0x03, SLO::class, 2, 8, IndirectXMode::class);
         $this->add(0x13, SLO::class, 2, 8, IndirectYMode::class);
+
+        $this->add(0xEB, SBC::class, 2, 2, ImmediateMode::class);
     }
 }
