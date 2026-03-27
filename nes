@@ -4,6 +4,8 @@
 use App\CPU\CPU;
 use App\Rom\Rom;
 use App\Rom\RomInterface;
+use App\UI\UI;
+use App\UI\UIInterface;
 use DI\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -13,6 +15,7 @@ $rom = new Rom($file);
 
 $container = new Container();
 $container->set(RomInterface::class, $rom);
+$container->set(UIInterface::class, new UI());
 
 $cpu = $container->get(CPU::class);
 $cpu->run();

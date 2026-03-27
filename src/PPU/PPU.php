@@ -13,7 +13,7 @@ use App\Rom\RomInterface;
 use App\Type\Rgb;
 use App\Type\UInt16;
 use App\Type\UInt8;
-use App\UI\UI;
+use App\UI\UIInterface;
 use Exception;
 use SplFixedArray;
 
@@ -75,7 +75,7 @@ final class PPU
 
     public function __construct(
         private readonly RomInterface $rom,
-        private readonly UI $ui,
+        private readonly UIInterface $ui,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
         private readonly ScrollRegister $scrollRegister,
@@ -251,6 +251,11 @@ final class PPU
         $bankStart = $bank * 0x1000;
 
         $frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
+
+        if (count($this->rom->getChrRom()) === 0) {
+            // CHR ROM is empty
+            return $frame;
+        }
 
         foreach (range(0, 255) as $tileN) {
             $tile = array_slice($this->rom->getChrRom(), $bankStart + $tileN * 16, 16);

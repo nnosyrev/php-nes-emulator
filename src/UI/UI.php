@@ -6,7 +6,7 @@ namespace App\UI;
 
 use App\Frame;
 
-final class UI
+final class UI implements UIInterface
 {
     private const SQUARE_WIDTH = 3;
     private const WINDOW_WIDTH = Frame::WIDTH * self::SQUARE_WIDTH;

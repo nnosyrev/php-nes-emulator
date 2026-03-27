@@ -7,6 +7,7 @@ namespace Tests;
 use App\CPU\CPU;
 use App\Rom\RomInterface;
 use App\Type\UInt8;
+use App\UI\UIInterface;
 use DI\Container;
 
 trait CPUTestTrait
@@ -16,6 +17,7 @@ trait CPUTestTrait
     protected function setUp(): void
     {
         $this->container = new Container();
+        $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
     }
 
     protected function loadProgramToRom(array $program): void
