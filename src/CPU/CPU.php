@@ -40,6 +40,10 @@ final class CPU
         private readonly InstructionFactory $instructionFactory,
         private readonly ModeFactory $modeFactory,
     ) {
+        $this->registerA = new UInt8(0);
+        $this->registerX = new UInt8(0);
+        $this->registerY = new UInt8(0);
+
         $this->PC = new UInt16(self::PRG_ROM_START);
         $this->SP = new UInt8(self::SP_END);
     }
@@ -62,6 +66,11 @@ final class CPU
             } catch (BreakException $e) {
                 return;
             }
+
+            $cycles = $opcode->cycles;
+
+            // 1 CPU cycle = 3 PPU cycles
+            $this->bus->runPPU($cycles * 3);
 
             if ($this->getPC() === $pcOld) {
                 $this->addToPC(new UInt8($opcode->bytes - 1));

@@ -2,12 +2,17 @@
 <?php
 
 use App\CPU\CPU;
-use App\CPU\Instruction\InstructionFactory;
-use App\CPU\Mode\ModeFactory;
-use App\CPU\Opcode\OpcodeCollection;
+use App\Rom\Rom;
+use App\Rom\RomInterface;
+use DI\Container;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$CPU = new CPU(new OpcodeCollection(), new InstructionFactory(), new ModeFactory());
-$CPU->load([0xa9, 0x05, 0x00]);
-$CPU->run();
+$file = file_get_contents($argv[1]);
+$rom = new Rom($file);
+
+$container = new Container();
+$container->set(RomInterface::class, $rom);
+
+$cpu = $container->get(CPU::class);
+$cpu->run();

@@ -74,7 +74,7 @@ final class Bus
             //$this->ppu->setOamDma($data);
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
-            throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
+            //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x4018, 0x401F)) {
             throw new Exception('APU and I/O functionality that is normally disabled ' . $addr->hexString());
         } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
@@ -113,5 +113,10 @@ final class Bus
         $result = ($high << 8) | $low;
 
         return new UInt16($result);
+    }
+
+    public function runPPU(int $cycles): void
+    {
+        $this->ppu->run($cycles);
     }
 }
