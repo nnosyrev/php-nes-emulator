@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\PPU;
 
+use App\Event\NMIEvent;
 use App\Frame;
 use App\Mirroring;
 use App\PPU\Register\AddressRegister;
@@ -16,6 +17,7 @@ use App\Type\UInt8;
 use App\UI\UIInterface;
 use Exception;
 use SplFixedArray;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class PPU
 {
@@ -73,9 +75,14 @@ final class PPU
      */
     private SplFixedArray $oamData;
 
+    private int $cycles = 0;
+
+    private int $scanlines = 0;
+
     public function __construct(
         private readonly RomInterface $rom,
         private readonly UIInterface $ui,
+        private readonly EventDispatcherInterface $dispatcher,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
         private readonly ScrollRegister $scrollRegister,
@@ -225,10 +232,25 @@ final class PPU
 
     public function run(int $cycles): void
     {
-        $this->render($cycles);
+        $this->cycles += $cycles;
+
+        if ($this->cycles >= 341) {
+            $this->scanlines++;
+            $this->cycles = $this->cycles - 341;
+
+            if ($this->scanlines >= 241) {
+                // Trigger NMI interrupt
+                $this->dispatcher->dispatch(new NMIEvent());
+            }
+
+            if ($this->scanlines >= 262) {
+                $this->scanlines = 0;
+                $this->render();
+            }
+        }
     }
 
-    private function render(int $cycles): void
+    private function render(): void
     {
         $pallete = [
             new Rgb(new UInt8(50), new UInt8(100), new UInt8(200)),
@@ -248,14 +270,14 @@ final class PPU
             throw new \Exception('Incorrect bank');
         }
 
-        $bankStart = $bank * 0x1000;
-
         $frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
 
         if (count($this->rom->getChrRom()) === 0) {
             // CHR ROM is empty
             return $frame;
         }
+
+        $bankStart = $bank * 0x1000;
 
         foreach (range(0, 255) as $tileN) {
             $tile = array_slice($this->rom->getChrRom(), $bankStart + $tileN * 16, 16);

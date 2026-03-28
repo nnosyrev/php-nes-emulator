@@ -9,11 +9,13 @@ use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
+use App\Event\NMIEvent;
 use App\Type\Int8;
 use App\Type\UInt16;
 use App\Type\UInt8;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final class CPU
+final class CPU implements EventSubscriberInterface
 {
     private const PRG_ROM_START = 0x8000;
     private const STACK_START = 0x0100;
@@ -313,5 +315,17 @@ final class CPU
         $res = ($high->value << 8) | $low->value;
 
         return new UInt16($res);
+    }
+
+    public function onNMI(NMIEvent $event): void
+    {
+        // ...
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NMIEvent::class => 'onNMI',
+        ];
     }
 }

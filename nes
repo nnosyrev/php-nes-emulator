@@ -4,18 +4,20 @@
 use App\CPU\CPU;
 use App\Rom\Rom;
 use App\Rom\RomInterface;
-use App\UI\UI;
-use App\UI\UIInterface;
-use DI\Container;
+use DI\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
 $file = file_get_contents($argv[1]);
 $rom = new Rom($file);
 
-$container = new Container();
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/config/config.php');
+
+$container = $builder->build();
 $container->set(RomInterface::class, $rom);
-$container->set(UIInterface::class, new UI());
 
 $cpu = $container->get(CPU::class);
+$container->get(EventDispatcherInterface::class)->addSubscriber($cpu);
 $cpu->run();

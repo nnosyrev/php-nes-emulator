@@ -9,6 +9,7 @@ use App\Rom\RomInterface;
 use App\Type\UInt8;
 use App\UI\UIInterface;
 use DI\Container;
+use DI\ContainerBuilder;
 
 trait CPUTestTrait
 {
@@ -16,7 +17,10 @@ trait CPUTestTrait
 
     protected function setUp(): void
     {
-        $this->container = new Container();
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions(__DIR__ . '/../config/config.php');
+
+        $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
     }
 
