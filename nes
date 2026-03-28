@@ -13,7 +13,7 @@ $file = file_get_contents($argv[1]);
 $rom = new Rom($file);
 
 $builder = new ContainerBuilder();
-$builder->addDefinitions(__DIR__ . '/config/config.php');
+$builder->addDefinitions(__DIR__ . '/config/di.php');
 
 $container = $builder->build();
 $container->set(RomInterface::class, $rom);

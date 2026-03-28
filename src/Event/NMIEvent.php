@@ -6,6 +6,4 @@ namespace App\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 
-final class NMIEvent extends Event
-{
-}
+final class NMIEvent extends Event {}

@@ -18,7 +18,7 @@ trait CPUTestTrait
     protected function setUp(): void
     {
         $builder = new ContainerBuilder();
-        $builder->addDefinitions(__DIR__ . '/../config/config.php');
+        $builder->addDefinitions(__DIR__ . '/../config/di.php');
 
         $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
