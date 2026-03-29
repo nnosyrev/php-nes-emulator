@@ -18,6 +18,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class PPU
 {
+    private const CYCLES_PER_SCANLINE = 341;
+    private const SCANLINES_PER_FRAME = 261;
+    private const START_VBLANK_SCANLINE = 241;
+
     private SplFixedArray $palleteTable;
 
     private SplFixedArray $vram;
@@ -94,7 +98,14 @@ final class PPU
 
     public function setControl(UInt8 $value): void
     {
+        $oldNMIEnableBit = $this->controlRegister->getNMIEnableBit();
+
         $this->controlRegister->set($value);
+
+        // Changing NMI enable from 0 to 1 while the vblank flag in PPUSTATUS is 1 will immediately trigger an NMI
+        if (!$oldNMIEnableBit && $this->controlRegister->getNMIEnableBit() && $this->getStatusVblankFlag()) {
+            $this->dispatcher->dispatch(new NMIEvent());
+        }
     }
 
     public function setMask(UInt8 $value): void
@@ -113,6 +124,21 @@ final class PPU
         $this->scrollRegister->resetLatch();
 
         return $status;
+    }
+
+    private function setStatusVblankFlag(): void
+    {
+        $this->status = $this->status->or(new UInt8(0b10000000));
+    }
+
+    private function clearStatusVblankFlag(): void
+    {
+        $this->status = $this->status->and(new UInt8(0b01111111));
+    }
+
+    private function getStatusVblankFlag(): bool
+    {
+        return ($this->status->and(new UInt8(0b10000000))->value !== 0);
     }
 
     public function setOamAddr(UInt8 $value): void
@@ -231,17 +257,23 @@ final class PPU
     {
         $this->cycles += $cycles;
 
-        if ($this->cycles >= 341) {
+        if ($this->cycles >= self::CYCLES_PER_SCANLINE) {
             $this->scanlines++;
-            $this->cycles = $this->cycles - 341;
+            $this->cycles = $this->cycles - self::CYCLES_PER_SCANLINE;
 
-            if ($this->scanlines >= 241) {
-                // Trigger NMI interrupt
-                $this->dispatcher->dispatch(new NMIEvent());
+            if ($this->scanlines >= self::START_VBLANK_SCANLINE) {
+                $this->setStatusVblankFlag();
+
+                if ($this->controlRegister->getNMIEnableBit()) {
+                    // Trigger NMI interrupt
+                    $this->dispatcher->dispatch(new NMIEvent());
+                }
             }
 
-            if ($this->scanlines >= 262) {
+            if ($this->scanlines >= self::SCANLINES_PER_FRAME) {
+                $this->clearStatusVblankFlag();
                 $this->scanlines = 0;
+
                 $this->renderer->render();
             }
         }

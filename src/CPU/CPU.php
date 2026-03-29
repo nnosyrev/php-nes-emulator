@@ -319,7 +319,19 @@ final class CPU implements EventSubscriberInterface
 
     public function onNMI(NMIEvent $event): void
     {
-        // ...
+        if ($this->getFlagI()) {
+            return;
+        }
+
+        $this->pushToStackUInt16($this->getPC());
+
+        $this->setFlagB(false);
+
+        $this->pushToStack($this->getFlagsAsUInt8());
+
+        $this->setFlagI(true);
+
+        $this->setPC($this->getMemoryUInt16(new UInt16(0xFFFA)));
     }
 
     public static function getSubscribedEvents(): array

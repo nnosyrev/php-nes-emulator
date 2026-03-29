@@ -12,6 +12,8 @@ final class BRK implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        throw new BreakException('Break');
+        if (!$CPU->getFlagI()) {
+            throw new BreakException('Break');
+        }
     }
 }

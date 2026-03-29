@@ -9,6 +9,7 @@ use App\Type\UInt8;
 final class ControlRegister
 {
     private const VRAM_ADDR_INCREMENT = 0b00000100;
+    private const NMI_ENABLE          = 0b10000000;
 
     // 7  bit  0
     // ---- ----
@@ -24,8 +25,7 @@ final class ControlRegister
     // ||+------- Sprite size (0: 8x8 pixels; 1: 8x16 pixels)
     // |+-------- PPU master/slave select
     // |          (0: read backdrop from EXT pins; 1: output color on EXT pins)
-    // +--------- Generate an NMI at the start of the
-    //            vertical blanking interval (0: off; 1: on)
+    // +--------- Vblank NMI enable (0: off, 1: on)
     private UInt8 $bits;
 
     public function __construct()
@@ -45,5 +45,10 @@ final class ControlRegister
         }
 
         return new UInt8(32);
+    }
+
+    public function getNMIEnableBit(): bool
+    {
+        return ($this->bits->and(new UInt8(self::NMI_ENABLE))->value !== 0);
     }
 }
