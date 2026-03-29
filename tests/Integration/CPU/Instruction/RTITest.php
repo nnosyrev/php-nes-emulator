@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
+use App\CPU\Exception\BreakException;
+use App\CPU\Instruction\BRK;
+use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Instruction\InstructionInterface;
+use App\CPU\Instruction\RTI;
 use App\Type\UInt16;
 use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
@@ -15,6 +20,19 @@ final class RTITest extends TestCase
 
     public function testRTITrue(): void
     {
+        $brk = $this->createStub(InstructionInterface::class);
+        $brk->method('execute')
+            ->willThrowException(new BreakException());
+
+        $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
+        $instructionFactory->method('make')
+            ->willReturnMap([
+                [RTI::class, new RTI()],
+                [BRK::class, $brk]
+            ]);
+
+        $this->container->set(InstructionFactoryInterface::class, $instructionFactory);
+
         $this->loadProgramToRom([0x40, 0x00]);
 
         $CPU = $this->getCpu();

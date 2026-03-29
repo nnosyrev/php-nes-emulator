@@ -6,7 +6,7 @@ namespace App\CPU\Instruction;
 
 use Exception;
 
-final class InstructionFactory
+final class InstructionFactory implements InstructionFactoryInterface
 {
     private array $instructions = [];
 

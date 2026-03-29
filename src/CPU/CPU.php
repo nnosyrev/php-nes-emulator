@@ -6,7 +6,7 @@ namespace App\CPU;
 
 use App\Bus;
 use App\CPU\Exception\BreakException;
-use App\CPU\Instruction\InstructionFactory;
+use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\Event\NMIEvent;
@@ -39,9 +39,11 @@ final class CPU implements EventSubscriberInterface
     public function __construct(
         private readonly Bus $bus,
         private readonly OpcodeCollection $opcodeCollection,
-        private readonly InstructionFactory $instructionFactory,
+        private readonly InstructionFactoryInterface $instructionFactory,
         private readonly ModeFactory $modeFactory,
     ) {
+        $this->setFlagI(false);
+
         $this->registerA = new UInt8(0);
         $this->registerX = new UInt8(0);
         $this->registerY = new UInt8(0);
