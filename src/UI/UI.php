@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI;
 
-use App\Frame;
+use App\PPU\Frame;
 
 final class UI implements UIInterface
 {

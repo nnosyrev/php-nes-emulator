@@ -65,7 +65,7 @@ final class CPU implements EventSubscriberInterface
 
             try {
                 $instruction->execute($this, $mode);
-            } catch (BreakException $e) {
+            } catch (BreakException) {
                 return;
             }
 

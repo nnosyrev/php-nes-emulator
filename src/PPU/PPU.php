@@ -242,7 +242,7 @@ final class PPU
 
             if ($this->scanlines >= 262) {
                 $this->scanlines = 0;
-                $this->renderer->render($this->rom);
+                $this->renderer->render();
             }
         }
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\PPU;
 
-use App\Frame;
 use App\Rom\RomInterface;
 use App\Type\Rgb;
 use App\Type\UInt8;
@@ -14,9 +13,10 @@ final class Renderer
 {
     public function __construct(
         private readonly UIInterface $ui,
+        private readonly RomInterface $rom,
     ) {}
 
-    public function render(RomInterface $rom): void
+    public function render(): void
     {
         $pallete = [
             new Rgb(new UInt8(50), new UInt8(100), new UInt8(200)),
@@ -25,12 +25,12 @@ final class Renderer
             new Rgb(new UInt8(100), new UInt8(100), new UInt8(100)),
         ];
 
-        $frame = $this->getFrame($rom, 0, $pallete);
+        $frame = $this->getFrame(0, $pallete);
 
         $this->ui->render($frame);
     }
 
-    private function getFrame(RomInterface $rom, int $bank, array $pallete): Frame
+    private function getFrame(int $bank, array $pallete): Frame
     {
         if ($bank > 1 || $bank < 0) {
             throw new \Exception('Incorrect bank');
@@ -38,7 +38,7 @@ final class Renderer
 
         $frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
 
-        if (count($rom->getChrRom()) === 0) {
+        if (count($this->rom->getChrRom()) === 0) {
             // CHR ROM is empty
             return $frame;
         }
@@ -46,7 +46,7 @@ final class Renderer
         $bankStart = $bank * 0x1000;
 
         foreach (range(0, 255) as $tileN) {
-            $tile = array_slice($rom->getChrRom(), $bankStart + $tileN * 16, 16);
+            $tile = array_slice($this->rom->getChrRom(), $bankStart + $tileN * 16, 16);
 
             $baseX = ($tileN % 32) * 8;
             $baseY = (int) floor($tileN / 32) * 8;
