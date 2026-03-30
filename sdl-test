@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use App\Frame;
+use App\PPU\Frame;
 use App\Rom\Rom;
 use App\Type\Rgb;
 use App\Type\UInt8;

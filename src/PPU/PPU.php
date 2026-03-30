@@ -126,6 +126,11 @@ final class PPU
         return $status;
     }
 
+    private function setStatusSprite0Flag(): void
+    {
+        $this->status = $this->status->or(new UInt8(0b01000000));
+    }
+
     private function setStatusVblankFlag(): void
     {
         $this->status = $this->status->or(new UInt8(0b10000000));
@@ -272,10 +277,31 @@ final class PPU
 
             if ($this->scanlines >= self::SCANLINES_PER_FRAME) {
                 $this->clearStatusVblankFlag();
+                $this->setStatusSprite0Flag();
                 $this->scanlines = 0;
 
-                $this->renderer->render();
+                $this->renderer->render($this);
             }
         }
+    }
+
+    public function getVRam(): SplFixedArray
+    {
+        return $this->vram;
+    }
+
+    public function getAllOamData(): SplFixedArray
+    {
+        return $this->oamData;
+    }
+
+    public function getSpriteChrBank(): int
+    {
+        return ($this->controlRegister->getSpritePatternTableBit() ? 1 : 0);
+    }
+
+    public function getBackgroundChrBank(): int
+    {
+        return ($this->controlRegister->getBackgroundPatternTableBit() ? 1 : 0);
     }
 }

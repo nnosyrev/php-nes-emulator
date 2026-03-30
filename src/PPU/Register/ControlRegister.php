@@ -8,8 +8,10 @@ use App\Type\UInt8;
 
 final class ControlRegister
 {
-    private const VRAM_ADDR_INCREMENT = 0b00000100;
-    private const NMI_ENABLE          = 0b10000000;
+    private const VRAM_ADDR_INCREMENT      = 0b00000100;
+    private const SPRITE_PATTERN_TABLE     = 0b00001000;
+    private const BACKGROUND_PATTERN_TABLE = 0b00010000;
+    private const NMI_ENABLE               = 0b10000000;
 
     // 7  bit  0
     // ---- ----
@@ -50,5 +52,15 @@ final class ControlRegister
     public function getNMIEnableBit(): bool
     {
         return ($this->bits->and(new UInt8(self::NMI_ENABLE))->value !== 0);
+    }
+
+    public function getSpritePatternTableBit(): bool
+    {
+        return ($this->bits->and(new UInt8(self::SPRITE_PATTERN_TABLE))->value !== 0);
+    }
+
+    public function getBackgroundPatternTableBit(): bool
+    {
+        return ($this->bits->and(new UInt8(self::BACKGROUND_PATTERN_TABLE))->value !== 0);
     }
 }

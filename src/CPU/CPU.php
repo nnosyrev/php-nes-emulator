@@ -43,6 +43,7 @@ final class CPU implements EventSubscriberInterface
         private readonly ModeFactory $modeFactory,
     ) {
         $this->setFlagI(false);
+        $this->setFlagD(false);
 
         $this->registerA = new UInt8(0);
         $this->registerX = new UInt8(0);
@@ -243,7 +244,7 @@ final class CPU implements EventSubscriberInterface
         $all = '';
         $all .= $this->getFlagN() ? '1' : '0';
         $all .= $this->getFlagV() ? '1' : '0';
-        $all .= '0';
+        $all .= '1';
         $all .= $this->getFlagB() ? '1' : '0';
         $all .= $this->getFlagD() ? '1' : '0';
         $all .= $this->getFlagI() ? '1' : '0';
@@ -322,8 +323,10 @@ final class CPU implements EventSubscriberInterface
     public function onNMI(NMIEvent $event): void
     {
         if ($this->getFlagI()) {
-            return;
+            //return;
         }
+
+        //var_dump('NMI...');
 
         $this->pushToStackUInt16($this->getPC());
 

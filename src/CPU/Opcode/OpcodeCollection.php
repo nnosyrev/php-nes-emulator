@@ -10,6 +10,7 @@ use App\CPU\Instruction\ADC;
 use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\ASL;
 use App\CPU\Instruction\ASLA;
+use App\CPU\Instruction\ASR;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
@@ -97,7 +98,7 @@ final class OpcodeCollection
     private function add(int $code, string $instructionClass, int $bytes, $cycles, string $modeClass): void
     {
         if (array_key_exists($code, $this->opcodes)) {
-            throw new Exception(sprintf('The "0x%s" opcode already exists', mb_strtoupper(dechex($code))));
+            throw new Exception(sprintf('The "0x%s" opcode already exists', $this->codeToHex($code)));
         }
 
         $this->opcodes[$code] = new Opcode($code, $instructionClass, $bytes, $cycles, $modeClass);
@@ -106,10 +107,15 @@ final class OpcodeCollection
     public function get(int $code): Opcode
     {
         if (!array_key_exists($code, $this->opcodes)) {
-            throw new Exception('Opcode not found');
+            throw new Exception('Opcode 0x'. $this->codeToHex($code) .' not found');
         }
 
         return $this->opcodes[$code];
+    }
+
+    private function codeToHex(int $code): string
+    {
+        return mb_strtoupper(dechex($code));
     }
 
     private function setUp(): void
@@ -393,5 +399,7 @@ final class OpcodeCollection
         $this->add(0x13, SLO::class, 2, 8, IndirectYMode::class);
 
         $this->add(0xEB, SBC::class, 2, 2, ImmediateMode::class);
+
+        $this->add(0x4B, ASR::class, 2, 2, ImmediateMode::class);
     }
 }
