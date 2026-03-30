@@ -11,6 +11,7 @@ use App\CPU\Instruction\ANDI;
 use App\CPU\Instruction\ASL;
 use App\CPU\Instruction\ASLA;
 use App\CPU\Instruction\ASR;
+use App\CPU\Instruction\ATX;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
@@ -376,9 +377,6 @@ final class OpcodeCollection
         $this->add(0x0B, AAC::class, 2, 2, ImmediateMode::class);
         $this->add(0x2B, AAC::class, 2, 2, ImmediateMode::class);
 
-        // ATX
-        $this->add(0xAB, LAX::class, 2, 2, ImmediateMode::class);
-
         $this->add(0xC7, DCP::class, 2, 5, ZeroPageMode::class);
         $this->add(0xD7, DCP::class, 2, 6, ZeroPageXMode::class);
         $this->add(0xCF, DCP::class, 3, 6, AbsoluteMode::class);
@@ -401,5 +399,7 @@ final class OpcodeCollection
         $this->add(0xEB, SBC::class, 2, 2, ImmediateMode::class);
 
         $this->add(0x4B, ASR::class, 2, 2, ImmediateMode::class);
+
+        $this->add(0xAB, ATX::class, 2, 2, ImmediateMode::class);
     }
 }
