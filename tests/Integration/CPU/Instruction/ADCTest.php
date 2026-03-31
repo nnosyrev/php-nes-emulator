@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
+use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 use Tests\CPUTestTrait;
 
@@ -38,7 +39,7 @@ final class ADCTest extends TestCase
 
         $result = 0xC8 + 0xDC;
 
-        $this->assertSame($CPU->getRegisterA()->value, $result % 256);
+        $this->assertSame($CPU->getRegisterA()->value, $result % UInt8::BASE);
         // @phpstan-ignore greater.alwaysTrue
         $this->assertSame($CPU->getFlagC(), $result > 0xFF);
         // @phpstan-ignore notIdentical.alwaysFalse

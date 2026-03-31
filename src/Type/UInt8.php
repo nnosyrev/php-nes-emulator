@@ -8,7 +8,7 @@ use Exception;
 
 final class UInt8
 {
-    private const BASE = 256;
+    public const BASE = 256;
 
     public function __construct(public readonly int $value)
     {

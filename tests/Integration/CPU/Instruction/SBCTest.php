@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
+use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 use Tests\CPUTestTrait;
 
@@ -24,7 +25,7 @@ final class SBCTest extends TestCase
         // @phpstan-ignore greater.alwaysTrue
         $this->assertSame($CPU->getFlagC(), $result > 0xFF);
 
-        $result = $result % 256;
+        $result = $result % UInt8::BASE;
 
         $this->assertSame($CPU->getRegisterA()->value, $result);
         // @phpstan-ignore notIdentical.alwaysFalse
@@ -44,7 +45,7 @@ final class SBCTest extends TestCase
         // @phpstan-ignore greater.alwaysFalse
         $this->assertSame($CPU->getFlagC(), $result > 0xFF);
 
-        $result = $result % 256;
+        $result = $result % UInt8::BASE;
 
         $this->assertSame($CPU->getRegisterA()->value, $result);
         // @phpstan-ignore notIdentical.alwaysFalse

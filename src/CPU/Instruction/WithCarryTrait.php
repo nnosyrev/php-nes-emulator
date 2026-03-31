@@ -19,7 +19,7 @@ trait WithCarryTrait
 
         $cpu->setFlagC($result > 0xFF);
 
-        $result = $result % 256;
+        $result = $result % UInt8::BASE;
 
         $condition = ($data->value ^ $result) & ($result ^ $cpu->getRegisterA()->value) & 0x80;
 

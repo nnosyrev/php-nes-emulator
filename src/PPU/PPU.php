@@ -92,7 +92,7 @@ final class PPU
         $this->palleteTable = new SplFixedArray(32);
         $this->vram = new SplFixedArray(2048);
         $this->dataBuf = new UInt8(0);
-        $this->oamData = new SplFixedArray(256);
+        $this->oamData = new SplFixedArray(UInt8::BASE);
         $this->status = new UInt8(0);
     }
 
@@ -165,8 +165,8 @@ final class PPU
 
     public function setOamDma(array $data): void
     {
-        if (count($data) > 256) {
-            throw new Exception('The number of array elements cannot exceed 256');
+        if (count($data) > UInt8::BASE) {
+            throw new Exception('The number of array elements cannot exceed ' . UInt8::BASE);
         }
 
         foreach ($data as $value) {
