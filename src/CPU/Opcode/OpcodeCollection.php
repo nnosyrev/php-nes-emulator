@@ -405,5 +405,19 @@ final class OpcodeCollection
 
         $this->add(0x9F, AXA::class, 3, 5, AbsoluteYMode::class);
         $this->add(0x93, AXA::class, 2, 6, IndirectYMode::class);
+
+        // KIL
+        $this->add(0x02, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x12, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x22, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x32, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x42, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x52, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x62, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x72, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x92, NOP::class, 1, null, NoneMode::class);
+        $this->add(0xB2, NOP::class, 1, null, NoneMode::class);
+        $this->add(0xD2, NOP::class, 1, null, NoneMode::class);
+        $this->add(0xF2, NOP::class, 1, null, NoneMode::class);
     }
 }
