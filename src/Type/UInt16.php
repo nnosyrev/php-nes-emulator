@@ -12,7 +12,7 @@ final class UInt16
 
     public function __construct(public readonly int $value)
     {
-        if ($value < 0 || $value > 65535) {
+        if ($value < 0 || $value > self::BASE - 1) {
             throw new Exception('Invalid value');
         }
     }

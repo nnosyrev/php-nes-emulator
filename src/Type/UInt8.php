@@ -17,7 +17,7 @@ final class UInt8
 
     public static function validate(int $value): void
     {
-        if ($value < 0 || $value > 255) {
+        if ($value < 0 || $value > self::BASE - 1) {
             throw new Exception('Invalid value');
         }
     }

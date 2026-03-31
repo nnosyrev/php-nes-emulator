@@ -8,6 +8,7 @@ use App\CPU\Instruction\AAC;
 use App\CPU\Instruction\AAX;
 use App\CPU\Instruction\ADC;
 use App\CPU\Instruction\ANDI;
+use App\CPU\Instruction\ARR;
 use App\CPU\Instruction\ASL;
 use App\CPU\Instruction\ASLA;
 use App\CPU\Instruction\ASR;
@@ -129,7 +130,7 @@ final class OpcodeCollection
         $this->add(0x3D, ANDI::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
         $this->add(0x39, ANDI::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
         $this->add(0x21, ANDI::class, 2, 6, IndirectXMode::class);
-        $this->add(0x31, ANDI::class, 2, 5 /* +1 if page crossed */ , IndirectYMode::class);
+        $this->add(0x31, ANDI::class, 2, 5 /* +1 if page crossed */, IndirectYMode::class);
 
         $this->add(0x09, ORA::class, 2, 2, ImmediateMode::class);
         $this->add(0x05, ORA::class, 2, 3, ZeroPageMode::class);
@@ -406,5 +407,7 @@ final class OpcodeCollection
 
         $this->add(0x9F, AXA::class, 3, 5, AbsoluteYMode::class);
         $this->add(0x93, AXA::class, 2, 6, IndirectYMode::class);
+
+        $this->add(0x6B, ARR::class, 2, 2, ImmediateMode::class);
     }
 }
