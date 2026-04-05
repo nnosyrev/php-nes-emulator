@@ -41,6 +41,7 @@ use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
 use App\CPU\Instruction\JMP;
 use App\CPU\Instruction\JSR;
+use App\CPU\Instruction\LAR;
 use App\CPU\Instruction\LAX;
 use App\CPU\Instruction\LDA;
 use App\CPU\Instruction\LDX;
@@ -409,5 +410,7 @@ final class OpcodeCollection
         $this->add(0x93, AXA::class, 2, 6, IndirectYMode::class);
 
         $this->add(0x6B, ARR::class, 2, 2, ImmediateMode::class);
+
+        $this->add(0xBB, LAR::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
     }
 }
