@@ -77,6 +77,7 @@ use App\CPU\Instruction\TSX;
 use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
 use App\CPU\Instruction\TYA;
+use App\CPU\Instruction\XAA;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
 use App\CPU\Mode\AbsoluteYMode;
@@ -412,5 +413,7 @@ final class OpcodeCollection
         $this->add(0x6B, ARR::class, 2, 2, ImmediateMode::class);
 
         $this->add(0xBB, LAR::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
+
+        $this->add(0x8B, XAA::class, 2, 2, ImmediateMode::class);
     }
 }
