@@ -54,6 +54,7 @@ use App\CPU\Instruction\PHA;
 use App\CPU\Instruction\PHP;
 use App\CPU\Instruction\PLA;
 use App\CPU\Instruction\PLP;
+use App\CPU\Instruction\RLA;
 use App\CPU\Instruction\ROL;
 use App\CPU\Instruction\ROLA;
 use App\CPU\Instruction\ROR;
@@ -415,5 +416,13 @@ final class OpcodeCollection
         $this->add(0xBB, LAR::class, 3, 4 /* +1 if page crossed */, AbsoluteYMode::class);
 
         $this->add(0x8B, XAA::class, 2, 2, ImmediateMode::class);
+
+        $this->add(0x27, RLA::class, 2, 5, ZeroPageMode::class);
+        $this->add(0x37, RLA::class, 2, 6, ZeroPageXMode::class);
+        $this->add(0x2F, RLA::class, 3, 6, AbsoluteMode::class);
+        $this->add(0x3F, RLA::class, 3, 7, AbsoluteXMode::class);
+        $this->add(0x3B, RLA::class, 3, 7, AbsoluteYMode::class);
+        $this->add(0x23, RLA::class, 2, 8, IndirectXMode::class);
+        $this->add(0x33, RLA::class, 2, 8, IndirectYMode::class);
     }
 }
