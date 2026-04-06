@@ -79,6 +79,7 @@ use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
 use App\CPU\Instruction\TYA;
 use App\CPU\Instruction\XAA;
+use App\CPU\Instruction\XAS;
 use App\CPU\Mode\AbsoluteMode;
 use App\CPU\Mode\AbsoluteXMode;
 use App\CPU\Mode\AbsoluteYMode;
@@ -424,5 +425,7 @@ final class OpcodeCollection
         $this->add(0x3B, RLA::class, 3, 7, AbsoluteYMode::class);
         $this->add(0x23, RLA::class, 2, 8, IndirectXMode::class);
         $this->add(0x33, RLA::class, 2, 8, IndirectYMode::class);
+
+        $this->add(0x9B, XAS::class, 3, 5, AbsoluteYMode::class);
     }
 }
