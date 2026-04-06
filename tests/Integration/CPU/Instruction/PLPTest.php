@@ -29,7 +29,7 @@ final class PLPTest extends TestCase
             ->willReturnMap([
                 [PHA::class, new PHA()],
                 [PLP::class, new PLP()],
-                [BRK::class, $brk]
+                [BRK::class, $brk],
             ]);
 
         $this->container->set(InstructionFactoryInterface::class, $instructionFactory);

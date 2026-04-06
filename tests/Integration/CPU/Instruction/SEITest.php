@@ -26,7 +26,7 @@ final class SEITest extends TestCase
         $instructionFactory->method('make')
             ->willReturnMap([
                 [SEI::class, new SEI()],
-                [BRK::class, $brk]
+                [BRK::class, $brk],
             ]);
 
         $this->container->set(InstructionFactoryInterface::class, $instructionFactory);

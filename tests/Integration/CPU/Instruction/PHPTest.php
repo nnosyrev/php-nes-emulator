@@ -26,7 +26,7 @@ final class PHPTest extends TestCase
         $instructionFactory->method('make')
             ->willReturnMap([
                 [PHP::class, new PHP()],
-                [BRK::class, $brk]
+                [BRK::class, $brk],
             ]);
 
         $this->container->set(InstructionFactoryInterface::class, $instructionFactory);

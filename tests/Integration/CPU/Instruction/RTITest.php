@@ -28,7 +28,7 @@ final class RTITest extends TestCase
         $instructionFactory->method('make')
             ->willReturnMap([
                 [RTI::class, new RTI()],
-                [BRK::class, $brk]
+                [BRK::class, $brk],
             ]);
 
         $this->container->set(InstructionFactoryInterface::class, $instructionFactory);

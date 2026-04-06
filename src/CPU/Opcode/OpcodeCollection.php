@@ -114,7 +114,7 @@ final class OpcodeCollection
     public function get(int $code): Opcode
     {
         if (!array_key_exists($code, $this->opcodes)) {
-            throw new Exception('Opcode 0x'. $this->codeToHex($code) .' not found');
+            throw new Exception('Opcode 0x' . $this->codeToHex($code) . ' not found');
         }
 
         return $this->opcodes[$code];
