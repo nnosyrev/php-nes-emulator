@@ -9,7 +9,7 @@ use App\Type\UInt8;
 
 trait WithCarryTrait
 {
-    public function doWithCarry(UInt8 $data, CPU $cpu): void
+    public function addToRegisterAWithCarry(UInt8 $data, CPU $cpu): void
     {
         $result = $cpu->getRegisterA()->value + $data->value;
 

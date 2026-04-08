@@ -18,6 +18,6 @@ final class SBC implements InstructionInterface
 
         $data = $cpu->getMemory($addr);
 
-        $this->doWithCarry($data->xor(new UInt8(0xFF)), $cpu);
+        $this->addToRegisterAWithCarry($data->xor(new UInt8(0xFF)), $cpu);
     }
 }
