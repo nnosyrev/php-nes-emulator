@@ -39,6 +39,7 @@ use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
+use App\CPU\Instruction\ISC;
 use App\CPU\Instruction\JMP;
 use App\CPU\Instruction\JSR;
 use App\CPU\Instruction\LAR;
@@ -436,5 +437,13 @@ final class OpcodeCollection
         $this->add(0x7B, RRA::class, 3, 7, AbsoluteYMode::class);
         $this->add(0x63, RRA::class, 2, 8, IndirectXMode::class);
         $this->add(0x73, RRA::class, 2, 8, IndirectYMode::class);
+
+        $this->add(0xE7, ISC::class, 2, 5, ZeroPageMode::class);
+        $this->add(0xF7, ISC::class, 2, 6, ZeroPageXMode::class);
+        $this->add(0xEF, ISC::class, 3, 6, AbsoluteMode::class);
+        $this->add(0xFF, ISC::class, 3, 7, AbsoluteXMode::class);
+        $this->add(0xFB, ISC::class, 3, 7, AbsoluteYMode::class);
+        $this->add(0xE3, ISC::class, 2, 8, IndirectXMode::class);
+        $this->add(0xF3, ISC::class, 2, 8, IndirectYMode::class);
     }
 }
