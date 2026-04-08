@@ -14,6 +14,7 @@ use App\CPU\Instruction\ASLA;
 use App\CPU\Instruction\ASR;
 use App\CPU\Instruction\ATX;
 use App\CPU\Instruction\AXA;
+use App\CPU\Instruction\AXS;
 use App\CPU\Instruction\BCC;
 use App\CPU\Instruction\BCS;
 use App\CPU\Instruction\BEQ;
@@ -445,5 +446,7 @@ final class OpcodeCollection
         $this->add(0xFB, ISC::class, 3, 7, AbsoluteYMode::class);
         $this->add(0xE3, ISC::class, 2, 8, IndirectXMode::class);
         $this->add(0xF3, ISC::class, 2, 8, IndirectYMode::class);
+
+        $this->add(0xCB, AXS::class, 2, 2, ImmediateMode::class);
     }
 }
