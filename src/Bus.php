@@ -12,6 +12,16 @@ use Exception;
 
 final class Bus
 {
+    private const PPUCTRL_REGISTER   = 0x2000;
+    private const PPUMASK_REGISTER   = 0x2001;
+    private const PPUSTATUS_REGISTER = 0x2002;
+    private const OAMADDR_REGISTER   = 0x2003;
+    private const OAMDATA_REGISTER   = 0x2004;
+    private const PPUSCROLL_REGISTER = 0x2005;
+    private const PPUADDR_REGISTER   = 0x2006;
+    private const PPUDATA_REGISTER   = 0x2007;
+    private const OAMDMA_REGISTER    = 0x4014;
+
     private array $memory = [];
 
     public function __construct(
@@ -23,13 +33,16 @@ final class Bus
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
             return new UInt8($this->memory[$addr->and(new UInt16(0b11111111111))->value]);
-        } elseif ($addr->isIn(0x2000, 0x2001, 0x2003, 0x2005, 0x2006, 0x4014)) {
+        } elseif ($addr->isIn(
+            self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
+            self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER
+        )) {
             throw new Exception('An attempt to read from register intended for writing (' . $addr->hexString() . ')');
-        } elseif ($addr->isEqual(0x2002)) {
+        } elseif ($addr->isEqual(self::PPUSTATUS_REGISTER)) {
             return $this->ppu->getStatus();
-        } elseif ($addr->isEqual(0x2004)) {
+        } elseif ($addr->isEqual(self::OAMDATA_REGISTER)) {
             return $this->ppu->getOamData();
-        } elseif ($addr->isEqual(0x2007)) {
+        } elseif ($addr->isEqual(self::PPUDATA_REGISTER)) {
             return $this->ppu->getData();
         } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             return $this->getMemory($addr->and(new UInt16(0x2007)));
@@ -50,25 +63,25 @@ final class Bus
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
             $this->memory[$addr->and(new UInt16(0b11111111111))->value] = $data->value;
-        } elseif ($addr->isEqual(0x2000)) {
+        } elseif ($addr->isEqual(self::PPUCTRL_REGISTER)) {
             $this->ppu->setControl($data);
-        } elseif ($addr->isEqual(0x2001)) {
+        } elseif ($addr->isEqual(self::PPUMASK_REGISTER)) {
             $this->ppu->setMask($data);
-        } elseif ($addr->isEqual(0x2002)) {
+        } elseif ($addr->isEqual(self::PPUSTATUS_REGISTER)) {
             throw new Exception('An attempt to write a value to PPUSTATUS');
-        } elseif ($addr->isEqual(0x2003)) {
+        } elseif ($addr->isEqual(self::OAMADDR_REGISTER)) {
             $this->ppu->setOamAddr($data);
-        } elseif ($addr->isEqual(0x2004)) {
+        } elseif ($addr->isEqual(self::OAMDATA_REGISTER)) {
             $this->ppu->setOamData($data);
-        } elseif ($addr->isEqual(0x2005)) {
+        } elseif ($addr->isEqual(self::PPUSCROLL_REGISTER)) {
             $this->ppu->setScroll($data);
-        } elseif ($addr->isEqual(0x2006)) {
+        } elseif ($addr->isEqual(self::PPUADDR_REGISTER)) {
             $this->ppu->setAddress($data);
-        } elseif ($addr->isEqual(0x2007)) {
+        } elseif ($addr->isEqual(self::PPUDATA_REGISTER)) {
             $this->ppu->setData($data);
         } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             $this->setMemory($addr->and(new UInt16(0x2007)), $data);
-        } elseif ($addr->isEqual(0x4014)) {
+        } elseif ($addr->isEqual(self::OAMDMA_REGISTER)) {
             // TODO: writing to OAMDMA
             throw new Exception('TODO: writing to OAMDMA ' . $addr->hexString());
             //$this->ppu->setOamDma($data);
