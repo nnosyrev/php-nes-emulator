@@ -100,6 +100,11 @@ final class UInt8
         return Int8::createFromUInt8($this);
     }
 
+    public function hexString(): string
+    {
+        return '0x' . strtoupper(dechex($this->value));
+    }
+
     private function mod(int $value): int
     {
         return $value % self::BASE;

@@ -36,6 +36,8 @@ final class CPU implements EventSubscriberInterface
     private UInt8 $SP;
     private UInt16 $PC;
 
+    private bool $needNMI = false;
+
     public function __construct(
         private readonly Bus $bus,
         private readonly OpcodeCollection $opcodeCollection,
@@ -44,6 +46,7 @@ final class CPU implements EventSubscriberInterface
     ) {
         $this->setFlagI(false);
         $this->setFlagD(false);
+        $this->setFlagB(false);
 
         $this->registerA = new UInt8(0);
         $this->registerX = new UInt8(0);
@@ -56,6 +59,11 @@ final class CPU implements EventSubscriberInterface
     public function run(): void
     {
         while (true) {
+            if ($this->needNMI) {
+                $this->doNMI();
+                $this->needNMI = false;
+            }
+
             $code = $this->getMemory($this->PC);
 
             $this->incrementPC();
@@ -322,17 +330,18 @@ final class CPU implements EventSubscriberInterface
 
     public function onNMI(NMIEvent $event): void
     {
-        if ($this->getFlagI()) {
-            //return;
-        }
+        $this->needNMI = true;
+    }
 
-        //var_dump('NMI...');
-
+    public function doNMI(): void
+    {
         $this->pushToStackUInt16($this->getPC());
 
-        $this->setFlagB(false);
+        $flags = $this->getFlagsAsUInt8();
+        // Clearing B flag
+        $flags = $flags->and(new UInt8(0b11101111));
 
-        $this->pushToStack($this->getFlagsAsUInt8());
+        $this->pushToStack($flags);
 
         $this->setFlagI(true);
 

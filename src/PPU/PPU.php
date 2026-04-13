@@ -163,18 +163,6 @@ final class PPU
         $this->oamAddr = $this->oamAddr->increment();
     }
 
-    public function setOamDma(array $data): void
-    {
-        if (count($data) > UInt8::BASE) {
-            throw new Exception('The number of array elements cannot exceed ' . UInt8::BASE);
-        }
-
-        foreach ($data as $value) {
-            $this->oamData[$this->oamAddr->value] = $value;
-            $this->oamAddr = $this->oamAddr->increment();
-        }
-    }
-
     public function setScroll(UInt8 $value): void
     {
         $this->scrollRegister->set($value);
@@ -266,7 +254,7 @@ final class PPU
             $this->scanlines++;
             $this->cycles = $this->cycles - self::CYCLES_PER_SCANLINE;
 
-            if ($this->scanlines >= self::START_VBLANK_SCANLINE) {
+            if ($this->scanlines == self::START_VBLANK_SCANLINE) {
                 $this->setStatusVblankFlag();
 
                 if ($this->controlRegister->getNMIEnableBit()) {

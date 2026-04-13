@@ -51,7 +51,7 @@ final class ControlRegister
 
     public function getNMIEnableBit(): bool
     {
-        return ($this->bits->and(new UInt8(self::NMI_ENABLE))->value !== 0);
+        return ($this->bits->and(new UInt8(self::NMI_ENABLE))->value === self::NMI_ENABLE);
     }
 
     public function getSpritePatternTableBit(): bool

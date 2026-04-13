@@ -48,6 +48,7 @@ final class Bus
             return $this->getMemory($addr->and(new UInt16(0x2007)));
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
+            return new UInt8(0);
         } elseif ($addr->isInInterval(0x4018, 0x401F)) {
             // APU and I/O functionality that is normally disabled
         } elseif ($addr->isInInterval(0x8000, 0xFFFF)) {
@@ -82,9 +83,7 @@ final class Bus
         } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             $this->setMemory($addr->and(new UInt16(0x2007)), $data);
         } elseif ($addr->isEqual(self::OAMDMA_REGISTER)) {
-            // TODO: writing to OAMDMA
-            throw new Exception('TODO: writing to OAMDMA ' . $addr->hexString());
-            //$this->ppu->setOamDma($data);
+            $this->setOamDma($data);
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
             //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
@@ -131,5 +130,15 @@ final class Bus
     public function runPPU(int $cycles): void
     {
         $this->ppu->run($cycles);
+    }
+
+    private function setOamDma(UInt8 $data): void
+    {
+        $readFrom = $data->toUInt16()->shiftToLeft(8);
+        $readTo = $readFrom->or(new UInt16(0b11111111));
+
+        for ($addr = $readFrom->value; $addr <= $readTo->value; $addr++) {
+            $this->ppu->setOamData($this->getMemory(new UInt16($addr)));
+        }
     }
 }
