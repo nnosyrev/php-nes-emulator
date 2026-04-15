@@ -17,13 +17,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libicu-dev \
     libzip-dev \
     libsdl2-dev \
+    libffi-dev \
     && docker-php-ext-install -j$(nproc) \
     opcache \
     intl \
     zip \
+    ffi \
     bcmath \
-    && pecl install xdebug sdl-beta \
-    && docker-php-ext-enable xdebug sdl \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
