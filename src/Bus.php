@@ -33,11 +33,6 @@ final class Bus
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
             return new UInt8($this->memory[$addr->and(new UInt16(0b11111111111))->value]);
-        } elseif ($addr->isIn(
-            self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
-            self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER
-        )) {
-            throw new Exception('An attempt to read from register intended for writing (' . $addr->hexString() . ')');
         } elseif ($addr->isEqual(self::PPUSTATUS_REGISTER)) {
             return $this->ppu->getStatus();
         } elseif ($addr->isEqual(self::OAMDATA_REGISTER)) {
@@ -55,6 +50,11 @@ final class Bus
             // TODO: offset
             $value = $this->rom->getPrgRom()[$addr->value - 0x8000];
             return new UInt8($value);
+        } elseif ($addr->isIn(
+            self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
+            self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER
+        )) {
+            throw new Exception('An attempt to read from register intended for writing (' . $addr->hexString() . ')');
         }
 
         throw new Exception('An attempt to access an invalid memory address ' . $addr->hexString());

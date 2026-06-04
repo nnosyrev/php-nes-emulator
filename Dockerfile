@@ -1,5 +1,5 @@
 # Use the official PHP CLI image as the base
-FROM php:8.1.34-cli
+FROM php:8.5.6-cli
 
 # Set environment variables for user and group ID
 ARG UID=1000
@@ -19,13 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsdl2-dev \
     libffi-dev \
     && docker-php-ext-install -j$(nproc) \
-    opcache \
     intl \
     zip \
     ffi \
     bcmath \
-    #&& pecl install xdebug \
-    #&& docker-php-ext-enable xdebug \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -39,6 +36,7 @@ ARG XDEBUG_LOG_LEVEL
 
 # Configure Xdebug if enabled
 RUN if [ "${XDEBUG_ENABLED}" = "true" ]; then \
+    pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     echo "xdebug.mode=${XDEBUG_MODE}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.idekey=${XDEBUG_IDE_KEY}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
@@ -46,10 +44,7 @@ RUN if [ "${XDEBUG_ENABLED}" = "true" ]; then \
     echo "xdebug.log_level=${XDEBUG_LOG_LEVEL}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.client_host=${XDEBUG_HOST}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; \
     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; \
-fi \
-echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ; \
-echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ; \
-echo "opcache.jit_buffer_size=256M" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ;
+fi
 
 # If the group already exists, use it; otherwise, create the 'www' group
 RUN if getent group ${GID}; then \
@@ -65,6 +60,8 @@ USER www
 
 # Set the working directory
 WORKDIR /var/www
+
+COPY php.ini /usr/local/etc/php/conf.d
 
 ENV PATH="$PATH:/var/www/vendor/bin"
 

@@ -49,10 +49,10 @@ final class UI implements UIInterface
         $this->sdl->SDL_SetRenderDrawColor($this->renderer, 100, 0, 0, 0);
         $this->sdl->SDL_RenderClear($this->renderer);
 
-        $pixels = \FFI::new('int *');
-        $pitch = \FFI::new('int');
+        $pixels = $this->sdl->new('int *');
+        $pitch = $this->sdl->new('int');
 
-        if (0 == $this->sdl->SDL_LockTexture($this->texture, null, \FFI::cast('void**', \FFI::addr($pixels)), \FFI::addr($pitch))) {
+        if (0 == $this->sdl->SDL_LockTexture($this->texture, null, $this->sdl->cast('void**', \FFI::addr($pixels)), \FFI::addr($pitch))) {
             foreach ($frame->getPixels() as $key => &$value) {
                 $pixels[$key] = $value;
             }
