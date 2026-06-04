@@ -12,7 +12,7 @@ final class InstructionFactory implements InstructionFactoryInterface
 
     public function make(string $class): InstructionInterface
     {
-        if (!array_key_exists($class, $this->instructions)) {
+        if (!\array_key_exists($class, $this->instructions)) {
             $instruction = new $class();
 
             if (!($instruction instanceof InstructionInterface)) {

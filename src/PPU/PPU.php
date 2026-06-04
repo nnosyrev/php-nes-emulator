@@ -231,13 +231,13 @@ final class PPU
 
         $vramIndex = $mirroredAddr - 0x2000;
 
-        $nameTable = (int) floor($vramIndex / 0x400);
+        $nameTable = (int) \floor($vramIndex / 0x400);
 
         $mirroring = $this->rom->getMirroring();
 
-        if ($mirroring === Mirroring::Vertical && in_array($nameTable, [2, 3])) {
+        if ($mirroring === Mirroring::Vertical && \in_array($nameTable, [2, 3])) {
             $vramIndex = $vramIndex - 0x800;
-        } elseif ($mirroring === Mirroring::Horizontal && in_array($nameTable, [1, 2])) {
+        } elseif ($mirroring === Mirroring::Horizontal && \in_array($nameTable, [1, 2])) {
             $vramIndex = $vramIndex - 0x400;
         } elseif ($mirroring === Mirroring::Horizontal && $nameTable === 3) {
             $vramIndex = $vramIndex - 0x800;

@@ -12,7 +12,7 @@ final class ModeFactory
 
     public function make(string $class): ModeInterface
     {
-        if (!array_key_exists($class, $this->modes)) {
+        if (!\array_key_exists($class, $this->modes)) {
             $mode = new $class();
 
             if (!($mode instanceof ModeInterface)) {

@@ -85,7 +85,7 @@ final class UInt16
 
     public function isIn(int ...$args): bool
     {
-        return in_array($this->value, [...$args]);
+        return \in_array($this->value, [...$args]);
     }
 
     public function isEqual(int $equal): bool
@@ -95,7 +95,7 @@ final class UInt16
 
     public function hexString(): string
     {
-        return '0x' . strtoupper(dechex($this->value));
+        return '0x' . \strtoupper(\dechex($this->value));
     }
 
     private function mod(int $value): int

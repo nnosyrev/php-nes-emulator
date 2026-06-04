@@ -110,7 +110,7 @@ final class Rom implements RomInterface
             throw new Exception('Invalid byte address');
         }
 
-        $byte = ord($this->file[$n]);
+        $byte = \ord($this->file[$n]);
 
         return new UInt8($byte);
     }

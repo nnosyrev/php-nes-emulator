@@ -41,10 +41,10 @@ final class Renderer
             $tileN = $vram[$offset];
 
             // TODO: !!!
-            $tile = array_slice($chrRom, $backgroundBankStart + $tileN * 16, 16);
+            $tile = \array_slice($chrRom, $backgroundBankStart + $tileN * 16, 16);
 
             $baseX = ($offset % 32) * 8;
-            $baseY = (int) floor($offset / 32) * 8;
+            $baseY = (int) \floor($offset / 32) * 8;
 
             for ($y = 0; $y <= 7; $y++) {
                 $upper = $tile[$y];
@@ -68,11 +68,11 @@ final class Renderer
         for ($i = 252; $i >= 0; $i = $i - 4) {
             $baseY = $oamData[$i];
             $tileN = $oamData[$i + 1];
-            $attributes = $oamData[$i + 2];
+            //$attributes = $oamData[$i + 2];
             $baseX = $oamData[$i + 3];
 
             // TODO: !!!
-            $tile = array_slice($chrRom, $spriteBankStart + $tileN * 16, 16);
+            $tile = \array_slice($chrRom, $spriteBankStart + $tileN * 16, 16);
 
             for ($y = 0; $y <= 7; $y++) {
                 $upper = $tile[$y];

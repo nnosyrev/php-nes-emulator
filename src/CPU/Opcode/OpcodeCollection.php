@@ -107,7 +107,7 @@ final class OpcodeCollection
 
     private function add(int $code, string $instructionClass, int $bytes, $cycles, string $modeClass): void
     {
-        if (array_key_exists($code, $this->opcodes)) {
+        if (\array_key_exists($code, $this->opcodes)) {
             throw new Exception(sprintf('The "0x%s" opcode already exists', $this->codeToHex($code)));
         }
 
@@ -116,7 +116,7 @@ final class OpcodeCollection
 
     public function get(int $code): Opcode
     {
-        if (!array_key_exists($code, $this->opcodes)) {
+        if (!\array_key_exists($code, $this->opcodes)) {
             throw new Exception('Opcode 0x' . $this->codeToHex($code) . ' not found');
         }
 
@@ -125,7 +125,7 @@ final class OpcodeCollection
 
     private function codeToHex(int $code): string
     {
-        return mb_strtoupper(dechex($code));
+        return \mb_strtoupper(\dechex($code));
     }
 
     private function setUp(): void
