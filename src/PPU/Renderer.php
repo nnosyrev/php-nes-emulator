@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\PPU;
 
 use App\Rom\RomInterface;
-use App\Type\Rgb;
-use App\Type\UInt8;
 use App\UI\UIInterface;
 
 final class Renderer
@@ -20,13 +18,13 @@ final class Renderer
         private readonly RomInterface $rom,
     ) {
         $this->pallete = [
-            new Rgb(new UInt8(50), new UInt8(100), new UInt8(200)),
-            new Rgb(new UInt8(200), new UInt8(100), new UInt8(50)),
-            new Rgb(new UInt8(100), new UInt8(50), new UInt8(200)),
-            new Rgb(new UInt8(100), new UInt8(100), new UInt8(100)),
+            0x808080,
+            0xFF0000,
+            0x008F00,
+            10000000,
         ];
 
-        $this->frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
+        $this->frame = new Frame(0x000000);
     }
 
     public function render(PPU $ppu): void
@@ -42,6 +40,7 @@ final class Renderer
             $offset = $i - 0x2000;
             $tileN = $vram[$offset];
 
+            // TODO: !!!
             $tile = array_slice($chrRom, $backgroundBankStart + $tileN * 16, 16);
 
             $baseX = ($offset % 32) * 8;
@@ -72,6 +71,7 @@ final class Renderer
             $attributes = $oamData[$i + 2];
             $baseX = $oamData[$i + 3];
 
+            // TODO: !!!
             $tile = array_slice($chrRom, $spriteBankStart + $tileN * 16, 16);
 
             for ($y = 0; $y <= 7; $y++) {

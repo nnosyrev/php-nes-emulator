@@ -16,6 +16,7 @@ final class UI implements UIInterface
     private SDL $sdl;
     private \FFI\CData $window;
     private \FFI\CData $renderer;
+    private \FFI\CData $texture;
 
     public function __construct()
     {
@@ -33,36 +34,40 @@ final class UI implements UIInterface
         );
 
         $this->renderer = $this->sdl->SDL_CreateRenderer($this->window, 0, SDL::SDL_RENDERER_ACCELERATED);
+
+        $this->texture = $this->sdl->SDL_CreateTexture(
+            $this->renderer,
+            SDL::SDL_PIXELFORMAT_RGBA32,
+            SDL::SDL_TEXTUREACCESS_STREAMING,
+            Frame::WIDTH,
+            Frame::HEIGHT
+        );
     }
 
     public function render(Frame $frame): void
     {
-        // Clear screen
         $this->sdl->SDL_SetRenderDrawColor($this->renderer, 100, 0, 0, 0);
         $this->sdl->SDL_RenderClear($this->renderer);
 
-        // Show frame
-        for ($x = 0; $x < Frame::WIDTH; $x++) {
-            for ($y = 0; $y < Frame::HEIGHT; $y++) {
-                $rgb = $frame->getPixel($x, $y);
+        $pixels = \FFI::new('int *');
+        $pitch = \FFI::new('int');
 
-                $this->sdl->SDL_SetRenderDrawColor($this->renderer, $rgb->r->value, $rgb->g->value, $rgb->b->value, 255);
-
-                $rect = $this->sdl->new('SDL_Rect');
-                $rect->x = $x * self::SQUARE_WIDTH;
-                $rect->y = $y * self::SQUARE_WIDTH;
-                $rect->w = self::SQUARE_WIDTH;
-                $rect->h = self::SQUARE_WIDTH;
-
-                $this->sdl->SDL_RenderFillRect($this->renderer, \FFI::addr($rect));
+        if (0 == $this->sdl->SDL_LockTexture($this->texture, null, \FFI::cast('void**', \FFI::addr($pixels)), \FFI::addr($pitch))) {
+            foreach ($frame->getPixels() as $key => &$value) {
+                $pixels[$key] = $value;
             }
+
+            $this->sdl->SDL_UnlockTexture($this->texture);
         }
+
+        $this->sdl->SDL_RenderCopy($this->renderer, $this->texture, null, null);
 
         $this->sdl->SDL_RenderPresent($this->renderer);
     }
 
     public function __destruct()
     {
+        $this->sdl->SDL_DestroyTexture($this->texture);
         $this->sdl->SDL_DestroyRenderer($this->renderer);
         $this->sdl->SDL_DestroyWindow($this->window);
         $this->sdl->SDL_Quit();

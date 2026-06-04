@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\PPU;
 
-use App\Type\Rgb;
+use Exception;
 
 final class Frame
 {
@@ -13,27 +13,32 @@ final class Frame
 
     private array $data = [];
 
-    public function __construct(Rgb $rgb)
+    public function __construct(int $color)
     {
-        $this->init($rgb);
+        $this->init($color);
     }
 
-    private function init(Rgb $rgb): void
+    private function init(int $color): void
     {
-        for ($x = 0; $x < self::WIDTH; $x++) {
-            for ($y = 0; $y < self::HEIGHT; $y++) {
-                $this->setPixel($x, $y, $rgb);
-            }
+        for ($i = 0; $i < self::WIDTH * self::HEIGHT; $i++) {
+            $this->data[$i] = $color;
         }
     }
 
-    public function setPixel(int $x, int $y, Rgb $rgb): void
+    public function setPixel(int $x, int $y, int $color): void
     {
-        $this->data[$x][$y] = $rgb;
+        if ($x > self::WIDTH || $y > self::HEIGHT) {
+            return;
+            throw new Exception('Something went wrong.');
+        }
+
+        $pixelPosition = $y * self::WIDTH + $x;
+
+        $this->data[$pixelPosition] = $color;
     }
 
-    public function getPixel(int $x, int $y): Rgb
+    public function getPixels(): array
     {
-        return $this->data[$x][$y];
+        return $this->data;
     }
 }

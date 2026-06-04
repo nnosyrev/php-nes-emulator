@@ -24,8 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zip \
     ffi \
     bcmath \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug \
+    #&& pecl install xdebug \
+    #&& docker-php-ext-enable xdebug \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -46,7 +46,10 @@ RUN if [ "${XDEBUG_ENABLED}" = "true" ]; then \
     echo "xdebug.log_level=${XDEBUG_LOG_LEVEL}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     echo "xdebug.client_host=${XDEBUG_HOST}" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; \
     echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; \
-fi
+fi \
+echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ; \
+echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ; \
+echo "opcache.jit_buffer_size=256M" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini ;
 
 # If the group already exists, use it; otherwise, create the 'www' group
 RUN if getent group ${GID}; then \
