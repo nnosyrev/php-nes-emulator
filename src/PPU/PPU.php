@@ -80,9 +80,10 @@ final class PPU
 
     private int $scanlines = 0;
 
+    private bool $needRender = false;
+
     public function __construct(
         private readonly RomInterface $rom,
-        private readonly Renderer $renderer,
         private readonly EventDispatcherInterface $dispatcher,
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
@@ -268,9 +269,18 @@ final class PPU
                 $this->setStatusSprite0Flag();
                 $this->scanlines = 0;
 
-                $this->renderer->render($this);
+                $this->needRender = true;
+
+                return;
             }
         }
+
+        $this->needRender = false;
+    }
+
+    public function getNeedRender(): bool
+    {
+        return $this->needRender;
     }
 
     public function getVRam(): SplFixedArray

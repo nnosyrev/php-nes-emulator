@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App;
 
 use App\PPU\PPU;
+use App\PPU\Renderer;
 use App\Rom\RomInterface;
 use App\Type\UInt16;
 use App\Type\UInt8;
+use App\UI\UIInterface;
 use Exception;
 
 final class Bus
@@ -27,6 +29,9 @@ final class Bus
     public function __construct(
         private readonly PPU $ppu,
         private readonly RomInterface $rom,
+        private readonly UIInterface $ui,
+        private readonly Renderer $renderer,
+        private readonly Joystick $joystick,
     ) {}
 
     public function getMemory(UInt16 $addr): UInt8
@@ -41,6 +46,8 @@ final class Bus
             return $this->ppu->getData();
         } elseif ($addr->isInInterval(0x2008, 0x3FFF)) {
             return $this->getMemory($addr->and(new UInt16(0x2007)));
+        } elseif ($addr->isEqual(0x4016)) {
+            return $this->joystick->get();
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
             return new UInt8(0);
@@ -84,6 +91,8 @@ final class Bus
             $this->setMemory($addr->and(new UInt16(0x2007)), $data);
         } elseif ($addr->isEqual(self::OAMDMA_REGISTER)) {
             $this->setOamDma($data);
+        } elseif ($addr->isEqual(0x4016)) {
+            $this->joystick->set($data);
         } elseif ($addr->isInInterval(0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
             //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
@@ -127,9 +136,17 @@ final class Bus
         return new UInt16($result);
     }
 
-    public function runPPU(int $cycles): void
+    public function ticks(int $cpuCycles): void
     {
-        $this->ppu->run($cycles);
+        // 1 CPU cycle = 3 PPU cycles
+        $this->ppu->run($cpuCycles * 3);
+
+        if ($this->ppu->getNeedRender()) {
+            $frame = $this->renderer->render();
+
+            $this->ui->render($frame);
+            $this->ui->processEvent($this->joystick);
+        }
     }
 
     private function setOamDma(UInt8 $data): void

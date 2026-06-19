@@ -76,14 +76,11 @@ final class CPU implements EventSubscriberInterface
 
             try {
                 $instruction->execute($this, $mode);
+
+                $this->bus->ticks($opcode->cycles);
             } catch (BreakException) {
                 return;
             }
-
-            $cycles = $opcode->cycles;
-
-            // 1 CPU cycle = 3 PPU cycles
-            $this->bus->runPPU($cycles * 3);
 
             if ($this->getPC() === $pcOld) {
                 $this->addToPC(new UInt8($opcode->bytes - 1));

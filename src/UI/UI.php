@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\UI;
 
+use App\CPU\Exception\BreakException;
+use App\Joystick;
 use App\PPU\Frame;
+use Serafim\SDL\Event\Type;
 use Serafim\SDL\SDL;
 
 final class UI implements UIInterface
@@ -17,6 +20,7 @@ final class UI implements UIInterface
     private \FFI\CData $window;
     private \FFI\CData $renderer;
     private \FFI\CData $texture;
+    private \FFI\CData $event;
 
     public function __construct()
     {
@@ -42,6 +46,8 @@ final class UI implements UIInterface
             Frame::WIDTH,
             Frame::HEIGHT
         );
+
+        $this->event = $this->sdl->new('SDL_Event');
     }
 
     public function render(Frame $frame): void
@@ -65,11 +71,69 @@ final class UI implements UIInterface
         $this->sdl->SDL_RenderPresent($this->renderer);
     }
 
+    public function processEvent(Joystick $joystick): void
+    {
+        $this->sdl->SDL_PollEvent(\FFI::addr($this->event));
+
+        switch ($this->event->type) {
+            case Type::SDL_QUIT:
+                throw new BreakException('Quit');
+            case Type::SDL_KEYDOWN:
+                $symChar = $this->getSymChar();
+
+                if ($symChar == 'w') {
+                    $joystick->setButtonBit(Joystick::BUTTON_UP, true);
+                } elseif ($symChar == 's') {
+                    $joystick->setButtonBit(Joystick::BUTTON_DOWN, true);
+                } elseif ($symChar == 'a') {
+                    $joystick->setButtonBit(Joystick::BUTTON_LEFT, true);
+                } elseif ($symChar == 'd') {
+                    $joystick->setButtonBit(Joystick::BUTTON_RIGHT, true);
+                } elseif ($symChar == 'n') {
+                    $joystick->setButtonBit(Joystick::BUTTON_SELECT, true);
+                } elseif ($symChar == 'm') {
+                    $joystick->setButtonBit(Joystick::BUTTON_START, true);
+                } elseif ($symChar == 'o') {
+                    $joystick->setButtonBit(Joystick::BUTTON_B, true);
+                } elseif ($symChar == 'p') {
+                    $joystick->setButtonBit(Joystick::BUTTON_A, true);
+                } elseif ($symChar == 'q') {
+                    throw new BreakException('Quit');
+                }
+                break;
+            case Type::SDL_KEYUP:
+                $symChar = $this->getSymChar();
+
+                if ($symChar == 'w') {
+                    $joystick->setButtonBit(Joystick::BUTTON_UP, false);
+                } elseif ($symChar == 's') {
+                    $joystick->setButtonBit(Joystick::BUTTON_DOWN, false);
+                } elseif ($symChar == 'a') {
+                    $joystick->setButtonBit(Joystick::BUTTON_LEFT, false);
+                } elseif ($symChar == 'd') {
+                    $joystick->setButtonBit(Joystick::BUTTON_RIGHT, false);
+                } elseif ($symChar == 'n') {
+                    $joystick->setButtonBit(Joystick::BUTTON_SELECT, false);
+                } elseif ($symChar == 'm') {
+                    $joystick->setButtonBit(Joystick::BUTTON_START, false);
+                } elseif ($symChar == 'o') {
+                    $joystick->setButtonBit(Joystick::BUTTON_B, false);
+                } elseif ($symChar == 'p') {
+                    $joystick->setButtonBit(Joystick::BUTTON_A, false);
+                }
+        }
+    }
+
     public function __destruct()
     {
         $this->sdl->SDL_DestroyTexture($this->texture);
         $this->sdl->SDL_DestroyRenderer($this->renderer);
         $this->sdl->SDL_DestroyWindow($this->window);
         $this->sdl->SDL_Quit();
+    }
+
+    private function getSymChar(): string
+    {
+        return chr($this->event->key->keysym->sym % 256);
     }
 }

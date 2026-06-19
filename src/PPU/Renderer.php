@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\PPU;
 
 use App\Rom\RomInterface;
-use App\UI\UIInterface;
 
 final class Renderer
 {
@@ -14,8 +13,8 @@ final class Renderer
     private Frame $frame;
 
     public function __construct(
-        private readonly UIInterface $ui,
         private readonly RomInterface $rom,
+        private readonly PPU $ppu,
     ) {
         $this->pallete = [
             0x808080,
@@ -27,8 +26,10 @@ final class Renderer
         $this->frame = new Frame(0x000000);
     }
 
-    public function render(PPU $ppu): void
+    public function render(): Frame
     {
+        $ppu = $this->ppu;
+
         $chrRom = $this->rom->getChrRom();
         $frame = $this->frame;
 
@@ -88,6 +89,6 @@ final class Renderer
             }
         }
 
-        $this->ui->render($frame);
+        return $frame;
     }
 }
