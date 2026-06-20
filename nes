@@ -4,6 +4,7 @@
 use App\CPU\CPU;
 use App\Rom\Rom;
 use App\Rom\RomInterface;
+use App\Scheduler;
 use DI\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -20,4 +21,6 @@ $container->set(RomInterface::class, $rom);
 
 $cpu = $container->get(CPU::class);
 $container->get(EventDispatcherInterface::class)->addSubscriber($cpu);
-$cpu->run();
+
+$scheduler = $container->get(Scheduler::class);
+$scheduler->run();

@@ -136,19 +136,6 @@ final class Bus
         return new UInt16($result);
     }
 
-    public function ticks(int $cpuCycles): void
-    {
-        // 1 CPU cycle = 3 PPU cycles
-        $this->ppu->run($cpuCycles * 3);
-
-        if ($this->ppu->getNeedRender()) {
-            $frame = $this->renderer->render();
-
-            $this->ui->render($frame);
-            $this->ui->processEvent($this->joystick);
-        }
-    }
-
     private function setOamDma(UInt8 $data): void
     {
         $readFrom = $data->toUInt16()->shiftToLeft(8);

@@ -247,9 +247,9 @@ final class PPU
         return new UInt16($vramIndex);
     }
 
-    public function run(int $cycles): void
+    public function tick(): void
     {
-        $this->cycles += $cycles;
+        $this->cycles += 1;
 
         if ($this->cycles >= self::CYCLES_PER_SCANLINE) {
             $this->scanlines++;
@@ -267,20 +267,21 @@ final class PPU
             if ($this->scanlines >= self::SCANLINES_PER_FRAME) {
                 $this->clearStatusVblankFlag();
                 $this->setStatusSprite0Flag();
+
                 $this->scanlines = 0;
-
                 $this->needRender = true;
-
-                return;
             }
         }
-
-        $this->needRender = false;
     }
 
     public function getNeedRender(): bool
     {
         return $this->needRender;
+    }
+
+    public function setNeedRenderToFalse(): void
+    {
+        $this->needRender = false;
     }
 
     public function getVRam(): SplFixedArray

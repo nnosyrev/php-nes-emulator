@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use App\CPU\CPU;
 use App\Rom\RomInterface;
 use App\Type\UInt8;
 use App\UI\UIInterface;
@@ -33,9 +32,9 @@ trait CPUTestTrait
         $this->container->set(RomInterface::class, $rom);
     }
 
-    protected function getCpu(): CPU
+    protected function getCpu(): CPUWrapper
     {
-        return $this->container->get(CPU::class);
+        return $this->container->get(CPUWrapper::class);
     }
 
     protected function getFlagNValue(UInt8 $byte): bool

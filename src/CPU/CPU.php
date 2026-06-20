@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\CPU;
 
 use App\Bus;
-use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
@@ -13,6 +12,7 @@ use App\Event\NMIEvent;
 use App\Type\Int8;
 use App\Type\UInt16;
 use App\Type\UInt8;
+use Fiber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CPU implements EventSubscriberInterface
@@ -38,6 +38,8 @@ final class CPU implements EventSubscriberInterface
 
     private bool $needNMI = false;
 
+    private Fiber $fiber;
+
     public function __construct(
         private readonly Bus $bus,
         private readonly OpcodeCollection $opcodeCollection,
@@ -50,6 +52,17 @@ final class CPU implements EventSubscriberInterface
 
         $this->PC = new UInt16(self::PRG_ROM_START);
         $this->SP = new UInt8(self::SP_END);
+
+        $this->fiber = new Fiber([$this, 'run']);
+    }
+
+    public function tick(): void
+    {
+        if (!$this->fiber->isStarted()) {
+            $this->fiber->start();
+        } else {
+            $this->fiber->resume();
+        }
     }
 
     public function run(): void
@@ -70,13 +83,7 @@ final class CPU implements EventSubscriberInterface
             $instruction = $this->instructionFactory->make($opcode->instructionClass);
             $mode = $this->modeFactory->make($opcode->modeClass);
 
-            try {
-                $instruction->execute($this, $mode);
-
-                $this->bus->ticks($opcode->cycles);
-            } catch (BreakException) {
-                return;
-            }
+            $instruction->execute($this, $mode);
 
             if ($this->getPC() === $pcOld) {
                 $this->addToPC(new UInt8($opcode->bytes - 1));
@@ -270,21 +277,31 @@ final class CPU implements EventSubscriberInterface
 
     public function setMemory(UInt16 $addr, UInt8 $data): void
     {
+        $this->suspend();
+
         $this->bus->setMemory($addr, $data);
     }
 
     public function getMemory(UInt16 $addr): UInt8
     {
+        $this->suspend();
+
         return $this->bus->getMemory($addr);
     }
 
     public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
     {
+        $this->suspend();
+        $this->suspend();
+
         $this->bus->setMemoryUInt16($addr, $data);
     }
 
     public function getMemoryUInt16(UInt16 $addr): UInt16
     {
+        $this->suspend();
+        $this->suspend();
+
         return $this->bus->getMemoryUInt16($addr);
     }
 
@@ -293,11 +310,15 @@ final class CPU implements EventSubscriberInterface
         $this->setMemory((new UInt16(self::STACK_START))->add($this->SP), $data);
 
         $this->SP = $this->SP->decrement();
+
+        $this->suspend();
     }
 
     public function popFromStack(): UInt8
     {
         $this->SP = $this->SP->increment();
+
+        $this->suspend();
 
         return $this->getMemory((new UInt16(self::STACK_START))->add($this->SP));
     }
@@ -339,6 +360,13 @@ final class CPU implements EventSubscriberInterface
         $this->setFlagI(true);
 
         $this->setPC($this->getMemoryUInt16(new UInt16(0xFFFA)));
+    }
+
+    private function suspend(): void
+    {
+        if ($this->fiber->isStarted()) {
+            Fiber::suspend();
+        }
     }
 
     public static function getSubscribedEvents(): array
