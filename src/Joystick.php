@@ -10,7 +10,7 @@ final class Joystick
 {
     private bool $strobe = false;
     private int $index = 0;
-    public int $bits = 0;
+    private int $bits = 0;
 
     public const int BUTTON_RIGHT  = 0b10000000;
     public const int BUTTON_LEFT   = 0b01000000;

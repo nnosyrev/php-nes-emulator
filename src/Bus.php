@@ -37,7 +37,7 @@ final class Bus
     public function getMemory(UInt16 $addr): UInt8
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
-            return new UInt8($this->memory[$addr->and(new UInt16(0b11111111111))->value]);
+            return new UInt8($this->memory[$this->mirror($addr)->value]);
         } elseif ($addr->isEqual(self::PPUSTATUS_REGISTER)) {
             return $this->ppu->getStatus();
         } elseif ($addr->isEqual(self::OAMDATA_REGISTER)) {
@@ -70,7 +70,7 @@ final class Bus
     public function setMemory(UInt16 $addr, UInt8 $data): void
     {
         if ($addr->isInInterval(0, 0x1FFF)) {
-            $this->memory[$addr->and(new UInt16(0b11111111111))->value] = $data->value;
+            $this->memory[$this->mirror($addr)->value] = $data->value;
         } elseif ($addr->isEqual(self::PPUCTRL_REGISTER)) {
             $this->ppu->setControl($data);
         } elseif ($addr->isEqual(self::PPUMASK_REGISTER)) {
@@ -157,5 +157,10 @@ final class Bus
         for ($addr = $readFrom->value; $addr <= $readTo->value; $addr++) {
             $this->ppu->setOamData($this->getMemory(new UInt16($addr)));
         }
+    }
+
+    private function mirror(UInt16 $addr): UInt16
+    {
+        return $addr->and(new UInt16(0b11111111111));
     }
 }

@@ -25,13 +25,13 @@ final class CPU implements EventSubscriberInterface
     private UInt8 $registerX;
     private UInt8 $registerY;
 
-    private bool $flagC;
-    private bool $flagZ;
-    private bool $flagI;
-    private bool $flagD;
-    private bool $flagB;
-    private bool $flagV;
-    private bool $flagN;
+    private bool $flagC = false;
+    private bool $flagZ = false;
+    private bool $flagI = false;
+    private bool $flagD = false;
+    private bool $flagB = false;
+    private bool $flagV = false;
+    private bool $flagN = false;
 
     private UInt8 $SP;
     private UInt16 $PC;
@@ -44,10 +44,6 @@ final class CPU implements EventSubscriberInterface
         private readonly InstructionFactoryInterface $instructionFactory,
         private readonly ModeFactory $modeFactory,
     ) {
-        $this->setFlagI(false);
-        $this->setFlagD(false);
-        $this->setFlagB(false);
-
         $this->registerA = new UInt8(0);
         $this->registerX = new UInt8(0);
         $this->registerY = new UInt8(0);
@@ -330,7 +326,7 @@ final class CPU implements EventSubscriberInterface
         $this->needNMI = true;
     }
 
-    public function doNMI(): void
+    private function doNMI(): void
     {
         $this->pushToStackUInt16($this->getPC());
 

@@ -11,9 +11,9 @@ final class LDY implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $operandAddr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($CPU);
 
-        $value = $CPU->getMemory($operandAddr);
+        $value = $CPU->getMemory($addr);
 
         $CPU->setRegisterY($value);
     }
