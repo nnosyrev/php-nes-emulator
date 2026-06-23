@@ -34,6 +34,8 @@ ARG XDEBUG_IDE_KEY
 ARG XDEBUG_LOG
 ARG XDEBUG_LOG_LEVEL
 
+COPY php.ini /usr/local/etc/php/conf.d
+
 # Configure Xdebug if enabled
 RUN if [ "${XDEBUG_ENABLED}" = "true" ]; then \
     pecl install xdebug && \
@@ -60,8 +62,6 @@ USER www
 
 # Set the working directory
 WORKDIR /var/www
-
-COPY php.ini /usr/local/etc/php/conf.d
 
 ENV PATH="$PATH:/var/www/vendor/bin"
 

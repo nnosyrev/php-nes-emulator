@@ -21,6 +21,8 @@ final class UI implements UIInterface
     private \FFI\CData $renderer;
     private \FFI\CData $texture;
     private \FFI\CData $event;
+    private \FFI\CData $pixels;
+    private \FFI\CData $pitch;
 
     public function __construct()
     {
@@ -48,6 +50,8 @@ final class UI implements UIInterface
         );
 
         $this->event = $this->sdl->new('SDL_Event');
+        $this->pixels = $this->sdl->new('int *');
+        $this->pitch = $this->sdl->new('int');
     }
 
     public function render(Frame $frame): void
@@ -55,12 +59,9 @@ final class UI implements UIInterface
         $this->sdl->SDL_SetRenderDrawColor($this->renderer, 100, 0, 0, 0);
         $this->sdl->SDL_RenderClear($this->renderer);
 
-        $pixels = $this->sdl->new('int *');
-        $pitch = $this->sdl->new('int');
-
-        if (0 == $this->sdl->SDL_LockTexture($this->texture, null, $this->sdl->cast('void**', \FFI::addr($pixels)), \FFI::addr($pitch))) {
-            foreach ($frame->getPixels() as $key => &$value) {
-                $pixels[$key] = $value;
+        if (0 == $this->sdl->SDL_LockTexture($this->texture, null, $this->sdl->cast('void**', \FFI::addr($this->pixels)), \FFI::addr($this->pitch))) {
+            foreach ($frame->getPixels() as $key => $value) {
+                $this->pixels[$key] = $value;
             }
 
             $this->sdl->SDL_UnlockTexture($this->texture);

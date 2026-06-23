@@ -60,7 +60,7 @@ final class CPU implements EventSubscriberInterface
     {
         if (!$this->fiber->isStarted()) {
             $this->fiber->start();
-        } else {
+        } elseif ($this->fiber->isSuspended()) {
             $this->fiber->resume();
         }
     }
@@ -364,7 +364,7 @@ final class CPU implements EventSubscriberInterface
 
     private function suspend(): void
     {
-        if ($this->fiber->isStarted()) {
+        if ($this->fiber->isRunning()) {
             Fiber::suspend();
         }
     }
@@ -374,5 +374,10 @@ final class CPU implements EventSubscriberInterface
         return [
             NMIEvent::class => 'onNMI',
         ];
+    }
+
+    public function __destruct()
+    {
+        $this->suspend();
     }
 }
