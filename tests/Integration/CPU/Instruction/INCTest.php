@@ -20,9 +20,9 @@ final class INCTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x01))->value, 0x05 + 1);
+        $this->assertSame($CPU->getMemory(0x01), 0x05 + 1);
         $this->assertSame($CPU->getFlagZ(), false);
-        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(new UInt16(0x01))));
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(0x01)));
     }
 
     public function testINCZeroPageX(): void
@@ -32,9 +32,9 @@ final class INCTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x02))->value, 0x05 + 1);
+        $this->assertSame($CPU->getMemory(0x02), 0x05 + 1);
         $this->assertSame($CPU->getFlagZ(), false);
-        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(new UInt16(0x02))));
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(0x02)));
     }
 
     public function testINCAbsolute(): void
@@ -42,12 +42,12 @@ final class INCTest extends TestCase
         $this->loadProgramToRom([0xEE, 0x01, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x0201), new UInt8(0x04));
+        $CPU->setMemory(0x0201, 0x04);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0201))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0201), 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
-        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(new UInt16(0x0201))));
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(0x0201)));
     }
 
     public function testINCAbsoluteX(): void
@@ -55,12 +55,12 @@ final class INCTest extends TestCase
         $this->loadProgramToRom([0xFE, 0x01, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x0202), new UInt8(0x04));
-        $CPU->setRegisterX(new UInt8(0x01));
+        $CPU->setMemory(0x0202, 0x04);
+        $CPU->setRegisterX(0x01);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0202))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0202), 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
-        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(new UInt16(0x0202))));
+        $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getMemory(0x0202)));
     }
 }

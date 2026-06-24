@@ -18,7 +18,7 @@ final class DEXTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x05 - 1);
+        $this->assertSame($CPU->getRegisterX(), 0x05 - 1);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -30,7 +30,7 @@ final class DEXTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0xFF);
+        $this->assertSame($CPU->getRegisterX(), 0xFF);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }

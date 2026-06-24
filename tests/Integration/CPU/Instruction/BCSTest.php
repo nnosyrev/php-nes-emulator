@@ -21,7 +21,7 @@ final class BCSTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x06);
+        $this->assertSame($CPU->getRegisterX(), 0x06);
     }
 
     public function testBCSFlagCIsFalse(): void
@@ -34,6 +34,6 @@ final class BCSTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x05);
+        $this->assertSame($CPU->getRegisterX(), 0x05);
     }
 }

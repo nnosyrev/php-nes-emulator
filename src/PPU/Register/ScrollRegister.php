@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace App\PPU\Register;
 
-use App\Type\UInt8;
-
 final class ScrollRegister
 {
-    private UInt8 $scrollX;
-    private UInt8 $scrollY;
+    private int /* UInt8 */ $scrollX = 0;
+    private int /* UInt8 */ $scrollY = 0;
 
     private bool $latch = true;
 
-    public function __construct()
-    {
-        $this->scrollX = new UInt8(0);
-        $this->scrollY = new UInt8(0);
-    }
-
-    public function set(UInt8 $value): void
+    public function set(int /* UInt8 */ $value): void
     {
         if ($this->latch) {
             $this->scrollX = $value;

@@ -13,10 +13,10 @@ final class LSRA implements InstructionInterface
     {
         $old = $CPU->getRegisterA();
 
-        $new = $old->shiftToRight(1);
+        $new = $old >> 1;
 
         $CPU->setRegisterA($new);
 
-        $CPU->setFlagC(($old->value & 0b00000001) === 0b00000001);
+        $CPU->setFlagC(($old & 0b00000001) === 0b00000001);
     }
 }

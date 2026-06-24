@@ -43,7 +43,7 @@ final class PHPTest extends TestCase
         $CPU->setFlagC(true);
         $CPU->run();
 
-        $stackValue = $CPU->popFromStack()->value;
+        $stackValue = $CPU->popFromStack();
 
         $this->assertSame($stackValue & 0b10000000, 0b10000000);
         $this->assertSame($stackValue & 0b01000000, 0b01000000);
@@ -68,7 +68,7 @@ final class PHPTest extends TestCase
         $CPU->setFlagC(false);
         $CPU->run();
 
-        $stackValue = $CPU->popFromStack()->value;
+        $stackValue = $CPU->popFromStack();
 
         $this->assertSame($stackValue | 0b01111111, 0b01111111);
         $this->assertSame($stackValue | 0b10111111, 0b10111111);

@@ -9,6 +9,7 @@ use App\CPU\Exception\BreakException;
 use App\PPU\PPU;
 use App\PPU\Renderer;
 use App\UI\UIInterface;
+use App\Util\Debug;
 
 final class Scheduler
 {
@@ -32,6 +33,8 @@ final class Scheduler
                 $this->ppu->tick();
 
                 if ($this->ppu->getNeedRender()) {
+                    Debug::dumpCallsPerSecond();
+
                     $frame = $this->renderer->render();
 
                     $this->ui->render($frame);

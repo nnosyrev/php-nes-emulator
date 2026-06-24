@@ -15,7 +15,7 @@ final class ATX implements InstructionInterface
 
         $value = $cpu->getMemory($addr);
 
-        $cpu->setRegisterA($cpu->getRegisterA()->and($value));
+        $cpu->setRegisterA($cpu->getRegisterA() & $value);
         $cpu->setRegisterX($cpu->getRegisterA());
     }
 }

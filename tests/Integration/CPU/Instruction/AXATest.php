@@ -20,7 +20,7 @@ final class AXATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0213))->value, 0x05 & 0x11 & 0x02);
+        $this->assertSame($CPU->getMemory(0x0213), 0x05 & 0x11 & 0x02);
     }
 
     public function testAXAIndirectY(): void
@@ -28,10 +28,10 @@ final class AXATest extends TestCase
         $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x11, 0xA0, 0x01, 0x93, 0x01, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x01), new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x02), new UInt8(0x07));
+        $CPU->setMemory(0x01, 0x03);
+        $CPU->setMemory(0x02, 0x07);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0704))->value, 0x05 & 0x11 & 0x07);
+        $this->assertSame($CPU->getMemory(0x0704), 0x05 & 0x11 & 0x07);
     }
 }

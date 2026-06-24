@@ -13,10 +13,7 @@ final class AXA implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        $value = $cpu
-            ->getRegisterX()
-            ->and($cpu->getRegisterA())
-            ->and($addr->shiftToRight(8)->toUInt8());
+        $value = $cpu->getRegisterX() & ($cpu->getRegisterA()) & ($addr >> 8);
 
         $cpu->setMemory($addr, $value);
     }

@@ -6,7 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
-use App\Type\UInt8;
+use App\Util\UInt8;
 
 final class RLA implements InstructionInterface
 {
@@ -16,14 +16,16 @@ final class RLA implements InstructionInterface
 
         $old = $cpu->getMemory($addr);
 
-        $new = $old->shiftToLeft(1);
+        $new = UInt8::shiftToLeft($old, 1);
 
         if ($cpu->getFlagC()) {
-            $new = $new->or(new UInt8(0b00000001));
+            //$new = $new->or(new UInt8(0b00000001));
+            $new = UInt8::or($new, 0b00000001);
         }
 
         $cpu->setMemory($addr, $new);
-        $cpu->setRegisterA($cpu->getRegisterA()->and($new));
-        $cpu->setFlagC(($old->value & 0b10000000) === 0b10000000);
+        //$cpu->setRegisterA($cpu->getRegisterA()->and($new));
+        $cpu->setRegisterA(UInt8::and($cpu->getRegisterA(), $new));
+        $cpu->setFlagC(($old & 0b10000000) === 0b10000000);
     }
 }

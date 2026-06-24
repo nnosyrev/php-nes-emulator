@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\CPU\Mode;
 
 use App\CPU\CPU;
-use App\Type\UInt16;
+use App\Util\UInt8;
 
 final class ZeroPageXMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): UInt16
+    public function getOperandAddress(CPU $CPU): int /* UInt16 */
     {
-        return $CPU->getMemory($CPU->getPC())
-            ->add($CPU->getRegisterX())
-            ->toUInt16();
+        return UInt8::add($CPU->getMemory($CPU->getPC()), $CPU->getRegisterX());
     }
 }

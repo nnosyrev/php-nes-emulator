@@ -20,7 +20,7 @@ final class LDYTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x05);
+        $this->assertSame($CPU->getRegisterY(), 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }
@@ -30,10 +30,10 @@ final class LDYTest extends TestCase
         $this->loadProgramToRom([0xA4, 0x05, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
+        $CPU->setMemory(0x05, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x11);
+        $this->assertSame($CPU->getRegisterY(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }
@@ -43,11 +43,11 @@ final class LDYTest extends TestCase
         $this->loadProgramToRom([0xB4, 0x05, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterX(new UInt8(0x01));
-        $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
+        $CPU->setRegisterX(0x01);
+        $CPU->setMemory(0x06, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x11);
+        $this->assertSame($CPU->getRegisterY(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }
@@ -57,10 +57,10 @@ final class LDYTest extends TestCase
         $this->loadProgramToRom([0xAC, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x0210), new UInt8(0x11));
+        $CPU->setMemory(0x0210, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x11);
+        $this->assertSame($CPU->getRegisterY(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }
@@ -70,11 +70,11 @@ final class LDYTest extends TestCase
         $this->loadProgramToRom([0xBC, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterX(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x11));
+        $CPU->setRegisterX(0x03);
+        $CPU->setMemory(0x0213, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x11);
+        $this->assertSame($CPU->getRegisterY(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }

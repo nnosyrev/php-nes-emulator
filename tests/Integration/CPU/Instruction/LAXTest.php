@@ -18,11 +18,11 @@ final class LAXTest extends TestCase
         $this->loadProgramToRom([0xA7, 0x05, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
+        $CPU->setMemory(0x05, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x11);
-        $this->assertSame($CPU->getRegisterX()->value, 0x11);
+        $this->assertSame($CPU->getRegisterA(), 0x11);
+        $this->assertSame($CPU->getRegisterX(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }

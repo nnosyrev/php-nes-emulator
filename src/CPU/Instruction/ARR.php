@@ -15,14 +15,14 @@ final class ARR extends RORAbstract
 
         $value = $cpu->getMemory($addr);
 
-        $data = $value->and($cpu->getRegisterA());
+        $data = $value & $cpu->getRegisterA();
 
         $new = $this->getNew($cpu, $data);
 
         $cpu->setRegisterA($new);
 
-        $bit5 = ($new->value & 0b100000) === 0b100000;
-        $bit6 = ($new->value & 0b1000000) === 0b1000000;
+        $bit5 = ($new & 0b100000) === 0b100000;
+        $bit6 = ($new & 0b1000000) === 0b1000000;
 
         $cpu->setFlagC($bit6);
         $cpu->setFlagV($bit5 xor $bit6);

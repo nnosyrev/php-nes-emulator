@@ -17,14 +17,14 @@ final class CPUTest extends TestCase
     {
         $this->loadProgramToRom([]);
 
-        $addr = new UInt16(0);
+        $addr = 0;
 
         $CPU = $this->getCpu();
-        $CPU->setMemoryUInt16($addr, new UInt16(0x8000));
+        $CPU->setMemoryUInt16($addr, 0x8000);
 
         $readed = $CPU->getMemoryUInt16($addr);
 
-        $this->assertSame($readed->value, 0x8000);
+        $this->assertSame($readed, 0x8000);
     }
 
     public function testPushPopStack(): void
@@ -32,12 +32,12 @@ final class CPUTest extends TestCase
         $this->loadProgramToRom([]);
 
         $CPU = $this->getCpu();
-        $CPU->pushToStack(new UInt8(1));
-        $CPU->pushToStack(new UInt8(2));
-        $CPU->pushToStack(new UInt8(3));
+        $CPU->pushToStack(1);
+        $CPU->pushToStack(2);
+        $CPU->pushToStack(3);
 
-        $this->assertSame($CPU->popFromStack()->value, 3);
-        $this->assertSame($CPU->popFromStack()->value, 2);
-        $this->assertSame($CPU->popFromStack()->value, 1);
+        $this->assertSame($CPU->popFromStack(), 3);
+        $this->assertSame($CPU->popFromStack(), 2);
+        $this->assertSame($CPU->popFromStack(), 1);
     }
 }

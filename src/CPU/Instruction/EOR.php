@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class EOR implements InstructionInterface
 {
@@ -15,6 +16,6 @@ final class EOR implements InstructionInterface
 
         $data = $CPU->getMemory($addr);
 
-        $CPU->setRegisterA($data->xor($CPU->getRegisterA()));
+        $CPU->setRegisterA(UInt8::xor($data, $CPU->getRegisterA()));
     }
 }

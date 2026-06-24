@@ -36,8 +36,8 @@ final class RTITest extends TestCase
         $this->loadProgramToRom([0x40, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->pushToStackUInt16(new UInt16(0x8000 + 1));
-        $CPU->pushToStack(new UInt8(0b11111111));
+        $CPU->pushToStackUInt16(0x8000 + 1);
+        $CPU->pushToStack(0b11111111);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), true);
@@ -54,8 +54,8 @@ final class RTITest extends TestCase
         $this->loadProgramToRom([0x40, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->pushToStackUInt16(new UInt16(0x8000 + 1));
-        $CPU->pushToStack(new UInt8(0b00000000));
+        $CPU->pushToStackUInt16(0x8000 + 1);
+        $CPU->pushToStack(0b00000000);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagC(), false);

@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class DEX implements InstructionInterface
 {
@@ -13,6 +14,6 @@ final class DEX implements InstructionInterface
     {
         $byte = $CPU->getRegisterX();
 
-        $CPU->setRegisterX($byte->decrement());
+        $CPU->setRegisterX(UInt8::decrement($byte));
     }
 }

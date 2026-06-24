@@ -20,7 +20,7 @@ final class STATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x34), 0x05);
     }
 
     public function testSTAZeroPageX(): void
@@ -30,7 +30,7 @@ final class STATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x35))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x35), 0x05);
     }
 
     public function testSTAAbsolute(): void
@@ -40,7 +40,7 @@ final class STATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0134))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0134), 0x05);
     }
 
     public function testSTAAbsoluteX(): void
@@ -50,7 +50,7 @@ final class STATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0135))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0135), 0x05);
     }
 
     public function testSTAAbsoluteY(): void
@@ -60,7 +60,7 @@ final class STATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0135))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0135), 0x05);
     }
 
     public function testSTAIndirectX(): void
@@ -68,11 +68,11 @@ final class STATest extends TestCase
         $this->loadProgramToRom([0xA9, 0x05, 0xA2, 0x01, 0x81, 0x34, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x35), new UInt8(0x02));
-        $CPU->setMemory(new UInt16(0x36), new UInt8(0x01));
+        $CPU->setMemory(0x35, 0x02);
+        $CPU->setMemory(0x36, 0x01);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0102))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0102), 0x05);
     }
 
     public function testSTAIndirectY(): void
@@ -80,10 +80,10 @@ final class STATest extends TestCase
         $this->loadProgramToRom([0xA9, 0x05, 0xA0, 0x01, 0x91, 0x34, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x34), new UInt8(0x02));
-        $CPU->setMemory(new UInt16(0x35), new UInt8(0x01));
+        $CPU->setMemory(0x34, 0x02);
+        $CPU->setMemory(0x35, 0x01);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0103))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0103), 0x05);
     }
 }

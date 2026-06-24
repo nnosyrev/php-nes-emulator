@@ -18,7 +18,7 @@ final class TXSTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getSP()->value, $CPU->getRegisterX()->value);
-        $this->assertSame($CPU->getSP()->value, 0x05);
+        $this->assertSame($CPU->getSP(), $CPU->getRegisterX());
+        $this->assertSame($CPU->getSP(), 0x05);
     }
 }

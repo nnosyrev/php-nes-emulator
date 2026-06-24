@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\CPU\Mode;
 
 use App\CPU\CPU;
-use App\Type\UInt16;
+use App\Util\UInt16;
 
 final class AbsoluteXMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): UInt16
+    public function getOperandAddress(CPU $CPU): int /* UInt16 */
     {
         $param = $CPU->getMemoryUInt16($CPU->getPC());
 
-        return $param->add($CPU->getRegisterX());
+        return UInt16::add($param, $CPU->getRegisterX());
     }
 }

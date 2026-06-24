@@ -18,7 +18,7 @@ final class ISCTest extends TestCase
         $this->loadProgramToRom([0xA9, 0xA1, 0xE7, 0x08, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x08), new UInt8(0x05));
+        $CPU->setMemory(0x08, 0x05);
         $CPU->setFlagC(false);
         $CPU->run();
 
@@ -29,8 +29,8 @@ final class ISCTest extends TestCase
 
         $result = $result % UInt8::BASE;
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x08))->value, 0x06);
-        $this->assertSame($CPU->getRegisterA()->value, $result);
+        $this->assertSame($CPU->getMemory(0x08), 0x06);
+        $this->assertSame($CPU->getRegisterA(), $result);
         // @phpstan-ignore notIdentical.alwaysFalse
         $this->assertSame($CPU->getFlagV(), ((0xA1 ^ $result) & ($result ^ (0x06 ^ 0xFF)) & 0x80) !== 0);
     }

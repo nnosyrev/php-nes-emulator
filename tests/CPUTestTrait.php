@@ -37,8 +37,8 @@ trait CPUTestTrait
         return $this->container->get(CPUWrapper::class);
     }
 
-    protected function getFlagNValue(UInt8 $byte): bool
+    protected function getFlagNValue(int /* UInt8 */ $byte): bool
     {
-        return ($byte->value & 0b10000000) === 0b10000000;
+        return ($byte & 0b10000000) === 0b10000000;
     }
 }

@@ -19,6 +19,6 @@ final class AAXTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05 & 0x11);
+        $this->assertSame($CPU->getMemory(0x34), 0x05 & 0x11);
     }
 }

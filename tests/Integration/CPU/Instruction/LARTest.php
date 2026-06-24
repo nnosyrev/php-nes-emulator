@@ -18,14 +18,14 @@ final class LARTest extends TestCase
         $this->loadProgramToRom([0xBB, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x11));
+        $CPU->setRegisterY(0x03);
+        $CPU->setMemory(0x0213, 0x11);
         $CPU->run();
 
         $result = 0x11 & 0xFF;
 
-        $this->assertSame($CPU->getRegisterA()->value, $result);
-        $this->assertSame($CPU->getRegisterX()->value, $result);
-        $this->assertSame($CPU->getSP()->value, $result);
+        $this->assertSame($CPU->getRegisterA(), $result);
+        $this->assertSame($CPU->getRegisterX(), $result);
+        $this->assertSame($CPU->getSP(), $result);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Rom;
 
 use App\Mirroring;
-use App\Type\UInt8;
 
 interface RomInterface
 {
@@ -13,7 +12,7 @@ interface RomInterface
 
     public function getChrRom(): array;
 
-    public function getMapper(): UInt8;
+    public function getMapper(): int /* UInt8 */;
 
     public function getMirroring(): Mirroring;
 }

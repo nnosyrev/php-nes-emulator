@@ -19,6 +19,6 @@ final class SYATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0123))->value, 0x05 & (0x01 + 1));
+        $this->assertSame($CPU->getMemory(0x0123), 0x05 & (0x01 + 1));
     }
 }

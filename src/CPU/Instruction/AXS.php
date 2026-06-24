@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class AXS implements InstructionInterface
 {
@@ -15,12 +16,12 @@ final class AXS implements InstructionInterface
 
         $value = $cpu->getMemory($addr);
 
-        $cpu->setRegisterX($cpu->getRegisterX()->and($cpu->getRegisterA()));
+        $cpu->setRegisterX($cpu->getRegisterX() & $cpu->getRegisterA());
 
-        if ($value->value <= $cpu->getRegisterX()->value) {
+        if ($value <= $cpu->getRegisterX()) {
             $cpu->setFlagC(true);
         }
 
-        $cpu->setRegisterX($cpu->getRegisterX()->subtract($value));
+        $cpu->setRegisterX(UInt8::subtract($cpu->getRegisterX(), $value));
     }
 }

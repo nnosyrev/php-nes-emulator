@@ -27,7 +27,7 @@ final class SBCTest extends TestCase
 
         $result = $result % UInt8::BASE;
 
-        $this->assertSame($CPU->getRegisterA()->value, $result);
+        $this->assertSame($CPU->getRegisterA(), $result);
         // @phpstan-ignore notIdentical.alwaysFalse
         $this->assertSame($CPU->getFlagV(), ((0xA1 ^ $result) & ($result ^ (0x05 ^ 0xFF)) & 0x80) !== 0);
     }
@@ -47,7 +47,7 @@ final class SBCTest extends TestCase
 
         $result = $result % UInt8::BASE;
 
-        $this->assertSame($CPU->getRegisterA()->value, $result);
+        $this->assertSame($CPU->getRegisterA(), $result);
         // @phpstan-ignore notIdentical.alwaysFalse
         $this->assertSame($CPU->getFlagV(), (((0xA1 ^ 0xFF) ^ $result) & ($result ^ 0x05) & 0x80) !== 0);
     }

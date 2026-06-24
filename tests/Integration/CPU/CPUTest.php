@@ -18,6 +18,6 @@ final class CPUTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0xC1);
+        $this->assertSame($CPU->getRegisterX(), 0xC1);
     }
 }

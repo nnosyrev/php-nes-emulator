@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class ORA implements InstructionInterface
 {
@@ -15,6 +16,6 @@ final class ORA implements InstructionInterface
 
         $data = $CPU->getMemory($addr);
 
-        $CPU->setRegisterA($data->or($CPU->getRegisterA()));
+        $CPU->setRegisterA(UInt8::or($data, $CPU->getRegisterA()));
     }
 }

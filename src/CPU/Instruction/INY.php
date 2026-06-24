@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class INY implements InstructionInterface
 {
@@ -13,6 +14,6 @@ final class INY implements InstructionInterface
     {
         $byte = $CPU->getRegisterY();
 
-        $CPU->setRegisterY($byte->increment());
+        $CPU->setRegisterY(UInt8::increment($byte));
     }
 }

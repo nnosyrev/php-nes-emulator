@@ -20,7 +20,7 @@ final class LDXTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x05);
+        $this->assertSame($CPU->getRegisterX(), 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -30,10 +30,10 @@ final class LDXTest extends TestCase
         $this->loadProgramToRom([0xA6, 0x05, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x05), new UInt8(0x11));
+        $CPU->setMemory(0x05, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x11);
+        $this->assertSame($CPU->getRegisterX(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -43,11 +43,11 @@ final class LDXTest extends TestCase
         $this->loadProgramToRom([0xB6, 0x05, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterY(new UInt8(0x01));
-        $CPU->setMemory(new UInt16(0x06), new UInt8(0x11));
+        $CPU->setRegisterY(0x01);
+        $CPU->setMemory(0x06, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x11);
+        $this->assertSame($CPU->getRegisterX(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -57,10 +57,10 @@ final class LDXTest extends TestCase
         $this->loadProgramToRom([0xAE, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemory(new UInt16(0x0210), new UInt8(0x11));
+        $CPU->setMemory(0x0210, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x11);
+        $this->assertSame($CPU->getRegisterX(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }
@@ -70,11 +70,11 @@ final class LDXTest extends TestCase
         $this->loadProgramToRom([0xBE, 0x10, 0x02, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterY(new UInt8(0x03));
-        $CPU->setMemory(new UInt16(0x0213), new UInt8(0x11));
+        $CPU->setRegisterY(0x03);
+        $CPU->setMemory(0x0213, 0x11);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x11);
+        $this->assertSame($CPU->getRegisterX(), 0x11);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterX()));
     }

@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace App\CPU\Mode;
 
 use App\CPU\CPU;
-use App\Type\UInt16;
 
 final class IndirectMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): UInt16
+    public function getOperandAddress(CPU $CPU): int /* UInt16 */
     {
         $addr = $CPU->getMemoryUInt16($CPU->getPC());
 
-        if (($addr->value & 0x00FF) === 0x00FF) {
+        if (($addr & 0x00FF) === 0x00FF) {
             $low = $CPU->getMemory($addr);
-            $high = $CPU->getMemory(new UInt16($addr->value & 0xFF00));
+            $high = $CPU->getMemory($addr & 0xFF00);
 
-            $result = ($high->value << 8) | $low->value;
+            $result = ($high << 8) | $low;
 
-            return new UInt16($result);
+            return $result;
         }
 
         return $CPU->getMemoryUInt16($addr);

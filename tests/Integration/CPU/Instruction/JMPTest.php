@@ -19,7 +19,7 @@ final class JMPTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x05);
+        $this->assertSame($CPU->getRegisterA(), 0x05);
     }
 
     public function testJMPIndirect(): void
@@ -27,9 +27,9 @@ final class JMPTest extends TestCase
         $this->loadProgramToRom([0xA9, 0x05, 0x6C, 0x10, 0x02, 0xA9, 0x29, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setMemoryUInt16(new UInt16(0x0210), new UInt16(0x8007));
+        $CPU->setMemoryUInt16(0x0210, 0x8007);
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x05);
+        $this->assertSame($CPU->getRegisterA(), 0x05);
     }
 }

@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class DEY implements InstructionInterface
 {
@@ -13,6 +14,6 @@ final class DEY implements InstructionInterface
     {
         $byte = $CPU->getRegisterY();
 
-        $CPU->setRegisterY($byte->decrement());
+        $CPU->setRegisterY(UInt8::decrement($byte));
     }
 }

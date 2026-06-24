@@ -18,9 +18,9 @@ final class PHATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $stackValue = $CPU->popFromStack()->value;
+        $stackValue = $CPU->popFromStack();
 
-        $this->assertSame($stackValue, $CPU->getRegisterA()->value);
+        $this->assertSame($stackValue, $CPU->getRegisterA());
         $this->assertSame($stackValue, 0x05);
     }
 }

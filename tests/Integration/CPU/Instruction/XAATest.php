@@ -18,7 +18,7 @@ final class XAATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0b11111111 & 0b00011000);
+        $this->assertSame($CPU->getRegisterA(), 0b11111111 & 0b00011000);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }

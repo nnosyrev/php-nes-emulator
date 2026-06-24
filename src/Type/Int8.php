@@ -23,4 +23,11 @@ final class Int8
 
         return new self($new);
     }
+
+    public static function createFromInt(int $int): int
+    {
+        $new = ($int >= 0x80) ? -(($int ^ 0xFF) + 1) : $int;
+
+        return $new;
+    }
 }

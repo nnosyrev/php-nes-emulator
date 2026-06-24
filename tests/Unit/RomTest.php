@@ -19,6 +19,6 @@ final class RomTest extends TestCase
         $this->assertSame($rom->getMirroring(), Mirroring::Vertical);
         $this->assertSame(count($rom->getChrRom()), 0);
         $this->assertSame(count($rom->getPrgRom()), 32768);
-        $this->assertSame($rom->getMapper()->value, 0);
+        $this->assertSame($rom->getMapper(), 0);
     }
 }

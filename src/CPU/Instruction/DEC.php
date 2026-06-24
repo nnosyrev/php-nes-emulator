@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class DEC implements InstructionInterface
 {
@@ -14,7 +15,7 @@ final class DEC implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
 
         $orig = $CPU->getMemory($addr);
-        $dec = $orig->decrement();
+        $dec = UInt8::decrement($orig);
 
         $CPU->setMemory($addr, $dec);
 

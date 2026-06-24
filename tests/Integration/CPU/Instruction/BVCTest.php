@@ -21,7 +21,7 @@ final class BVCTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x05);
+        $this->assertSame($CPU->getRegisterX(), 0x05);
     }
 
     public function testBVCFlagVIsFalse(): void
@@ -34,6 +34,6 @@ final class BVCTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x06);
+        $this->assertSame($CPU->getRegisterX(), 0x06);
     }
 }

@@ -6,7 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
-use App\Type\UInt8;
+use App\Util\UInt8;
 
 final class ISC implements InstructionInterface
 {
@@ -18,10 +18,10 @@ final class ISC implements InstructionInterface
 
         $old = $cpu->getMemory($addr);
 
-        $new = $old->increment();
+        $new = UInt8::increment($old);
 
         $cpu->setMemory($addr, $new);
 
-        $this->addToRegisterAWithCarry($new->xor(new UInt8(0xFF)), $cpu);
+        $this->addToRegisterAWithCarry(UInt8::xor($new, 0xFF), $cpu);
     }
 }

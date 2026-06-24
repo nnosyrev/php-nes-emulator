@@ -18,7 +18,7 @@ final class JSRTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x05);
-        $this->assertSame($CPU->popFromStackUInt16()->value, 0x8004);
+        $this->assertSame($CPU->getRegisterA(), 0x05);
+        $this->assertSame($CPU->popFromStackUInt16(), 0x8004);
     }
 }

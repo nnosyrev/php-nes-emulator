@@ -20,7 +20,7 @@ final class BNETest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x06);
+        $this->assertSame($CPU->getRegisterX(), 0x06);
     }
 
     public function testBNEFlagZIsTrue(): void
@@ -32,6 +32,6 @@ final class BNETest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x00);
+        $this->assertSame($CPU->getRegisterX(), 0x00);
     }
 }

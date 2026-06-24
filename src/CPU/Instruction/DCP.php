@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class DCP implements InstructionInterface
 {
@@ -15,11 +16,11 @@ final class DCP implements InstructionInterface
 
         $value = $cpu->getMemory($addr);
 
-        $result = $value->decrement();
+        $result = UInt8::decrement($value);
 
         $cpu->setMemory($addr, $result);
 
-        $cpu->setFlagC($cpu->getRegisterA()->value >= $result->value);
-        $cpu->setFlagsZNByValue($cpu->getRegisterA()->subtract($result));
+        $cpu->setFlagC($cpu->getRegisterA() >= $result);
+        $cpu->setFlagsZNByValue(UInt8::subtract($cpu->getRegisterA(), $result));
     }
 }

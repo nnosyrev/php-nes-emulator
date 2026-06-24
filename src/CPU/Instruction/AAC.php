@@ -15,7 +15,7 @@ final class AAC implements InstructionInterface
 
         $data = $cpu->getMemory($addr);
 
-        $cpu->setRegisterA($data->and($cpu->getRegisterA()));
+        $cpu->setRegisterA($data & $cpu->getRegisterA());
 
         $cpu->setFlagC($cpu->getFlagN());
     }

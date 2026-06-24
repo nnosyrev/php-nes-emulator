@@ -10,8 +10,8 @@ use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
 use App\PPU\Register\ScrollRegister;
 use App\Rom\RomInterface;
-use App\Type\UInt16;
-use App\Type\UInt8;
+use App\Util\UInt16;
+use App\Util\UInt8;
 use Exception;
 use SplFixedArray;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -26,7 +26,7 @@ final class PPU
 
     private SplFixedArray $vram;
 
-    private UInt8 $dataBuf;
+    private int /* UInt8 */ $dataBuf;
 
     /*
      * PPUMASK - Rendering settings ($2001 write)
@@ -44,7 +44,7 @@ final class PPU
      * |+-------- Emphasize green (red on PAL/Dendy)
      * +--------- Emphasize blue
      */
-    private UInt8 $mask;
+    private int /* UInt8 */ $mask;
 
     /*
      * PPUSTATUS - Rendering events ($2002 read)
@@ -58,7 +58,7 @@ final class PPU
      * |+-------- Sprite 0 hit flag
      * +--------- Vblank flag, cleared on read. Unreliable; see below.
      */
-    private UInt8 $status;
+    private int /* UInt8 */ $status;
 
     /*
      * OAMADDR - Sprite RAM address ($2003 write)
@@ -69,7 +69,7 @@ final class PPU
      * |||| ||||
      * ++++-++++- OAM address
      */
-    private UInt8 $oamAddr;
+    private int /* UInt8 */ $oamAddr;
 
     /*
      * OAMDATA - Sprite RAM data ($2004 read/write)
@@ -92,12 +92,12 @@ final class PPU
         // TODO: it's may be wrong (32)
         $this->palleteTable = new SplFixedArray(32);
         $this->vram = new SplFixedArray(2048);
-        $this->dataBuf = new UInt8(0);
+        $this->dataBuf = 0;
         $this->oamData = new SplFixedArray(UInt8::BASE);
-        $this->status = new UInt8(0);
+        $this->status = 0;
     }
 
-    public function setControl(UInt8 $value): void
+    public function setControl(int /* UInt8 */ $value): void
     {
         $oldNMIEnableBit = $this->controlRegister->getNMIEnableBit();
 
@@ -109,17 +109,17 @@ final class PPU
         }
     }
 
-    public function setMask(UInt8 $value): void
+    public function setMask(int /* UInt8 */ $value): void
     {
         $this->mask = $value;
     }
 
-    public function getStatus(): UInt8
+    public function getStatus(): int /* UInt8 */
     {
         $status = $this->status;
 
         // Vblank flag, cleared on read.
-        $this->status = $this->status->and(new UInt8(0b01111111));
+        $this->status = UInt8::and($this->status, 0b01111111);
 
         $this->addressRegister->resetLatch();
         $this->scrollRegister->resetLatch();
@@ -129,52 +129,52 @@ final class PPU
 
     private function setStatusSprite0Flag(): void
     {
-        $this->status = $this->status->or(new UInt8(0b01000000));
+        $this->status = UInt8::or($this->status, 0b01000000);
     }
 
     private function setStatusVblankFlag(): void
     {
-        $this->status = $this->status->or(new UInt8(0b10000000));
+        $this->status = UInt8::or($this->status, 0b10000000);
     }
 
     private function clearStatusVblankFlag(): void
     {
-        $this->status = $this->status->and(new UInt8(0b01111111));
+        $this->status = UInt8::and($this->status, 0b01111111);
     }
 
     private function getStatusVblankFlag(): bool
     {
-        return ($this->status->and(new UInt8(0b10000000))->value !== 0);
+        return (UInt8::and($this->status, 0b10000000) !== 0);
     }
 
-    public function setOamAddr(UInt8 $value): void
+    public function setOamAddr(int /* UInt8 */ $value): void
     {
         $this->oamAddr = $value;
     }
 
-    public function getOamData(): UInt8
+    public function getOamData(): int /* UInt8 */
     {
-        return new UInt8($this->oamData[$this->oamAddr->value]);
+        return $this->oamData[$this->oamAddr];
     }
 
-    public function setOamData(UInt8 $data): void
+    public function setOamData(int /* UInt8 */ $data): void
     {
-        $this->oamData[$this->oamAddr->value] = $data->value;
+        $this->oamData[$this->oamAddr] = $data;
 
-        $this->oamAddr = $this->oamAddr->increment();
+        $this->oamAddr = UInt8::increment($this->oamAddr);
     }
 
-    public function setScroll(UInt8 $value): void
+    public function setScroll(int /* UInt8 */ $value): void
     {
         $this->scrollRegister->set($value);
     }
 
-    public function setAddress(UInt8 $value): void
+    public function setAddress(int /* UInt8 */ $value): void
     {
         $this->addressRegister->set($value);
     }
 
-    public function getData(): UInt8
+    public function getData(): int /* UInt8 */
     {
         $addr = $this->addressRegister->get();
 
@@ -182,13 +182,13 @@ final class PPU
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
-        if ($addr->isInInterval(0x0000, 0x1FFF)) {
-            $this->dataBuf = new UInt8($this->rom->getChrRom()[$addr->value]);
-        } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
-            $this->dataBuf = new UInt8($this->vram[$this->mirrorVRamAddress($addr)->value]);
-        } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
-            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . $addr->hexString());
-        } elseif ($addr->isInInterval(0x3F00, 0x3FFF)) {
+        if (UInt16::isInInterval($addr, 0, 0x1FFF)) {
+            $this->dataBuf = $this->rom->getChrRom()[$addr];
+        } elseif (UInt16::isInInterval($addr, 0x2000, 0x2FFF)) {
+            $this->dataBuf = $this->vram[$this->mirrorVRamAddress($addr)];
+        } elseif (UInt16::isInInterval($addr, 0x3000, 0x3EFF)) {
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . UInt16::hexString($addr));
+        } elseif (UInt16::isInInterval($addr, 0x3F00, 0x3FFF)) {
             // These reads work differently than standard VRAM reads, as palette RAM is a separate memory
             // space internal to the PPU that is overlaid onto the PPU address space. The referenced 6-bit
             // palette data is returned immediately instead of going to the internal read buffer, and hence
@@ -197,38 +197,38 @@ final class PPU
             // goes into the read buffer as normal. The old contents of the read buffer are discarded when
             // reading palettes, but by changing the address to point outside palette RAM and performing
             // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
-            $this->dataBuf = new UInt8($this->palleteTable[$addr->value - 0x3f00]);
+            $this->dataBuf = $this->palleteTable[$addr - 0x3f00];
 
             return $this->dataBuf;
         } else {
-            throw new Exception('Unexpected access to mirrored space ' . $addr->hexString());
+            throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
         }
 
         return $result;
     }
 
-    public function setData(UInt8 $data): void
+    public function setData(int /* UInt8 */ $data): void
     {
         $addr = $this->addressRegister->get();
 
-        if ($addr->isInInterval(0x0000, 0x1FFF)) {
-            throw new Exception('Attempt to write to CHR ROM space ' . $addr->hexString());
-        } elseif ($addr->isInInterval(0x2000, 0x2FFF)) {
-            $this->vram[$this->mirrorVRamAddress($addr)->value] = $data->value;
-        } elseif ($addr->isInInterval(0x3000, 0x3EFF)) {
-            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . $addr->hexString());
-        } elseif ($addr->isInInterval(0x3F00, 0x3FFF)) {
-            $this->palleteTable[$addr->value - 0x3f00] = $data->value;
+        if (UInt16::isInInterval($addr, 0x0000, 0x1FFF)) {
+            throw new Exception('Attempt to write to CHR ROM space ' . UInt16::hexString($addr));
+        } elseif (UInt16::isInInterval($addr, 0x2000, 0x2FFF)) {
+            $this->vram[$this->mirrorVRamAddress($addr)] = $data;
+        } elseif (UInt16::isInInterval($addr, 0x3000, 0x3EFF)) {
+            throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . UInt16::hexString($addr));
+        } elseif (UInt16::isInInterval($addr, 0x3F00, 0x3FFF)) {
+            $this->palleteTable[$addr - 0x3f00] = $data;
         } else {
-            throw new Exception('Unexpected access to mirrored space ' . $addr->hexString());
+            throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
         }
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
     }
 
-    private function mirrorVRamAddress(UInt16 $addr): UInt16
+    private function mirrorVRamAddress(int /* UInt16 */ $addr): int /* UInt16 */
     {
-        $mirroredAddr = $addr->and(new UInt16(0b10111111111111))->value;
+        $mirroredAddr = $addr & 0b10111111111111;
 
         $vramIndex = $mirroredAddr - 0x2000;
 
@@ -244,7 +244,7 @@ final class PPU
             $vramIndex = $vramIndex - 0x800;
         }
 
-        return new UInt16($vramIndex);
+        return $vramIndex;
     }
 
     public function tick(): void

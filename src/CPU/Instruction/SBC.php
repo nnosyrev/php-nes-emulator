@@ -6,7 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
-use App\Type\UInt8;
+use App\Util\UInt8;
 
 final class SBC implements InstructionInterface
 {
@@ -18,6 +18,7 @@ final class SBC implements InstructionInterface
 
         $data = $cpu->getMemory($addr);
 
-        $this->addToRegisterAWithCarry($data->xor(new UInt8(0xFF)), $cpu);
+        //$this->addToRegisterAWithCarry($data->xor(new UInt8(0xFF)), $cpu);
+        $this->addToRegisterAWithCarry(UInt8::xor($data, 0xFF), $cpu);
     }
 }

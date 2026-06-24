@@ -24,7 +24,7 @@ final class ARRTest extends TestCase
         // 0b00000100
         // 0b10000010
 
-        $this->assertSame($CPU->getRegisterA()->value, ((0b01000100 & 0b00001100) >> 1) | 0b10000000);
+        $this->assertSame($CPU->getRegisterA(), ((0b01000100 & 0b00001100) >> 1) | 0b10000000);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
         $this->assertSame($CPU->getFlagC(), false);
@@ -45,7 +45,7 @@ final class ARRTest extends TestCase
         // 0b01000010
         //    6
 
-        $this->assertSame($CPU->getRegisterA()->value, (0b11000100 & 0b10001100) >> 1);
+        $this->assertSame($CPU->getRegisterA(), (0b11000100 & 0b10001100) >> 1);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
         $this->assertSame($CPU->getFlagC(), true);

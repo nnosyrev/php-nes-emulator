@@ -36,6 +36,6 @@ final class RTSTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0x05);
+        $this->assertSame($CPU->getRegisterX(), 0x05);
     }
 }

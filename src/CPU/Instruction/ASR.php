@@ -15,10 +15,10 @@ final class ASR implements InstructionInterface
 
         $value = $cpu->getMemory($addr);
 
-        $new = $cpu->getRegisterA()->and($value);
+        $new = $cpu->getRegisterA() & $value;
 
-        $cpu->setFlagC(($new->value & 0b00000001) === 0b00000001);
+        $cpu->setFlagC(($new & 0b00000001) === 0b00000001);
 
-        $cpu->setRegisterA($new->shiftToRight(1));
+        $cpu->setRegisterA($new >> 1);
     }
 }

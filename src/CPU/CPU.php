@@ -9,9 +9,8 @@ use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\Event\NMIEvent;
-use App\Type\Int8;
-use App\Type\UInt16;
-use App\Type\UInt8;
+use App\Util\UInt16;
+use App\Util\UInt8;
 use Fiber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -21,9 +20,9 @@ final class CPU implements EventSubscriberInterface
     private const STACK_START = 0x0100;
     private const SP_END = 0xFF;
 
-    private UInt8 $registerA;
-    private UInt8 $registerX;
-    private UInt8 $registerY;
+    private int /* UInt8 */ $registerA = 0;
+    private int /* UInt8 */ $registerX = 0;
+    private int /* UInt8 */ $registerY = 0;
 
     private bool $flagC = false;
     private bool $flagZ = false;
@@ -33,8 +32,8 @@ final class CPU implements EventSubscriberInterface
     private bool $flagV = false;
     private bool $flagN = false;
 
-    private UInt8 $SP;
-    private UInt16 $PC;
+    private int /* UInt8 */ $SP = self::SP_END;
+    private int /* UInt16 */ $PC = self::PRG_ROM_START;
 
     private bool $needNMI = false;
 
@@ -46,13 +45,6 @@ final class CPU implements EventSubscriberInterface
         private readonly InstructionFactoryInterface $instructionFactory,
         private readonly ModeFactory $modeFactory,
     ) {
-        $this->registerA = new UInt8(0);
-        $this->registerX = new UInt8(0);
-        $this->registerY = new UInt8(0);
-
-        $this->PC = new UInt16(self::PRG_ROM_START);
-        $this->SP = new UInt8(self::SP_END);
-
         $this->fiber = new Fiber([$this, 'run']);
     }
 
@@ -67,6 +59,7 @@ final class CPU implements EventSubscriberInterface
 
     public function run(): void
     {
+        assert(false);
         while (true) {
             if ($this->needNMI) {
                 $this->doNMI();
@@ -78,7 +71,7 @@ final class CPU implements EventSubscriberInterface
             $this->incrementPC();
             $pcOld = $this->getPC();
 
-            $opcode = $this->opcodeCollection->get($code->value);
+            $opcode = $this->opcodeCollection->get($code);
 
             $instruction = $this->instructionFactory->make($opcode->instructionClass);
             $mode = $this->modeFactory->make($opcode->modeClass);
@@ -86,28 +79,32 @@ final class CPU implements EventSubscriberInterface
             $instruction->execute($this, $mode);
 
             if ($this->getPC() === $pcOld) {
-                $this->addToPC(new UInt8($opcode->bytes - 1));
+                $this->addToPC($opcode->bytes - 1);
             }
         }
     }
 
-    public function setSP(UInt8 $data): void
+    public function setSP(int /* UInt8 */ $new): void
     {
-        $this->SP = $data;
+        assert(UInt8::check($new));
+
+        $this->SP = $new;
     }
 
-    public function getSP(): UInt8
+    public function getSP(): int /* UInt8 */
     {
         return $this->SP;
     }
 
-    public function getPC(): UInt16
+    public function getPC(): int /* UInt16 */
     {
         return $this->PC;
     }
 
-    public function setPC(UInt16 $new): self
+    public function setPC(int /* UInt16 */ $new): self
     {
+        assert(UInt16::check($new));
+
         $this->PC = $new;
 
         return $this;
@@ -115,48 +112,55 @@ final class CPU implements EventSubscriberInterface
 
     public function incrementPC(): self
     {
-        $this->PC = $this->PC->increment();
+        $this->PC = UInt16::increment($this->PC);
 
         return $this;
     }
 
-    public function addToPC(UInt8|Int8 $add): void
+    public function addToPC(int /* UInt8|Int8 */ $add): void
     {
-        $this->PC = $this->PC->add($add);
+        // TODO: add an Int8 check
+        assert(UInt8::check($add) || ($add >= -128 && $add <= 127));
+
+        $this->PC = UInt16::add($this->PC, $add);
     }
 
-    public function setRegisterA(UInt8 $byte): void
+    public function setRegisterA(int /* UInt8 */ $byte): void
     {
+        assert(UInt8::check($byte));
+
         $this->registerA = $byte;
 
         $this->setFlagsZNByValue($this->getRegisterA());
     }
 
-    public function getRegisterA(): UInt8
+    public function getRegisterA(): int /* UInt8 */
     {
         return $this->registerA;
     }
 
-    public function setRegisterX(UInt8 $byte): void
+    public function setRegisterX(int /* UInt8 */ $byte): void
     {
         $this->registerX = $byte;
 
         $this->setFlagsZNByValue($this->getRegisterX());
     }
 
-    public function getRegisterX(): UInt8
+    public function getRegisterX(): int /* UInt8 */
     {
         return $this->registerX;
     }
 
-    public function setRegisterY(UInt8 $byte): void
+    public function setRegisterY(int /* UInt8 */ $byte): void
     {
+        assert(UInt8::check($byte));
+
         $this->registerY = $byte;
 
         $this->setFlagsZNByValue($this->getRegisterY());
     }
 
-    public function getRegisterY(): UInt8
+    public function getRegisterY(): int /* UInt8 */
     {
         return $this->registerY;
     }
@@ -216,9 +220,11 @@ final class CPU implements EventSubscriberInterface
         $this->flagZ = $flagZ;
     }
 
-    public function setFlagZByValue(UInt8 $byte): void
+    public function setFlagZByValue(int /* UInt8 */ $byte): void
     {
-        $this->setFlagZ($byte->value === 0);
+        assert(UInt8::check($byte));
+
+        $this->setFlagZ($byte === 0);
     }
 
     public function getFlagZ(): bool
@@ -231,9 +237,11 @@ final class CPU implements EventSubscriberInterface
         $this->flagN = $flagN;
     }
 
-    public function setFlagNByValue(UInt8 $byte): void
+    public function setFlagNByValue(int /* UInt8 */ $byte): void
     {
-        $this->setFlagN(($byte->value & 0b10000000) === 0b10000000);
+        assert(UInt8::check($byte));
+
+        $this->setFlagN(($byte & 0b10000000) === 0b10000000);
     }
 
     public function getFlagN(): bool
@@ -241,13 +249,15 @@ final class CPU implements EventSubscriberInterface
         return $this->flagN;
     }
 
-    public function setFlagsZNByValue(UInt8 $value): void
+    public function setFlagsZNByValue(int /* UInt8 */ $value): void
     {
+        assert(UInt8::check($value));
+
         $this->setFlagZByValue($value);
         $this->setFlagNByValue($value);
     }
 
-    public function getFlagsAsUInt8(): UInt8
+    public function getFlagsAsUInt8(): int /* UInt8 */
     {
         $all = '';
         $all .= $this->getFlagN() ? '1' : '0';
@@ -259,12 +269,12 @@ final class CPU implements EventSubscriberInterface
         $all .= $this->getFlagZ() ? '1' : '0';
         $all .= $this->getFlagC() ? '1' : '0';
 
-        return new UInt8(bindec($all));
+        return bindec($all);
     }
 
-    public function setFlagsFromUInt8(UInt8 $uint8): void
+    public function setFlagsFromUInt8(int /* UInt8 */ $value): void
     {
-        $value = $uint8->value;
+        assert(UInt8::check($value));
 
         $this->setFlagN(($value & 0b10000000) === 0b10000000);
         $this->setFlagV(($value & 0b01000000) === 0b01000000);
@@ -275,71 +285,86 @@ final class CPU implements EventSubscriberInterface
         $this->setFlagC(($value & 0b00000001) === 0b00000001);
     }
 
-    public function setMemory(UInt16 $addr, UInt8 $data): void
+    public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value): void
     {
         $this->suspend();
 
-        $this->bus->setMemory($addr, $data);
+        $this->bus->setMemory($addr, $value);
     }
 
-    public function getMemory(UInt16 $addr): UInt8
+    public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
     {
         $this->suspend();
 
         return $this->bus->getMemory($addr);
     }
 
-    public function setMemoryUInt16(UInt16 $addr, UInt16 $data): void
+    public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data): void
     {
+        assert(UInt16::check($addr));
+        assert(UInt16::check($data));
+
         $this->suspend();
         $this->suspend();
 
         $this->bus->setMemoryUInt16($addr, $data);
     }
 
-    public function getMemoryUInt16(UInt16 $addr): UInt16
+    public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
     {
+        assert(UInt16::check($addr));
+
         $this->suspend();
         $this->suspend();
 
         return $this->bus->getMemoryUInt16($addr);
     }
 
-    public function pushToStack(UInt8 $data): void
+    public function pushToStack(int /* UInt8 */ $data): void
     {
-        $this->setMemory((new UInt16(self::STACK_START))->add($this->SP), $data);
+        assert(UInt8::check($data));
 
-        $this->SP = $this->SP->decrement();
+        $addr = UInt16::add(self::STACK_START, $this->SP);
+
+        assert(UInt16::check($addr));
+
+        $this->setMemory($addr, $data);
+
+        $this->SP = UInt8::decrement($this->SP);
 
         $this->suspend();
     }
 
-    public function popFromStack(): UInt8
+    public function popFromStack(): int /* UInt8 */
     {
-        $this->SP = $this->SP->increment();
+        $this->SP = UInt8::increment($this->SP);
 
-        $this->suspend();
+        $addr = UInt16::add(self::STACK_START, $this->SP);
 
-        return $this->getMemory((new UInt16(self::STACK_START))->add($this->SP));
+        assert(UInt16::check($addr));
+
+        return $this->getMemory($addr);
     }
 
-    public function pushToStackUInt16(UInt16 $data): void
+    public function pushToStackUInt16(int /* UInt16 */ $value): void
     {
-        $high = $data->value >> 8;
-        $low = $data->value & 0xFF;
+        $high = $value >> 8;
+        $low = $value & 0xFF;
 
-        $this->pushToStack(new UInt8($high));
-        $this->pushToStack(new UInt8($low));
+        $this->pushToStack($high);
+        $this->pushToStack($low);
     }
 
-    public function popFromStackUInt16(): UInt16
+    public function popFromStackUInt16(): int /* UInt16 */
     {
         $low = $this->popFromStack();
         $high = $this->popFromStack();
 
-        $res = ($high->value << 8) | $low->value;
+        $result = ($high << 8) | $low;
 
-        return new UInt16($res);
+        assert(UInt16::check($result));
+
+        return $result;
     }
 
     public function onNMI(NMIEvent $event): void
@@ -353,13 +378,13 @@ final class CPU implements EventSubscriberInterface
 
         $flags = $this->getFlagsAsUInt8();
         // Clearing B flag
-        $flags = $flags->and(new UInt8(0b11101111));
+        $flags = UInt8::and($flags, 0b11101111);
 
         $this->pushToStack($flags);
 
         $this->setFlagI(true);
 
-        $this->setPC($this->getMemoryUInt16(new UInt16(0xFFFA)));
+        $this->setPC($this->getMemoryUInt16(0xFFFA));
     }
 
     private function suspend(): void

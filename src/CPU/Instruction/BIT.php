@@ -16,7 +16,7 @@ final class BIT implements InstructionInterface
         $value = $cpu->getMemory($addr);
 
         $cpu->setFlagNByValue($value);
-        $cpu->setFlagZByValue($value->and($cpu->getRegisterA()));
-        $cpu->setFlagV(($value->value & 0b01000000) === 0b01000000);
+        $cpu->setFlagZByValue($value & $cpu->getRegisterA());
+        $cpu->setFlagV(($value & 0b01000000) === 0b01000000);
     }
 }

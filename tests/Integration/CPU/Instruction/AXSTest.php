@@ -21,7 +21,7 @@ final class AXSTest extends TestCase
 
         $result = (0xFF & 0xF1) - 0x34;
 
-        $this->assertSame($CPU->getRegisterX()->value, $result);
+        $this->assertSame($CPU->getRegisterX(), $result);
         $this->assertSame($CPU->getFlagZ(), false);
         // @phpstan-ignore greaterOrEqual.alwaysTrue
         $this->assertSame($CPU->getFlagC(), (0xFF & 0xF1) >= 0x34);

@@ -20,7 +20,7 @@ final class STYTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x34))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x34), 0x05);
     }
 
     public function testSTYZeroPageX(): void
@@ -28,10 +28,10 @@ final class STYTest extends TestCase
         $this->loadProgramToRom([0xA0, 0x05, 0x94, 0x34, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterX(new UInt8(0x01));
+        $CPU->setRegisterX(0x01);
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x35))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x35), 0x05);
     }
 
     public function testSTYAbsolute(): void
@@ -41,6 +41,6 @@ final class STYTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getMemory(new UInt16(0x0134))->value, 0x05);
+        $this->assertSame($CPU->getMemory(0x0134), 0x05);
     }
 }

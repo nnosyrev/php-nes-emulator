@@ -9,9 +9,9 @@ use App\Type\UInt8;
 
 trait WithCarryTrait
 {
-    public function addToRegisterAWithCarry(UInt8 $data, CPU $cpu): void
+    public function addToRegisterAWithCarry(int /* UInt8 */ $data, CPU $cpu): void
     {
-        $result = $cpu->getRegisterA()->value + $data->value;
+        $result = $cpu->getRegisterA() + $data;
 
         if ($cpu->getFlagC()) {
             $result = $result + 1;
@@ -21,10 +21,10 @@ trait WithCarryTrait
 
         $result = $result % UInt8::BASE;
 
-        $condition = ($data->value ^ $result) & ($result ^ $cpu->getRegisterA()->value) & 0x80;
+        $condition = ($data ^ $result) & ($result ^ $cpu->getRegisterA()) & 0x80;
 
         $cpu->setFlagV($condition !== 0);
 
-        $cpu->setRegisterA(new UInt8($result));
+        $cpu->setRegisterA($result);
     }
 }

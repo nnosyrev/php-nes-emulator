@@ -18,7 +18,7 @@ final class PLATest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x05);
+        $this->assertSame($CPU->getRegisterA(), 0x05);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }

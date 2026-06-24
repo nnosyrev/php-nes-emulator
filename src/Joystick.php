@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Type\UInt8;
-
 final class Joystick
 {
     private bool $strobe = false;
@@ -21,19 +19,19 @@ final class Joystick
     public const int BUTTON_B      = 0b00000010;
     public const int BUTTON_A      = 0b00000001;
 
-    public function set(UInt8 $data): void
+    public function set(int /* UInt8 */ $data): void
     {
-        $this->strobe = ($data->value & 1) === 1;
+        $this->strobe = ($data & 1) === 1;
 
         if ($this->strobe) {
             $this->index = 0;
         }
     }
 
-    public function get(): UInt8
+    public function get(): int /* UInt8 */
     {
         if ($this->index > 7) {
-            return new UInt8(1);
+            return 1;
         }
 
         $result = $this->bits & (1 << $this->index) >> $this->index;
@@ -42,7 +40,7 @@ final class Joystick
             $this->index += 1;
         }
 
-        return new UInt8($result);
+        return $result;
     }
 
     public function setButtonBit(int $key, bool $pressed): void

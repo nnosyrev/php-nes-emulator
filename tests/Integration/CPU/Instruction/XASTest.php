@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
-use App\Type\UInt16;
 use PHPUnit\Framework\TestCase;
 use Tests\CPUTestTrait;
 
@@ -21,7 +20,7 @@ final class XASTest extends TestCase
 
         $sp = 0x05 & 0x11;
 
-        $this->assertSame($CPU->getSP()->value, $sp);
-        $this->assertSame($CPU->getMemory(new UInt16(0x0213))->value, (0x02 + 1) & $sp);
+        $this->assertSame($CPU->getSP(), $sp);
+        $this->assertSame($CPU->getMemory(0x0213), (0x02 + 1) & $sp);
     }
 }

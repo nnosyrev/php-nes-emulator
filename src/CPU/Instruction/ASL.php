@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class ASL implements InstructionInterface
 {
@@ -14,11 +15,12 @@ final class ASL implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
         $old = $CPU->getMemory($addr);
 
-        $new = $old->shiftToLeft(1);
+        //$new = $old << 1;
+        $new = UInt8::shiftToLeft($old, 1);
 
         $CPU->setMemory($addr, $new);
 
-        $CPU->setFlagC(($old->value & 0b10000000) === 0b10000000);
+        $CPU->setFlagC(($old & 0b10000000) === 0b10000000);
         $CPU->setFlagsZNByValue($new);
     }
 }

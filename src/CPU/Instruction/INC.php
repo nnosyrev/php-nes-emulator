@@ -6,6 +6,7 @@ namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
 use App\CPU\Mode\ModeInterface;
+use App\Util\UInt8;
 
 final class INC implements InstructionInterface
 {
@@ -14,7 +15,7 @@ final class INC implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
 
         $orig = $CPU->getMemory($addr);
-        $inc = $orig->increment();
+        $inc = UInt8::increment($orig);
 
         $CPU->setMemory($addr, $inc);
 

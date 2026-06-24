@@ -14,11 +14,11 @@ final class LSR implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
         $old = $CPU->getMemory($addr);
 
-        $new = $old->shiftToRight(1);
+        $new = $old >> 1;
 
         $CPU->setMemory($addr, $new);
 
-        $CPU->setFlagC(($old->value & 0b00000001) === 0b00000001);
+        $CPU->setFlagC(($old & 0b00000001) === 0b00000001);
         $CPU->setFlagsZNByValue($new);
     }
 }

@@ -1,0 +1,25 @@
+<?php
+
+use App\CPU\CPU;
+use App\Rom\Rom;
+use App\Rom\RomInterface;
+use App\Scheduler;
+use DI\ContainerBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$file = file_get_contents($argv[1]);
+$rom = new Rom($file);
+
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/config/di.php');
+
+$container = $builder->build();
+$container->set(RomInterface::class, $rom);
+
+$cpu = $container->get(CPU::class);
+$container->get(EventDispatcherInterface::class)->addSubscriber($cpu);
+
+$scheduler = $container->get(Scheduler::class);
+$scheduler->run();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Rom;
 
 use App\Mirroring;
-use App\Type\UInt8;
+use App\Util\UInt8;
 use Exception;
 
 final class Rom implements RomInterface
@@ -20,7 +20,7 @@ final class Rom implements RomInterface
 
     private array $chrRom;
 
-    private UInt8 $mapper;
+    private int /* UInt8 */ $mapper;
 
     public function __construct(private readonly string $file)
     {
@@ -37,7 +37,7 @@ final class Rom implements RomInterface
         return $this->chrRom;
     }
 
-    public function getMapper(): UInt8
+    public function getMapper(): int /* UInt8 */
     {
         return $this->mapper;
     }
@@ -53,13 +53,14 @@ final class Rom implements RomInterface
             throw new Exception('Incorrect file format.');
         }
 
-        $iNesVersion = $this->getNByte(7)->shiftToRight(2)->and(new UInt8(0b11));
-        if ($iNesVersion->value !== 0) {
+        //$iNesVersion = ($this->getNByte(7) >> 2) & 0b11;
+        $iNesVersion = UInt8::and(UInt8::shiftToRight($this->getNByte(7), 2), 0b11);
+        if ($iNesVersion !== 0) {
             throw new Exception('NES2.0 format is not supported.');
         }
 
-        $fourScreen = $this->getNByte(6)->and(new UInt8(0b1000))->value !== 0;
-        $verticalMirroring = $this->getNByte(6)->and(new UInt8(0b1))->value !== 0;
+        $fourScreen = ($this->getNByte(6) & 0b1000) !== 0;
+        $verticalMirroring = ($this->getNByte(6) & 0b1) !== 0;
 
         if ($fourScreen) {
             $this->mirroring = Mirroring::FourScreen;
@@ -69,10 +70,10 @@ final class Rom implements RomInterface
             $this->mirroring = Mirroring::Horizontal;
         }
 
-        $prgRomSize = $this->getNByte(4)->value * self::PRG_ROM_PAGE_SIZE;
-        $chrRomSize = $this->getNByte(5)->value * self::CHR_ROM_PAGE_SIZE;
+        $prgRomSize = $this->getNByte(4) * self::PRG_ROM_PAGE_SIZE;
+        $chrRomSize = $this->getNByte(5) * self::CHR_ROM_PAGE_SIZE;
 
-        $skipTrainer = ($this->getNByte(6)->value & 0b100) !== 0;
+        $skipTrainer = ($this->getNByte(6) & 0b100) !== 0;
 
         $prgRomStart = 16 + ($skipTrainer ? 512 : 0);
         $chrRomStart = $prgRomStart + $prgRomSize;
@@ -80,13 +81,13 @@ final class Rom implements RomInterface
         $this->prgRom = $this->getBytes($prgRomStart, $prgRomSize);
         $this->chrRom = $this->getBytes($chrRomStart, $chrRomSize);
 
-        $this->mapper = $this->getNByte(7)->and(new UInt8(0b11110000))->or($this->getNByte(6)->shiftToRight(4));
+        $this->mapper = ($this->getNByte(7) & 0b11110000) | ($this->getNByte(6) >> 4);
     }
 
     private function checkTag(): bool
     {
         foreach (self::NES_TAG as $key => $value) {
-            if ($this->getNByte($key)->value !== $value) {
+            if ($this->getNByte($key) !== $value) {
                 return false;
             }
         }
@@ -98,13 +99,13 @@ final class Rom implements RomInterface
     {
         $result = [];
         for ($i = $from; $i < $from + $size; $i++) {
-            $result[] = $this->getNByte($i)->value;
+            $result[] = $this->getNByte($i);
         }
 
         return $result;
     }
 
-    private function getNByte(int $n): UInt8
+    private function getNByte(int $n): int /* UInt8 */
     {
         if (!isset($this->file[$n])) {
             throw new Exception('Invalid byte address');
@@ -112,6 +113,6 @@ final class Rom implements RomInterface
 
         $byte = \ord($this->file[$n]);
 
-        return new UInt8($byte);
+        return $byte;
     }
 }

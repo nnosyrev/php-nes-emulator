@@ -18,8 +18,8 @@ final class ATXTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0b00001111);
-        $this->assertSame($CPU->getRegisterX()->value, 0b00001111);
+        $this->assertSame($CPU->getRegisterA(), 0b00001111);
+        $this->assertSame($CPU->getRegisterX(), 0b00001111);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
     }

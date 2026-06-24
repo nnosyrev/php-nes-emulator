@@ -15,6 +15,6 @@ final class ANDI implements InstructionInterface
 
         $data = $CPU->getMemory($addr);
 
-        $CPU->setRegisterA($data->and($CPU->getRegisterA()));
+        $CPU->setRegisterA($data & $CPU->getRegisterA());
     }
 }

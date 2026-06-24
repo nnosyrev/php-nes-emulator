@@ -18,7 +18,7 @@ final class ASRTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0b00000111);
+        $this->assertSame($CPU->getRegisterA(), 0b00000111);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagC(), true);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));

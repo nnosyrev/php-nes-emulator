@@ -13,12 +13,12 @@ final class ControlRegisterTest extends TestCase
     public function test(): void
     {
         $controlRegister = new ControlRegister();
-        $controlRegister->set(new UInt8(0b00000100));
+        $controlRegister->set(0b00000100);
 
-        $this->assertSame($controlRegister->getAddressIncrement()->value, 32);
+        $this->assertSame($controlRegister->getAddressIncrement(), 32);
 
-        $controlRegister->set(new UInt8(0b00000000));
+        $controlRegister->set(0b00000000);
 
-        $this->assertSame($controlRegister->getAddressIncrement()->value, 1);
+        $this->assertSame($controlRegister->getAddressIncrement(), 1);
     }
 }

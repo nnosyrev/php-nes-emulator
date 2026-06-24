@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\PPU\Register;
 
-use App\Type\UInt8;
-
 final class ControlRegister
 {
     private const VRAM_ADDR_INCREMENT      = 0b00000100;
@@ -28,39 +26,34 @@ final class ControlRegister
     // |+-------- PPU master/slave select
     // |          (0: read backdrop from EXT pins; 1: output color on EXT pins)
     // +--------- Vblank NMI enable (0: off, 1: on)
-    private UInt8 $bits;
+    private int /* UInt8 */ $bits = 0b00000000;
 
-    public function __construct()
-    {
-        $this->bits = new UInt8(0b00000000);
-    }
-
-    public function set(UInt8 $value): void
+    public function set(int /* UInt8 */ $value): void
     {
         $this->bits = $value;
     }
 
-    public function getAddressIncrement(): UInt8
+    public function getAddressIncrement(): int /* UInt8 */
     {
-        if ($this->bits->and(new UInt8(self::VRAM_ADDR_INCREMENT))->value === 0) {
-            return new UInt8(1);
+        if (($this->bits & self::VRAM_ADDR_INCREMENT) === 0) {
+            return 1;
         }
 
-        return new UInt8(32);
+        return 32;
     }
 
     public function getNMIEnableBit(): bool
     {
-        return ($this->bits->and(new UInt8(self::NMI_ENABLE))->value === self::NMI_ENABLE);
+        return (($this->bits & self::NMI_ENABLE) === self::NMI_ENABLE);
     }
 
     public function getSpritePatternTableBit(): bool
     {
-        return ($this->bits->and(new UInt8(self::SPRITE_PATTERN_TABLE))->value !== 0);
+        return ($this->bits & self::SPRITE_PATTERN_TABLE) !== 0;
     }
 
     public function getBackgroundPatternTableBit(): bool
     {
-        return ($this->bits->and(new UInt8(self::BACKGROUND_PATTERN_TABLE))->value !== 0);
+        return ($this->bits & self::BACKGROUND_PATTERN_TABLE) !== 0;
     }
 }

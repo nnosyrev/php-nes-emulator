@@ -18,7 +18,7 @@ final class DEYTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0x05 - 1);
+        $this->assertSame($CPU->getRegisterY(), 0x05 - 1);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }
@@ -30,7 +30,7 @@ final class DEYTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterY()->value, 0xFF);
+        $this->assertSame($CPU->getRegisterY(), 0xFF);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterY()));
     }

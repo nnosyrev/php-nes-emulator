@@ -18,7 +18,7 @@ final class AACTest extends TestCase
         $CPU = $this->getCpu();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterA()->value, 0x05 & 0xA6);
+        $this->assertSame($CPU->getRegisterA(), 0x05 & 0xA6);
         $this->assertSame($CPU->getFlagZ(), false);
         $this->assertSame($CPU->getFlagN(), $this->getFlagNValue($CPU->getRegisterA()));
         $this->assertSame($CPU->getFlagC(), $this->getFlagNValue($CPU->getRegisterA()));

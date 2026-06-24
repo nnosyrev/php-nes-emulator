@@ -37,7 +37,7 @@ final class PLPTest extends TestCase
         $this->loadProgramToRom([0x48, 0x28, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterA(new UInt8(0b11111111));
+        $CPU->setRegisterA(0b11111111);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagN(), true);
@@ -54,7 +54,7 @@ final class PLPTest extends TestCase
         $this->loadProgramToRom([0x48, 0x28, 0x00]);
 
         $CPU = $this->getCpu();
-        $CPU->setRegisterA(new UInt8(0b00000000));
+        $CPU->setRegisterA(0b00000000);
         $CPU->run();
 
         $this->assertSame($CPU->getFlagN(), false);

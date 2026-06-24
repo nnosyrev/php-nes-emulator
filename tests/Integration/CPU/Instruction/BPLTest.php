@@ -20,7 +20,7 @@ final class BPLTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0b01110010 + 1);
+        $this->assertSame($CPU->getRegisterX(), 0b01110010 + 1);
     }
 
     public function testBPLFlagNIsTrue(): void
@@ -32,6 +32,6 @@ final class BPLTest extends TestCase
         $CPU->incrementPC();
         $CPU->run();
 
-        $this->assertSame($CPU->getRegisterX()->value, 0b11110010);
+        $this->assertSame($CPU->getRegisterX(), 0b11110010);
     }
 }
