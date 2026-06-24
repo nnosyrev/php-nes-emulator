@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c27fdce6da85cea2728d5703f6003f23",
+    "content-hash": "2438ad67f5775b55a5f85e64463a46d7",
     "packages": [
         {
             "name": "ffi-headers/contracts",
@@ -5845,7 +5845,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.1.34"
+        "php": "^8.5"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"

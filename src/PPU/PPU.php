@@ -26,7 +26,7 @@ final class PPU
 
     private SplFixedArray $vram;
 
-    private int /* UInt8 */ $dataBuf;
+    private int /* UInt8 */ $dataBuf = 0;
 
     /*
      * PPUMASK - Rendering settings ($2001 write)
@@ -58,7 +58,7 @@ final class PPU
      * |+-------- Sprite 0 hit flag
      * +--------- Vblank flag, cleared on read. Unreliable; see below.
      */
-    private int /* UInt8 */ $status;
+    private int /* UInt8 */ $status = 0;
 
     /*
      * OAMADDR - Sprite RAM address ($2003 write)
@@ -92,9 +92,7 @@ final class PPU
         // TODO: it's may be wrong (32)
         $this->palleteTable = new SplFixedArray(32);
         $this->vram = new SplFixedArray(2048);
-        $this->dataBuf = 0;
         $this->oamData = new SplFixedArray(UInt8::BASE);
-        $this->status = 0;
     }
 
     public function setControl(int /* UInt8 */ $value): void
@@ -236,9 +234,9 @@ final class PPU
 
         $mirroring = $this->rom->getMirroring();
 
-        if ($mirroring === Mirroring::Vertical && \in_array($nameTable, [2, 3])) {
+        if ($mirroring === Mirroring::Vertical && ($nameTable === 2 || $nameTable === 3)) {
             $vramIndex = $vramIndex - 0x800;
-        } elseif ($mirroring === Mirroring::Horizontal && \in_array($nameTable, [1, 2])) {
+        } elseif ($mirroring === Mirroring::Horizontal && ($nameTable === 1 || $nameTable === 2)) {
             $vramIndex = $vramIndex - 0x400;
         } elseif ($mirroring === Mirroring::Horizontal && $nameTable === 3) {
             $vramIndex = $vramIndex - 0x800;
