@@ -19,8 +19,6 @@ final class IndirectXMode implements ModeInterface
         $low = $CPU->getMemory($ptr);
         $high = $CPU->getMemory(UInt16::increment($ptr));
 
-        $result = ($high << 8) | $low;
-
-        return $result;
+        return ($high << 8) | $low;
     }
 }

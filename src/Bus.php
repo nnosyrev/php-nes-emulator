@@ -8,6 +8,7 @@ use App\PPU\PPU;
 use App\PPU\Renderer;
 use App\Rom\RomInterface;
 use App\UI\UIInterface;
+use App\Util\Debug;
 use App\Util\UInt16;
 use Exception;
 
@@ -35,26 +36,25 @@ final class Bus
 
     public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
     {
-        if (UInt16::isInInterval($addr, 0, 0x1FFF)) {
+        if (UInt16::isInInterval($addr, 0x8000, 0xFFFF)) {
+            return $this->rom->getPrgRom()[$addr - 0x8000];
+        } elseif (UInt16::isInInterval($addr, 0, 0x1FFF)) {
             return $this->memory[$this->mirror($addr)];
+        } elseif ($addr === 0x4016) {
+            return $this->joystick->get();
+        } elseif ($addr === self::PPUDATA_REGISTER) {
+            return $this->ppu->getData();
         } elseif ($addr === self::PPUSTATUS_REGISTER) {
             return $this->ppu->getStatus();
         } elseif ($addr === self::OAMDATA_REGISTER) {
             return $this->ppu->getOamData();
-        } elseif ($addr === self::PPUDATA_REGISTER) {
-            return $this->ppu->getData();
         } elseif (UInt16::isInInterval($addr, 0x2008, 0x3FFF)) {
             return $this->getMemory($addr & 0x2007);
-        } elseif ($addr === 0x4016) {
-            return $this->joystick->get();
         } elseif (UInt16::isInInterval($addr, 0x4000, 0x4017)) {
             // TODO: NES APU and I/O registers
             return 0;
         } elseif (UInt16::isInInterval($addr, 0x4018, 0x401F)) {
             // APU and I/O functionality that is normally disabled
-        } elseif (UInt16::isInInterval($addr, 0x8000, 0xFFFF)) {
-            $value = $this->rom->getPrgRom()[$addr - 0x8000];
-            return $value;
         } elseif (UInt16::isIn($addr,
             self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
             self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER
@@ -69,6 +69,15 @@ final class Bus
     {
         if (UInt16::isInInterval($addr, 0, 0x1FFF)) {
             $this->memory[$this->mirror($addr)] = $data;
+        } elseif ($addr === 0x4016) {
+            $this->joystick->set($data);
+        } elseif ($addr === self::OAMDMA_REGISTER) {
+            $this->setOamDma($data);
+        } elseif (UInt16::isInInterval($addr, 0x4000, 0x4017)) {
+            // TODO: NES APU and I/O registers
+            //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
+        } elseif ($addr === self::PPUADDR_REGISTER) {
+            $this->ppu->setAddress($data);
         } elseif ($addr === self::PPUCTRL_REGISTER) {
             $this->ppu->setControl($data);
         } elseif ($addr === self::PPUMASK_REGISTER) {
@@ -81,19 +90,10 @@ final class Bus
             $this->ppu->setOamData($data);
         } elseif ($addr === self::PPUSCROLL_REGISTER) {
             $this->ppu->setScroll($data);
-        } elseif ($addr === self::PPUADDR_REGISTER) {
-            $this->ppu->setAddress($data);
         } elseif ($addr === self::PPUDATA_REGISTER) {
             $this->ppu->setData($data);
         } elseif (UInt16::isInInterval($addr, 0x2008, 0x3FFF)) {
             $this->setMemory($addr & 0x2007, $data);
-        } elseif ($addr === self::OAMDMA_REGISTER) {
-            $this->setOamDma($data);
-        } elseif ($addr === 0x4016) {
-            $this->joystick->set($data);
-        } elseif (UInt16::isInInterval($addr, 0x4000, 0x4017)) {
-            // TODO: NES APU and I/O registers
-            //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
         } elseif (UInt16::isInInterval($addr, 0x4018, 0x401F)) {
             throw new Exception('APU and I/O functionality that is normally disabled ' . UInt16::hexString($addr));
         } elseif (UInt16::isInInterval($addr, 0x8000, 0xFFFF)) {

@@ -16,9 +16,7 @@ final class IndirectMode implements ModeInterface
             $low = $CPU->getMemory($addr);
             $high = $CPU->getMemory($addr & 0xFF00);
 
-            $result = ($high << 8) | $low;
-
-            return $result;
+            return ($high << 8) | $low;
         }
 
         return $CPU->getMemoryUInt16($addr);

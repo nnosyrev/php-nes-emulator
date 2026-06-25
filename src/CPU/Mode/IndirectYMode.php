@@ -13,10 +13,8 @@ final class IndirectYMode implements ModeInterface
     {
         $param = $CPU->getMemory($CPU->getPC());
 
-        $ptr = $param;
-
-        $low = $CPU->getMemory($ptr);
-        $high = $CPU->getMemory(UInt16::increment($ptr));
+        $low = $CPU->getMemory($param);
+        $high = $CPU->getMemory(UInt16::increment($param));
 
         $result = ($high << 8) | $low;
 

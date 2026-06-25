@@ -7,6 +7,7 @@ namespace App\UI;
 use App\CPU\Exception\BreakException;
 use App\Joystick;
 use App\PPU\Frame;
+use App\Util\Debug;
 use Serafim\SDL\Event\Type;
 use Serafim\SDL\SDL;
 
@@ -56,6 +57,7 @@ final class UI implements UIInterface
 
     public function render(Frame $frame): void
     {
+        //Debug::dumpCallsPerSecond();
         $this->sdl->SDL_SetRenderDrawColor($this->renderer, 100, 0, 0, 0);
         $this->sdl->SDL_RenderClear($this->renderer);
 

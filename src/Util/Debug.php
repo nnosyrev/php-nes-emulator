@@ -4,24 +4,26 @@ namespace App\Util;
 
 final class Debug
 {
-    private static int $timestamp;
-    private static int $calls;
+    private static array $timestamp;
+    private static array $calls;
 
-    public static function dumpCallsPerSecond(): void
+    public static function dumpCallsPerSecond(?string $name = null): void
     {
-        if (empty(self::$timestamp)) {
-            self::reset();
-        } elseif (self::$timestamp < time()) {
-            var_dump(self::$calls);
-            self::reset();
+        $name = is_null($name) ? 'Default' : ucfirst($name);
+
+        if (empty(self::$timestamp[$name])) {
+            self::reset($name);
+        } elseif (self::$timestamp[$name] < time()) {
+            echo $name . ': ' . self::$calls[$name] . PHP_EOL;
+            self::reset($name);
         } else {
-            self::$calls += 1;
+            self::$calls[$name] += 1;
         }
     }
 
-    private static function reset(): void
+    private static function reset(string $name): void
     {
-        self::$timestamp = time();
-        self::$calls = 0;
+        self::$timestamp[$name] = time();
+        self::$calls[$name] = 0;
     }
 }

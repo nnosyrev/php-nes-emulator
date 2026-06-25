@@ -39,8 +39,6 @@ final class UInt8
 
         $result = $a | $b;
 
-        assert(self::check($result));
-
         return $result;
     }
 
@@ -50,8 +48,6 @@ final class UInt8
         assert(self::check($b));
 
         $result = self::mod($a + $b);
-
-        assert(self::check($result));
 
         return $result;
     }
@@ -63,8 +59,6 @@ final class UInt8
 
         $result = self::mod($a - $b + self::BASE);
 
-        assert(self::check($result));
-
         return $result;
     }
 
@@ -73,8 +67,6 @@ final class UInt8
         assert(self::check($value));
 
         $result = self::mod($value + 1);
-
-        assert(self::check($result));
 
         return $result;
     }
@@ -85,8 +77,6 @@ final class UInt8
 
         $result = self::mod($value - 1 + self::BASE);
 
-        assert(self::check($result));
-
         return $result;
     }
 
@@ -96,8 +86,6 @@ final class UInt8
 
         $result = self::mod($value << $bits);
 
-        assert(self::check($result));
-
         return $result;
     }
 
@@ -106,8 +94,6 @@ final class UInt8
         assert(self::check($value));
 
         $result = $value >> $bits;
-
-        assert(self::check($result));
 
         return $result;
     }
