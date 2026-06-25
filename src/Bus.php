@@ -31,82 +31,61 @@ final class Bus
 
     public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
     {
-        if (UInt16::inInterval($addr, 0x8000, 0xFFFF)) {
-            return $this->rom->getPrgRom()[$addr - 0x8000];
-        } elseif (UInt16::inInterval($addr, 0, 0x1FFF)) {
-            return $this->memory[$this->mirror($addr)];
-        } elseif ($addr === 0x4016) {
-            return $this->joystick->get();
-        } elseif ($addr === self::PPUDATA_REGISTER) {
-            return $this->ppu->getData();
-        } elseif ($addr === self::PPUSTATUS_REGISTER) {
-            return $this->ppu->getStatus();
-        } elseif ($addr === self::OAMDATA_REGISTER) {
-            return $this->ppu->getOamData();
-        } elseif (UInt16::inInterval($addr, 0x2008, 0x3FFF)) {
-            return $this->getMemory($addr & 0x2007);
-        } elseif (UInt16::inInterval($addr, 0x4000, 0x4017)) {
-            // TODO: NES APU and I/O registers
-            return 0;
-        } elseif (UInt16::inInterval($addr, 0x4018, 0x401F)) {
-            // APU and I/O functionality that is normally disabled
-        } elseif (\in_array($addr, [self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
-            self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER])) {
-            throw new Exception('An attempt to read from register intended for writing (' . UInt16::hexString($addr) . ')');
-        }
-
-        throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
+        return match (true) {
+            UInt16::inInterval($addr, 0x8000, 0xFFFF) => $this->rom->getPrgRom()[$addr - 0x8000],
+            UInt16::inInterval($addr, 0, 0x1FFF)      => $this->memory[$this->mirror($addr)],
+            $addr === 0x4016                          => $this->joystick->get(),
+            $addr === self::PPUDATA_REGISTER          => $this->ppu->getData(),
+            $addr === self::PPUSTATUS_REGISTER        => $this->ppu->getStatus(),
+            $addr === self::OAMDATA_REGISTER          => $this->ppu->getOamData(),
+            UInt16::inInterval($addr, 0x2008, 0x3FFF) => $this->getMemory($addr & 0x2007),
+            UInt16::inInterval($addr, 0x4000, 0x4017) => 0,
+            UInt16::inInterval($addr, 0x4018, 0x401F) => 0,
+            \in_array($addr, [
+                self::PPUCTRL_REGISTER,
+                self::PPUMASK_REGISTER,
+                self::OAMADDR_REGISTER,
+                self::PPUSCROLL_REGISTER,
+                self::PPUADDR_REGISTER,
+                self::OAMDMA_REGISTER,
+            ])      => throw new Exception('An attempt to read from register intended for writing (' . UInt16::hexString($addr) . ')'),
+            default => throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr)),
+        };
     }
 
     public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $data): void
     {
-        if (UInt16::inInterval($addr, 0, 0x1FFF)) {
-            $this->memory[$this->mirror($addr)] = $data;
-        } elseif ($addr === 0x4016) {
-            $this->joystick->set($data);
-        } elseif ($addr === self::OAMDMA_REGISTER) {
-            $this->setOamDma($data);
-        } elseif (UInt16::inInterval($addr, 0x4000, 0x4017)) {
-            // TODO: NES APU and I/O registers
-            //throw new Exception('TODO: NES APU and I/O registers ' . $addr->hexString());
-        } elseif ($addr === self::PPUADDR_REGISTER) {
-            $this->ppu->setAddress($data);
-        } elseif ($addr === self::PPUCTRL_REGISTER) {
-            $this->ppu->setControl($data);
-        } elseif ($addr === self::PPUMASK_REGISTER) {
-            $this->ppu->setMask($data);
-        } elseif ($addr === self::PPUSTATUS_REGISTER) {
-            throw new Exception('An attempt to write a value to PPUSTATUS');
-        } elseif ($addr === self::OAMADDR_REGISTER) {
-            $this->ppu->setOamAddr($data);
-        } elseif ($addr === self::OAMDATA_REGISTER) {
-            $this->ppu->setOamData($data);
-        } elseif ($addr === self::PPUSCROLL_REGISTER) {
-            $this->ppu->setScroll($data);
-        } elseif ($addr === self::PPUDATA_REGISTER) {
-            $this->ppu->setData($data);
-        } elseif (UInt16::inInterval($addr, 0x2008, 0x3FFF)) {
-            $this->setMemory($addr & 0x2007, $data);
-        } elseif (UInt16::inInterval($addr, 0x4018, 0x401F)) {
-            throw new Exception('APU and I/O functionality that is normally disabled ' . UInt16::hexString($addr));
-        } elseif (UInt16::inInterval($addr, 0x8000, 0xFFFF)) {
-            throw new Exception('An attempt to write to PRG ROM ' . UInt16::hexString($addr));
-        } else {
-            throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
-        }
+        match (true) {
+            UInt16::inInterval($addr, 0, 0x1FFF)      => $this->memory[$this->mirror($addr)] = $data,
+            $addr === 0x4016                          => $this->joystick->set($data),
+            $addr === self::OAMDMA_REGISTER           => $this->setOamDma($data),
+            UInt16::inInterval($addr, 0x4000, 0x4017) => 0,
+            $addr === self::PPUADDR_REGISTER          => $this->ppu->setAddress($data),
+            $addr === self::PPUCTRL_REGISTER          => $this->ppu->setControl($data),
+            $addr === self::PPUMASK_REGISTER          => $this->ppu->setMask($data),
+            $addr === self::PPUSTATUS_REGISTER        => throw new Exception('An attempt to write a value to PPUSTATUS'),
+            $addr === self::OAMADDR_REGISTER          => $this->ppu->setOamAddr($data),
+            $addr === self::OAMDATA_REGISTER          => $this->ppu->setOamData($data),
+            $addr === self::PPUSCROLL_REGISTER        => $this->ppu->setScroll($data),
+            $addr === self::PPUDATA_REGISTER          => $this->ppu->setData($data),
+            UInt16::inInterval($addr, 0x2008, 0x3FFF) => $this->setMemory($addr & 0x2007, $data),
+            UInt16::inInterval($addr, 0x4018, 0x401F) => throw new Exception('APU and I/O functionality that is normally disabled ' . UInt16::hexString($addr)),
+            UInt16::inInterval($addr, 0x8000, 0xFFFF) => throw new Exception('An attempt to write to PRG ROM ' . UInt16::hexString($addr)),
+            default                                   => throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr))
+        };
     }
 
     public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data): void
     {
-        if (UInt16::inInterval($addr, 0, 0x1FFF)) {
-            $high = $data >> 8;
-            $low = $data & 0xFF;
-
-            $this->memory[$addr] = $low;
-            $this->memory[$addr + 1] = $high;
-        } else {
+        if (!UInt16::inInterval($addr, 0, 0x1FFF)) {
             throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
         }
+
+        $high = $data >> 8;
+        $low = $data & 0xFF;
+
+        $this->memory[$addr] = $low;
+        $this->memory[$addr + 1] = $high;
     }
 
     public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
