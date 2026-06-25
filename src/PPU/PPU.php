@@ -180,13 +180,13 @@ final class PPU
 
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
-        if (UInt16::isInInterval($addr, 0, 0x1FFF)) {
+        if (UInt16::inInterval($addr, 0, 0x1FFF)) {
             $this->dataBuf = $this->rom->getChrRom()[$addr];
-        } elseif (UInt16::isInInterval($addr, 0x2000, 0x2FFF)) {
+        } elseif (UInt16::inInterval($addr, 0x2000, 0x2FFF)) {
             $this->dataBuf = $this->vram[$this->mirrorVRamAddress($addr)];
-        } elseif (UInt16::isInInterval($addr, 0x3000, 0x3EFF)) {
+        } elseif (UInt16::inInterval($addr, 0x3000, 0x3EFF)) {
             throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . UInt16::hexString($addr));
-        } elseif (UInt16::isInInterval($addr, 0x3F00, 0x3FFF)) {
+        } elseif (UInt16::inInterval($addr, 0x3F00, 0x3FFF)) {
             // These reads work differently than standard VRAM reads, as palette RAM is a separate memory
             // space internal to the PPU that is overlaid onto the PPU address space. The referenced 6-bit
             // palette data is returned immediately instead of going to the internal read buffer, and hence
@@ -209,13 +209,13 @@ final class PPU
     {
         $addr = $this->addressRegister->get();
 
-        if (UInt16::isInInterval($addr, 0x0000, 0x1FFF)) {
+        if (UInt16::inInterval($addr, 0x0000, 0x1FFF)) {
             throw new Exception('Attempt to write to CHR ROM space ' . UInt16::hexString($addr));
-        } elseif (UInt16::isInInterval($addr, 0x2000, 0x2FFF)) {
+        } elseif (UInt16::inInterval($addr, 0x2000, 0x2FFF)) {
             $this->vram[$this->mirrorVRamAddress($addr)] = $data;
-        } elseif (UInt16::isInInterval($addr, 0x3000, 0x3EFF)) {
+        } elseif (UInt16::inInterval($addr, 0x3000, 0x3EFF)) {
             throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . UInt16::hexString($addr));
-        } elseif (UInt16::isInInterval($addr, 0x3F00, 0x3FFF)) {
+        } elseif (UInt16::inInterval($addr, 0x3F00, 0x3FFF)) {
             $this->palleteTable[$addr - 0x3f00] = $data;
         } else {
             throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));

@@ -15,7 +15,6 @@ final class ASL implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
         $old = $CPU->getMemory($addr);
 
-        //$new = $old << 1;
         $new = UInt8::shiftToLeft($old, 1);
 
         $CPU->setMemory($addr, $new);

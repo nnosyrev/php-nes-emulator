@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
-use App\Type\Int8;
+use App\Util\Int8;
 
 trait BranchTrait
 {

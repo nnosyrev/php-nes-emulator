@@ -16,7 +16,6 @@ final class XAA implements InstructionInterface
 
         $value = $cpu->getMemory($addr);
 
-        //$cpu->setRegisterA($cpu->getRegisterX()->and($value));
         $cpu->setRegisterA(UInt8::and($cpu->getRegisterX(), $value));
     }
 }

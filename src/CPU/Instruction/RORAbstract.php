@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\CPU\Instruction;
 
 use App\CPU\CPU;
-use App\Type\UInt8;
 
 abstract class RORAbstract implements InstructionInterface
 {
@@ -17,7 +16,6 @@ abstract class RORAbstract implements InstructionInterface
         return $newValue;
     }
 
-    // TODO: !!!
     protected function setFlagC(CPU $CPU, int /* UInt8 */ $old): void
     {
         $newCFlag = ($old & 0b00000001) === 0b00000001;

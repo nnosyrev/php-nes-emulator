@@ -59,7 +59,7 @@ final class CPU implements EventSubscriberInterface
 
     public function run(): void
     {
-        assert(false);
+        //assert(false);
         while (true) {
             if ($this->needNMI) {
                 $this->doNMI();

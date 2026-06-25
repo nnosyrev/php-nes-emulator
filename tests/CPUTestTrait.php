@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Rom\RomInterface;
-use App\Type\UInt8;
 use App\UI\UIInterface;
 use DI\Container;
 use DI\ContainerBuilder;

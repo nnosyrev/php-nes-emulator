@@ -19,12 +19,10 @@ final class RLA implements InstructionInterface
         $new = UInt8::shiftToLeft($old, 1);
 
         if ($cpu->getFlagC()) {
-            //$new = $new->or(new UInt8(0b00000001));
             $new = UInt8::or($new, 0b00000001);
         }
 
         $cpu->setMemory($addr, $new);
-        //$cpu->setRegisterA($cpu->getRegisterA()->and($new));
         $cpu->setRegisterA(UInt8::and($cpu->getRegisterA(), $new));
         $cpu->setFlagC(($old & 0b10000000) === 0b10000000);
     }

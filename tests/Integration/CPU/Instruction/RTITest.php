@@ -9,8 +9,6 @@ use App\CPU\Instruction\BRK;
 use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Instruction\InstructionInterface;
 use App\CPU\Instruction\RTI;
-use App\Type\UInt16;
-use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 use Tests\CPUTestTrait;
 

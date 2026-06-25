@@ -14,7 +14,6 @@ final class ASLA implements InstructionInterface
     {
         $old = $CPU->getRegisterA();
 
-        //$new = $old << 1;
         $new = UInt8::shiftToLeft($old, 1);
 
         $CPU->setRegisterA($new);

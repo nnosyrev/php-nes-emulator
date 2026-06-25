@@ -15,10 +15,8 @@ final class SXA implements InstructionInterface
     {
         $addr = $mode->getOperandAddress($cpu);
 
-        //$high = $addr->shiftToRight(8)->toUInt8();
         $high = UInt16::shiftToRight($addr, 8);
 
-        //$result = $cpu->getRegisterX()->and($high->increment());
         $result = UInt8::and($cpu->getRegisterX(), UInt8::increment($high));
 
         $cpu->setMemory($addr, $result);

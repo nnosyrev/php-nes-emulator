@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Unit\PPU\Register;
 
 use App\PPU\Register\ControlRegister;
-use App\Type\UInt8;
 use PHPUnit\Framework\TestCase;
 
 final class ControlRegisterTest extends TestCase

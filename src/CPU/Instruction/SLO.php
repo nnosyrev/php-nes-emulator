@@ -15,12 +15,10 @@ final class SLO implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
         $old = $CPU->getMemory($addr);
 
-        //$new = $old->shiftToLeft(1);
         $new = UInt8::shiftToLeft($old, 1);
 
         $CPU->setMemory($addr, $new);
         $CPU->setFlagC(($old & 0b10000000) === 0b10000000);
-        //$CPU->setRegisterA($CPU->getRegisterA()->or($new));
         $CPU->setRegisterA(UInt8::or($CPU->getRegisterA(), $new));
     }
 }

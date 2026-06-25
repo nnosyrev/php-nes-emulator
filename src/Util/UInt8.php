@@ -2,8 +2,6 @@
 
 namespace App\Util;
 
-use Exception;
-
 final class UInt8
 {
     public const BASE = 256;
@@ -13,23 +11,12 @@ final class UInt8
         return ($uint8 >= 0 && $uint8 <= (self::BASE - 1));
     }
 
-    public static function validate(int /* UInt8 */ $value): void
-    {
-        if (!self::check($value)) {
-            throw new Exception('Invalid value');
-        }
-    }
-
     public static function and(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
     {
         assert(self::check($a));
         assert(self::check($b));
 
-        $result = $a & $b;
-
-        assert(self::check($result));
-
-        return $result;
+        return $a & $b;
     }
 
     public static function or(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
@@ -37,9 +24,7 @@ final class UInt8
         assert(self::check($a));
         assert(self::check($b));
 
-        $result = $a | $b;
-
-        return $result;
+        return $a | $b;
     }
 
     public static function add(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
@@ -47,9 +32,7 @@ final class UInt8
         assert(self::check($a));
         assert(self::check($b));
 
-        $result = self::mod($a + $b);
-
-        return $result;
+        return self::mod($a + $b);
     }
 
     public  static function subtract(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
@@ -57,45 +40,35 @@ final class UInt8
         assert(self::check($a));
         assert(self::check($b));
 
-        $result = self::mod($a - $b + self::BASE);
-
-        return $result;
+        return self::mod($a - $b + self::BASE);
     }
 
     public static function increment(int /* UInt8 */ $value): int /* UInt8 */
     {
         assert(self::check($value));
 
-        $result = self::mod($value + 1);
-
-        return $result;
+        return self::mod($value + 1);
     }
 
     public static function decrement(int /* UInt8 */ $value): int /* UInt8 */
     {
         assert(self::check($value));
 
-        $result = self::mod($value - 1 + self::BASE);
-
-        return $result;
+        return self::mod($value - 1 + self::BASE);
     }
 
     public static function shiftToLeft(int /* UInt8 */ $value, int $bits): int /* UInt8 */
     {
         assert(self::check($value));
 
-        $result = self::mod($value << $bits);
-
-        return $result;
+        return self::mod($value << $bits);
     }
 
     public static function shiftToRight(int /* UInt8 */ $value, int $bits): int /* UInt8 */
     {
         assert(self::check($value));
 
-        $result = $value >> $bits;
-
-        return $result;
+        return $value >> $bits;
     }
 
     public static function xor(int /* UInt8 */ $value, int /* UInt8 */ $xor): int /* UInt8 */
@@ -103,11 +76,7 @@ final class UInt8
         assert(self::check($value));
         assert(self::check($xor));
 
-        $result = $value ^ $xor;
-
-        assert(self::check($result));
-
-        return $result;
+        return $value ^ $xor;
     }
 
     private static function mod(int /* UInt8 */ $value): int /* UInt8 */
