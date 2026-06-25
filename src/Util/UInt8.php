@@ -35,7 +35,7 @@ final class UInt8
         return self::mod($a + $b);
     }
 
-    public  static function subtract(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
+    public static function subtract(int /* UInt8 */ $a, int /* UInt8 */ $b): int /* UInt8 */
     {
         assert(self::check($a));
         assert(self::check($b));

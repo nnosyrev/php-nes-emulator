@@ -9,6 +9,7 @@ use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\Event\NMIEvent;
+use App\Util\Int8;
 use App\Util\UInt16;
 use App\Util\UInt8;
 use Fiber;
@@ -59,7 +60,7 @@ final class CPU implements EventSubscriberInterface
 
     public function run(): void
     {
-        //assert(false);
+        // @phpstan-ignore while.alwaysTrue
         while (true) {
             if ($this->needNMI) {
                 $this->doNMI();
@@ -119,8 +120,7 @@ final class CPU implements EventSubscriberInterface
 
     public function addToPC(int /* UInt8|Int8 */ $add): void
     {
-        // TODO: add an Int8 check
-        assert(UInt8::check($add) || ($add >= -128 && $add <= 127));
+        assert(UInt8::check($add) || Int8::check($add));
 
         $this->PC = UInt16::add($this->PC, $add);
     }

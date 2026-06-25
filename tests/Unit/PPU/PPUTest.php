@@ -11,6 +11,6 @@ final class PPUTest extends TestCase
 {
     public function test(): void
     {
-        $this->assertSame(true, true);
+        $this->assertSame(true, false);
     }
 }

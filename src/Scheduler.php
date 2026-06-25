@@ -39,7 +39,7 @@ final class Scheduler
 
                     $this->ppu->setNeedRenderToFalse();
                 }
-                
+
                 // APU...
             } catch (BreakException) {
                 return;

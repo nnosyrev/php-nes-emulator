@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App;
 
 use App\PPU\PPU;
-use App\PPU\Renderer;
 use App\Rom\RomInterface;
-use App\UI\UIInterface;
 use App\Util\UInt16;
 use Exception;
 
@@ -28,8 +26,6 @@ final class Bus
     public function __construct(
         private readonly PPU $ppu,
         private readonly RomInterface $rom,
-        private readonly UIInterface $ui,
-        private readonly Renderer $renderer,
         private readonly Joystick $joystick,
     ) {}
 
@@ -55,7 +51,7 @@ final class Bus
         } elseif (UInt16::inInterval($addr, 0x4018, 0x401F)) {
             // APU and I/O functionality that is normally disabled
         } elseif (\in_array($addr, [self::PPUCTRL_REGISTER, self::PPUMASK_REGISTER, self::OAMADDR_REGISTER,
-                                    self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER])) {
+            self::PPUSCROLL_REGISTER, self::PPUADDR_REGISTER, self::OAMDMA_REGISTER])) {
             throw new Exception('An attempt to read from register intended for writing (' . UInt16::hexString($addr) . ')');
         }
 
@@ -119,7 +115,6 @@ final class Bus
             $low = $this->memory[$addr];
             $high = $this->memory[$addr + 1];
         } elseif (UInt16::inInterval($addr, 0x8000, 0xFFFF)) {
-            // TODO: offset
             $low = $this->rom->getPrgRom()[$addr - 0x8000];
             $high = $this->rom->getPrgRom()[$addr + 1 - 0x8000];
         } else {

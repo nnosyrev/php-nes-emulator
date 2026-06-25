@@ -36,7 +36,7 @@ final class Joystick
 
         $result = $this->bits & (1 << $this->index) >> $this->index;
 
-        if (!$this->strobe && $this->index <= 7) {
+        if (!$this->strobe) {
             $this->index += 1;
         }
 
