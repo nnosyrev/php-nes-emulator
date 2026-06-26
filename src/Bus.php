@@ -58,7 +58,6 @@ final class Bus
             $addr === self::PPUSTATUS_REGISTER => $this->ppu->getStatus(),
             $addr === self::OAMDATA_REGISTER => $this->ppu->getOamData(),
             UInt16::inInterval($addr, self::PPU_REGISTERS_MIRRORS_START, self::PPU_REGISTERS_MIRRORS_END) => $this->getMemory($this->ppuMirror($addr)),
-            // Excluding OAMDMA_REGISTER (0x4014) which is higher
             UInt16::inInterval($addr, self::APU_REGISTERS_START, self::APU_REGISTERS_END) => 0,
             default => throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr)),
         };

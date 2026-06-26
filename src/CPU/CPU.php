@@ -21,6 +21,14 @@ final class CPU implements EventSubscriberInterface
     private const STACK_START = 0x0100;
     private const SP_END = 0xFF;
 
+    private const FLAG_C = 0b00000001;
+    private const FLAG_Z = 0b00000010;
+    private const FLAG_I = 0b00000100;
+    private const FLAG_D = 0b00001000;
+    private const FLAG_B = 0b00010000;
+    private const FLAG_V = 0b01000000;
+    private const FLAG_N = 0b10000000;
+
     private int /* UInt8 */ $registerA = 0;
     private int /* UInt8 */ $registerX = 0;
     private int /* UInt8 */ $registerY = 0;
@@ -241,7 +249,7 @@ final class CPU implements EventSubscriberInterface
     {
         assert(UInt8::check($byte));
 
-        $this->setFlagN(($byte & 0b10000000) === 0b10000000);
+        $this->setFlagN(($byte & self::FLAG_N) === self::FLAG_N);
     }
 
     public function getFlagN(): bool
@@ -276,13 +284,13 @@ final class CPU implements EventSubscriberInterface
     {
         assert(UInt8::check($value));
 
-        $this->setFlagN(($value & 0b10000000) === 0b10000000);
-        $this->setFlagV(($value & 0b01000000) === 0b01000000);
-        $this->setFlagB(($value & 0b00010000) === 0b00010000);
-        $this->setFlagD(($value & 0b00001000) === 0b00001000);
-        $this->setFlagI(($value & 0b00000100) === 0b00000100);
-        $this->setFlagZ(($value & 0b00000010) === 0b00000010);
-        $this->setFlagC(($value & 0b00000001) === 0b00000001);
+        $this->setFlagN(($value & self::FLAG_N) === self::FLAG_N);
+        $this->setFlagV(($value & self::FLAG_V) === self::FLAG_V);
+        $this->setFlagB(($value & self::FLAG_B) === self::FLAG_B);
+        $this->setFlagD(($value & self::FLAG_D) === self::FLAG_D);
+        $this->setFlagI(($value & self::FLAG_I) === self::FLAG_I);
+        $this->setFlagZ(($value & self::FLAG_Z) === self::FLAG_Z);
+        $this->setFlagC(($value & self::FLAG_C) === self::FLAG_C);
     }
 
     public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value): void
@@ -378,7 +386,7 @@ final class CPU implements EventSubscriberInterface
 
         $flags = $this->getFlagsAsUInt8();
         // Clearing B flag
-        $flags = UInt8::and($flags, 0b11101111);
+        $flags = UInt8::and($flags, ~ self::FLAG_B);
 
         $this->pushToStack($flags);
 
