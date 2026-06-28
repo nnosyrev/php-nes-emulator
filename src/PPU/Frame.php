@@ -27,8 +27,8 @@ final class Frame
 
     public function setPixel(int $x, int $y, int $color): void
     {
-        if ($x > self::WIDTH || $y > self::HEIGHT) {
-            // TODO: !!!
+        if ($x >= self::WIDTH || $y >= self::HEIGHT) {
+            // TODO:fix this !!!
             return;
             // @phpstan-ignore deadCode.unreachable
             throw new Exception('Something went wrong.');
