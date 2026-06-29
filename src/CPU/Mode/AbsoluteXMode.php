@@ -13,6 +13,9 @@ final class AbsoluteXMode implements ModeInterface
     {
         $param = $CPU->getMemoryUInt16($CPU->getPC());
 
+        $CPU->endCycle();
+        $CPU->endCycle();
+
         return UInt16::add($param, $CPU->getRegisterX());
     }
 }

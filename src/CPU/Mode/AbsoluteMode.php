@@ -8,8 +8,13 @@ use App\CPU\CPU;
 
 final class AbsoluteMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */
+    public function getOperandAddress(CPU $cpu): int /* UInt16 */
     {
-        return $CPU->getMemoryUInt16($CPU->getPC());
+        $result = $cpu->getMemoryUInt16($cpu->getPC());
+
+        $cpu->endCycle();
+        $cpu->endCycle();
+
+        return $result;
     }
 }

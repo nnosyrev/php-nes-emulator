@@ -52,6 +52,16 @@ final class CPUWrapper
         }
     }
 
+    /*
+    public function endCycle(): void
+    {
+        if ($this->fiber->isRunning()) {
+            $value = CycleStorage::pop();
+            Fiber::suspend($value);
+        }
+    }
+    */
+
     public function __call($name, $arguments)
     {
         return $this->cpu->$name(...$arguments);

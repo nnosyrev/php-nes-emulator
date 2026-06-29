@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\CPU;
 
-use App\Bus;
+use App\Bus\BusInterface;
 use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
@@ -49,7 +49,7 @@ final class CPU implements EventSubscriberInterface
     private Fiber $fiber;
 
     public function __construct(
-        private readonly Bus $bus,
+        private readonly BusInterface $bus,
         private readonly OpcodeCollection $opcodeCollection,
         private readonly InstructionFactoryInterface $instructionFactory,
         private readonly ModeFactory $modeFactory,
@@ -77,6 +77,8 @@ final class CPU implements EventSubscriberInterface
 
             $code = $this->getMemory($this->PC);
 
+            $this->endCycle();
+
             $this->incrementPC();
             $pcOld = $this->getPC();
 
@@ -90,6 +92,8 @@ final class CPU implements EventSubscriberInterface
             if ($this->getPC() === $pcOld) {
                 $this->addToPC($opcode->bytes - 1);
             }
+
+            $this->endCycle();
         }
     }
 
@@ -295,15 +299,11 @@ final class CPU implements EventSubscriberInterface
 
     public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value): void
     {
-        $this->suspend();
-
         $this->bus->setMemory($addr, $value);
     }
 
     public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
     {
-        $this->suspend();
-
         return $this->bus->getMemory($addr);
     }
 
@@ -312,18 +312,12 @@ final class CPU implements EventSubscriberInterface
         assert(UInt16::check($addr));
         assert(UInt16::check($data));
 
-        $this->suspend();
-        $this->suspend();
-
         $this->bus->setMemoryUInt16($addr, $data);
     }
 
     public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
     {
         assert(UInt16::check($addr));
-
-        $this->suspend();
-        $this->suspend();
 
         return $this->bus->getMemoryUInt16($addr);
     }
@@ -339,8 +333,6 @@ final class CPU implements EventSubscriberInterface
         $this->setMemory($addr, $data);
 
         $this->SP = UInt8::decrement($this->SP);
-
-        $this->suspend();
     }
 
     public function popFromStack(): int /* UInt8 */
@@ -395,7 +387,7 @@ final class CPU implements EventSubscriberInterface
         $this->setPC($this->getMemoryUInt16(0xFFFA));
     }
 
-    private function suspend(): void
+    public function endCycle(): void
     {
         if ($this->fiber->isRunning()) {
             Fiber::suspend();
@@ -411,6 +403,6 @@ final class CPU implements EventSubscriberInterface
 
     public function __destruct()
     {
-        $this->suspend();
+        $this->endCycle();
     }
 }
