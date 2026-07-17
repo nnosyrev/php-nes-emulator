@@ -12,12 +12,18 @@ final class Bus implements BusInterface
 
     public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
     {
-        return $this->memory[$addr];
+        $result = $this->memory[$addr];
+
+        CycleStorage::push($addr, $result, CycleStorage::TYPE_READ);
+
+        return $result;
     }
 
     public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $data): void
     {
         $this->memory[$addr] = $data;
+
+        CycleStorage::push($addr, $data, CycleStorage::TYPE_WRITE);
     }
 
     public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data): void
@@ -27,12 +33,18 @@ final class Bus implements BusInterface
 
         $this->memory[$addr] = $low;
         $this->memory[$addr + 1] = $high;
+
+        CycleStorage::push($addr, $low, CycleStorage::TYPE_WRITE);
+        CycleStorage::push($addr + 1, $high, CycleStorage::TYPE_WRITE);
     }
 
     public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
     {
         $low = $this->memory[$addr];
         $high = $this->memory[$addr + 1];
+
+        CycleStorage::push($addr, $low, CycleStorage::TYPE_READ);
+        CycleStorage::push($addr + 1, $high, CycleStorage::TYPE_READ);
 
         return ($high << 8) | $low;
     }

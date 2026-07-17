@@ -11,6 +11,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Tests\CPUWrapper;
 
 final class ComplexCPUTest extends TestCase
 {
@@ -72,11 +73,12 @@ final class ComplexCPUTest extends TestCase
         $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
         $this->container->set(BusInterface::class, $this->container->get(Bus::class));
+        $this->container->set(CPU::class, $this->container->get(CPUWrapper::class));
     }
 
-    private function getCpu(): CPU
+    private function getCpu(): CPUWrapper
     {
-        return $this->container->get(CPU::class);
+        return $this->container->get(CPUWrapper::class);
     }
 
     #[DataProvider('getData')]
@@ -95,9 +97,10 @@ final class ComplexCPUTest extends TestCase
             $cpu->setMemory($value[0], $value[1]);
         }
 
+        CycleStorage::reset();
+
         foreach ($testData['cycles'] as $value) {
-            $result = $cpu->tick();
-            //var_dump($result);
+            $this->assertSame($value, $cpu->tick());
         }
 
         $this->assertSame($cpu->getPC(), $testData['final']['pc']);

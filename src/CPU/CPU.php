@@ -12,8 +12,10 @@ use App\Event\NMIEvent;
 use App\Util\Int8;
 use App\Util\UInt16;
 use App\Util\UInt8;
+use Exception;
 use Fiber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tests\Integration\CPU\ComplexCPUTest\CycleStorage;
 
 final class CPU implements EventSubscriberInterface
 {
@@ -57,13 +59,15 @@ final class CPU implements EventSubscriberInterface
         $this->fiber = new Fiber([$this, 'run']);
     }
 
-    public function tick(): void
+    public function tick(): ?array
     {
         if (!$this->fiber->isStarted()) {
-            $this->fiber->start();
+            return $this->fiber->start();
         } elseif ($this->fiber->isSuspended()) {
-            $this->fiber->resume();
+            return $this->fiber->resume();
         }
+
+        throw new Exception('Something went wrong.');
     }
 
     public function run(): void
@@ -389,9 +393,7 @@ final class CPU implements EventSubscriberInterface
 
     public function endCycle(): void
     {
-        if ($this->fiber->isRunning()) {
-            Fiber::suspend();
-        }
+        Fiber::suspend(CycleStorage::pop());
     }
 
     public static function getSubscribedEvents(): array
@@ -399,10 +401,5 @@ final class CPU implements EventSubscriberInterface
         return [
             NMIEvent::class => 'onNMI',
         ];
-    }
-
-    public function __destruct()
-    {
-        $this->endCycle();
     }
 }

@@ -6,6 +6,8 @@ namespace Tests;
 
 use App\CPU\CPU;
 use App\CPU\Exception\BreakException;
+use Fiber;
+use Tests\Integration\CPU\ComplexCPUTest\CycleStorage;
 
 /**
  * @method incrementPC()
@@ -52,15 +54,10 @@ final class CPUWrapper
         }
     }
 
-    /*
     public function endCycle(): void
     {
-        if ($this->fiber->isRunning()) {
-            $value = CycleStorage::pop();
-            Fiber::suspend($value);
-        }
+        $this->cpu->endCycle(CycleStorage::pop());
     }
-    */
 
     public function __call($name, $arguments)
     {
