@@ -30,9 +30,6 @@ final class Interrupter implements InterrupterInterface
 
     public function endTick(): void
     {
-        // In instructions tests, the run method is simply run without running the tick() method
-        if ($this->fiber->isRunning()) {
-            Fiber::suspend();
-        }
+        Fiber::suspend();
     }
 }
