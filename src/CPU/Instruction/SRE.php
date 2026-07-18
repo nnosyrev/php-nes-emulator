@@ -19,7 +19,7 @@ final class SRE implements InstructionInterface
 
         $CPU->setMemory($addr, $new);
 
-        $CPU->endCycle();
+        $CPU->endTick();
 
         $CPU->setFlagC(($old & 0b00000001) === 0b00000001);
         $CPU->setFlagsZNByValue($new);

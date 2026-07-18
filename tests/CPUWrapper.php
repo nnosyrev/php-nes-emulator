@@ -54,11 +54,6 @@ final class CPUWrapper
         }
     }
 
-    public function endCycle(): void
-    {
-        $this->cpu->endCycle(CycleStorage::pop());
-    }
-
     public function __call($name, $arguments)
     {
         return $this->cpu->$name(...$arguments);

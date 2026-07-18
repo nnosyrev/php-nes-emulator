@@ -13,14 +13,14 @@ final class AbsoluteXMode implements ModeInterface
     {
         $param = $CPU->getMemoryUInt16($CPU->getPC());
 
-        $CPU->endCycle();
-        $CPU->endCycle();
+        $CPU->endTick();
+        $CPU->endTick();
 
         $result = UInt16::add($param, $CPU->getRegisterX());
 
         if (($result & 0xFF00) !== ($param & 0xFF00)) {
             $CPU->getMemory($param & 0xFF00 | $result & 0x00FF); // Dummy read
-            $CPU->endCycle();
+            $CPU->endTick();
         }
 
         return $result;

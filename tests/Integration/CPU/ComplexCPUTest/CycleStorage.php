@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\ComplexCPUTest;
 
+// TODO: It might make sense to make it a regular class.
 final class CycleStorage
 {
     public const string TYPE_READ = 'read';
@@ -33,5 +34,4 @@ final class CycleStorage
 
         return $first;
     }
-
 }

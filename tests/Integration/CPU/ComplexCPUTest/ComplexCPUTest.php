@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Integration\CPU\ComplexCPUTest;
 
 use App\Bus\BusInterface;
-use App\CPU\CPU;
+use App\CPU\Interrupter\InterrupterInterface;
 use App\UI\UIInterface;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -73,7 +73,7 @@ final class ComplexCPUTest extends TestCase
         $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
         $this->container->set(BusInterface::class, $this->container->get(Bus::class));
-        $this->container->set(CPU::class, $this->container->get(CPUWrapper::class));
+        $this->container->set(InterrupterInterface::class, $this->container->get(InterrupterDecorator::class));
     }
 
     private function getCpu(): CPUWrapper

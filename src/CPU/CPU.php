@@ -6,16 +6,14 @@ namespace App\CPU;
 
 use App\Bus\BusInterface;
 use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Interrupter\InterrupterInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
 use App\Event\NMIEvent;
 use App\Util\Int8;
 use App\Util\UInt16;
 use App\Util\UInt8;
-use Exception;
-use Fiber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tests\Integration\CPU\ComplexCPUTest\CycleStorage;
 
 final class CPU implements EventSubscriberInterface
 {
@@ -48,26 +46,19 @@ final class CPU implements EventSubscriberInterface
 
     private bool $needNMI = false;
 
-    private Fiber $fiber;
-
     public function __construct(
         private readonly BusInterface $bus,
         private readonly OpcodeCollection $opcodeCollection,
         private readonly InstructionFactoryInterface $instructionFactory,
         private readonly ModeFactory $modeFactory,
+        private readonly InterrupterInterface $cpuInterrupter,
     ) {
-        $this->fiber = new Fiber([$this, 'run']);
+        $this->cpuInterrupter->init($this, 'run');
     }
 
     public function tick(): ?array
     {
-        if (!$this->fiber->isStarted()) {
-            return $this->fiber->start();
-        } elseif ($this->fiber->isSuspended()) {
-            return $this->fiber->resume();
-        }
-
-        throw new Exception('Something went wrong.');
+        return $this->cpuInterrupter->startTick();
     }
 
     public function run(): void
@@ -81,7 +72,7 @@ final class CPU implements EventSubscriberInterface
 
             $code = $this->getMemory($this->PC);
 
-            $this->endCycle();
+            $this->endTick();
 
             $this->incrementPC();
             $pcOld = $this->getPC();
@@ -97,7 +88,7 @@ final class CPU implements EventSubscriberInterface
                 $this->addToPC($opcode->bytes - 1);
             }
 
-            $this->endCycle();
+            $this->endTick();
         }
     }
 
@@ -391,9 +382,9 @@ final class CPU implements EventSubscriberInterface
         $this->setPC($this->getMemoryUInt16(0xFFFA));
     }
 
-    public function endCycle(): void
+    public function endTick(): void
     {
-        Fiber::suspend(CycleStorage::pop());
+        $this->cpuInterrupter->endTick();
     }
 
     public static function getSubscribedEvents(): array

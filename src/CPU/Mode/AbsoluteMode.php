@@ -12,8 +12,8 @@ final class AbsoluteMode implements ModeInterface
     {
         $result = $cpu->getMemoryUInt16($cpu->getPC());
 
-        $cpu->endCycle();
-        $cpu->endCycle();
+        $cpu->endTick();
+        $cpu->endTick();
 
         return $result;
     }

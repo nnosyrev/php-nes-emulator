@@ -6,6 +6,8 @@ use App\Bus\Bus;
 use App\Bus\BusInterface;
 use App\CPU\Instruction\InstructionFactory;
 use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Interrupter\Interrupter;
+use App\CPU\Interrupter\InterrupterInterface;
 use App\UI\UI;
 use App\UI\UIInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -16,4 +18,5 @@ return [
     BusInterface::class => DI\get(Bus::class),
     EventDispatcherInterface::class => DI\get(EventDispatcher::class),
     InstructionFactoryInterface::class => DI\get(InstructionFactory::class),
+    InterrupterInterface::class => DI\get(Interrupter::class),
 ];
