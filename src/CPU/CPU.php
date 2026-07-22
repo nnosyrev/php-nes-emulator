@@ -21,13 +21,13 @@ final class CPU implements EventSubscriberInterface
     private const STACK_START = 0x0100;
     private const SP_END = 0xFF;
 
-    private const FLAG_C = 0b00000001;
-    private const FLAG_Z = 0b00000010;
-    private const FLAG_I = 0b00000100;
-    private const FLAG_D = 0b00001000;
-    private const FLAG_B = 0b00010000;
-    private const FLAG_V = 0b01000000;
-    private const FLAG_N = 0b10000000;
+    public const FLAG_C = 0b00000001;
+    public const FLAG_Z = 0b00000010;
+    public const FLAG_I = 0b00000100;
+    public const FLAG_D = 0b00001000;
+    public const FLAG_B = 0b00010000;
+    public const FLAG_V = 0b01000000;
+    public const FLAG_N = 0b10000000;
 
     private int /* UInt8 */ $registerA = 0;
     private int /* UInt8 */ $registerX = 0;
@@ -328,6 +328,8 @@ final class CPU implements EventSubscriberInterface
         $this->setMemory($addr, $data);
 
         $this->SP = UInt8::decrement($this->SP);
+
+        $this->endTick();
     }
 
     public function popFromStack(): int /* UInt8 */
@@ -371,8 +373,8 @@ final class CPU implements EventSubscriberInterface
     {
         $this->pushToStackUInt16($this->getPC());
 
-        $flags = $this->getFlagsAsUInt8();
         // Clearing B flag
+        $flags = $this->getFlagsAsUInt8();
         $flags = UInt8::and($flags, ~ self::FLAG_B);
 
         $this->pushToStack($flags);

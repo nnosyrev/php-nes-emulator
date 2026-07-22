@@ -112,9 +112,6 @@ final class Bus implements BusInterface
             throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
         }
 
-        // SycleStorage::push(29985, 25, "read");
-        // SycleStorage::push(29986, 95, "read");
-
         return ($high << 8) | $low;
     }
 
