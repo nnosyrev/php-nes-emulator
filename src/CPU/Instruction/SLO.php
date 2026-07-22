@@ -15,6 +15,11 @@ final class SLO implements InstructionInterface
         $addr = $mode->getOperandAddress($CPU);
         $old = $CPU->getMemory($addr);
 
+        $CPU->endTick();
+
+        $CPU->setMemory($addr, $old); // Dummy write
+        $CPU->endTick();
+
         $new = UInt8::shiftToLeft($old, 1);
 
         $CPU->setMemory($addr, $new);

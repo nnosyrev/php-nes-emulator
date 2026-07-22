@@ -36,6 +36,7 @@ use App\CPU\Instruction\DCP;
 use App\CPU\Instruction\DEC;
 use App\CPU\Instruction\DEX;
 use App\CPU\Instruction\DEY;
+use App\CPU\Instruction\DOP;
 use App\CPU\Instruction\EOR;
 use App\CPU\Instruction\INC;
 use App\CPU\Instruction\INX;
@@ -319,20 +320,20 @@ final class OpcodeCollection
         // Unofficial CPU instructions:
 
         // DOP
-        $this->add(0x04, NOP::class, 2, 3, ZeroPageMode::class);
-        $this->add(0x14, NOP::class, 2, 4, ZeroPageXMode::class);
-        $this->add(0x34, NOP::class, 2, 4, ZeroPageXMode::class);
-        $this->add(0x44, NOP::class, 2, 3, ZeroPageMode::class);
-        $this->add(0x54, NOP::class, 2, 4, ZeroPageXMode::class);
-        $this->add(0x64, NOP::class, 2, 3, ZeroPageMode::class);
-        $this->add(0x74, NOP::class, 2, 4, ZeroPageXMode::class);
-        $this->add(0x80, NOP::class, 2, 2, ImmediateMode::class);
-        $this->add(0x82, NOP::class, 2, 2, ImmediateMode::class);
-        $this->add(0x89, NOP::class, 2, 2, ImmediateMode::class);
-        $this->add(0xC2, NOP::class, 2, 2, ImmediateMode::class);
-        $this->add(0xD4, NOP::class, 2, 4, ZeroPageXMode::class);
-        $this->add(0xE2, NOP::class, 2, 2, ImmediateMode::class);
-        $this->add(0xF4, NOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x04, DOP::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x14, DOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x34, DOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x44, DOP::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x54, DOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x64, DOP::class, 2, 3, ZeroPageMode::class);
+        $this->add(0x74, DOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0x80, DOP::class, 2, 2, ImmediateMode::class);
+        $this->add(0x82, DOP::class, 2, 2, ImmediateMode::class);
+        $this->add(0x89, DOP::class, 2, 2, ImmediateMode::class);
+        $this->add(0xC2, DOP::class, 2, 2, ImmediateMode::class);
+        $this->add(0xD4, DOP::class, 2, 4, ZeroPageXMode::class);
+        $this->add(0xE2, DOP::class, 2, 2, ImmediateMode::class);
+        $this->add(0xF4, DOP::class, 2, 4, ZeroPageXMode::class);
 
         // TOP
         $this->add(0x0C, NOP::class, 3, 4, AbsoluteMode::class);
