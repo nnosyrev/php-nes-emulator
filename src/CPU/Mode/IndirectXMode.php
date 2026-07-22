@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\CPU\Mode;
 
 use App\CPU\CPU;
-use App\Util\UInt16;
 use App\Util\UInt8;
 
 final class IndirectXMode implements ModeInterface
@@ -14,10 +13,18 @@ final class IndirectXMode implements ModeInterface
     {
         $param = $CPU->getMemory($CPU->getPC());
 
+        $CPU->endTick();
+
+        $CPU->getMemory($param); // Dummy read
+        $CPU->endTick();
+
         $ptr = UInt8::add($param, $CPU->getRegisterX());
 
         $low = $CPU->getMemory($ptr);
-        $high = $CPU->getMemory(UInt16::increment($ptr));
+        $high = $CPU->getMemory(UInt8::increment($ptr));
+
+        $CPU->endTick();
+        $CPU->endTick();
 
         return ($high << 8) | $low;
     }
