@@ -12,6 +12,8 @@ final class ASLA implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
+        $CPU->getMemory($CPU->getPC()); // Dummy read
+
         $old = $CPU->getRegisterA();
 
         $new = UInt8::shiftToLeft($old, 1);
