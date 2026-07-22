@@ -78,6 +78,7 @@ use App\CPU\Instruction\SXA;
 use App\CPU\Instruction\SYA;
 use App\CPU\Instruction\TAX;
 use App\CPU\Instruction\TAY;
+use App\CPU\Instruction\TOP;
 use App\CPU\Instruction\TSX;
 use App\CPU\Instruction\TXA;
 use App\CPU\Instruction\TXS;
@@ -319,7 +320,6 @@ final class OpcodeCollection
 
         // Unofficial CPU instructions:
 
-        // DOP
         $this->add(0x04, DOP::class, 2, 3, ZeroPageMode::class);
         $this->add(0x14, DOP::class, 2, 4, ZeroPageXMode::class);
         $this->add(0x34, DOP::class, 2, 4, ZeroPageXMode::class);
@@ -335,14 +335,13 @@ final class OpcodeCollection
         $this->add(0xE2, DOP::class, 2, 2, ImmediateMode::class);
         $this->add(0xF4, DOP::class, 2, 4, ZeroPageXMode::class);
 
-        // TOP
-        $this->add(0x0C, NOP::class, 3, 4, AbsoluteMode::class);
-        $this->add(0x1C, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
-        $this->add(0x3C, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
-        $this->add(0x5C, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
-        $this->add(0x7C, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
-        $this->add(0xDC, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
-        $this->add(0xFC, NOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x0C, TOP::class, 3, 4, AbsoluteMode::class);
+        $this->add(0x1C, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x3C, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x5C, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0x7C, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0xDC, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
+        $this->add(0xFC, TOP::class, 3, 4 /* +1 if page crossed */, AbsoluteXMode::class);
 
         $this->add(0x47, SRE::class, 2, 5, ZeroPageMode::class);
         $this->add(0x57, SRE::class, 2, 6, ZeroPageXMode::class);
