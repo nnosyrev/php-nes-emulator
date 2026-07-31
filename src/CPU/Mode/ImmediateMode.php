@@ -8,7 +8,7 @@ use App\CPU\CPU;
 
 final class ImmediateMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */
+    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */
     {
         return $CPU->getPC();
     }

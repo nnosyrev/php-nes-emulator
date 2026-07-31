@@ -8,7 +8,7 @@ use App\CPU\CPU;
 
 final class ZeroPageMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */
+    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */
     {
         $result = $CPU->getMemory($CPU->getPC());
 

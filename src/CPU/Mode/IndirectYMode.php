@@ -10,7 +10,7 @@ use App\Util\UInt8;
 
 final class IndirectYMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */
+    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */
     {
         $param = $CPU->getMemory($CPU->getPC());
 
@@ -26,7 +26,7 @@ final class IndirectYMode implements ModeInterface
 
         $addr = UInt16::add($result, $CPU->getRegisterY());
 
-        if (($addr & 0xFF00) !== ($result & 0xFF00)) {
+        if ($forceDummyRead || ($addr & 0xFF00) !== ($result & 0xFF00)) {
             $CPU->getMemory($result & 0xFF00 | $addr & 0x00FF); // Dummy read
             $CPU->endTick();
         }

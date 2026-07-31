@@ -9,7 +9,7 @@ use App\Util\UInt16;
 
 final class AbsoluteXMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */
+    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */
     {
         $param = $CPU->getMemoryUInt16($CPU->getPC());
 
@@ -18,7 +18,7 @@ final class AbsoluteXMode implements ModeInterface
 
         $result = UInt16::add($param, $CPU->getRegisterX());
 
-        if (($result & 0xFF00) !== ($param & 0xFF00)) {
+        if ($forceDummyRead || ($result & 0xFF00) !== ($param & 0xFF00)) {
             $CPU->getMemory($param & 0xFF00 | $result & 0x00FF); // Dummy read
             $CPU->endTick();
         }

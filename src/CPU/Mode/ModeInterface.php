@@ -8,5 +8,5 @@ use App\CPU\CPU;
 
 interface ModeInterface
 {
-    public function getOperandAddress(CPU $CPU): int /* UInt16 */;
+    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */;
 }
