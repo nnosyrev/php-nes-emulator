@@ -100,6 +100,7 @@ final class ComplexCPUTest extends TestCase
         CycleStorage::reset();
 
         foreach ($testData['cycles'] as $value) {
+            //var_dump($cpu->tick());
             $this->assertSame($value, $cpu->tick());
         }
 
@@ -119,7 +120,7 @@ final class ComplexCPUTest extends TestCase
     {
         $dir = __DIR__ . '/TestScenario';
 
-        $allJson = \file_get_contents($dir . '/0f.json');
+        $allJson = \file_get_contents($dir . '/19.json');
 
         $allData = \json_decode($allJson, true);
 

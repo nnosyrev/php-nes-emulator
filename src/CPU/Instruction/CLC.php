@@ -11,6 +11,8 @@ final class CLC implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
+        $CPU->getMemory($CPU->getPC()); // Dummy read
+
         $CPU->setFlagC(false);
     }
 }
