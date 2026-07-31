@@ -11,6 +11,12 @@ final class ZeroPageXMode implements ModeInterface
 {
     public function getOperandAddress(CPU $CPU): int /* UInt16 */
     {
-        return UInt8::add($CPU->getMemory($CPU->getPC()), $CPU->getRegisterX());
+        $data = $CPU->getMemory($CPU->getPC()); 
+        $CPU->endTick();
+
+        $CPU->getMemory($data);
+        $CPU->endTick();
+
+        return UInt8::add($data, $CPU->getRegisterX());
     }
 }
