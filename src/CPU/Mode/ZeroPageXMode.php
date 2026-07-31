@@ -14,7 +14,7 @@ final class ZeroPageXMode implements ModeInterface
         $data = $CPU->getMemory($CPU->getPC()); 
         $CPU->endTick();
 
-        $CPU->getMemory($data);
+        $CPU->getMemory($data); // Dummy read
         $CPU->endTick();
 
         return UInt8::add($data, $CPU->getRegisterX());
