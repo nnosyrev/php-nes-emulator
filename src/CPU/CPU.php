@@ -279,17 +279,39 @@ final class CPU implements EventSubscriberInterface
         return bindec($all);
     }
 
-    public function setFlagsFromUInt8(int /* UInt8 */ $value): void
+    public function setFlagsFromUInt8(int /* UInt8 */ $value, array $without = []): void
     {
         assert(UInt8::check($value));
 
-        $this->setFlagN(($value & self::FLAG_N) === self::FLAG_N);
-        $this->setFlagV(($value & self::FLAG_V) === self::FLAG_V);
-        $this->setFlagB(($value & self::FLAG_B) === self::FLAG_B);
-        $this->setFlagD(($value & self::FLAG_D) === self::FLAG_D);
-        $this->setFlagI(($value & self::FLAG_I) === self::FLAG_I);
-        $this->setFlagZ(($value & self::FLAG_Z) === self::FLAG_Z);
-        $this->setFlagC(($value & self::FLAG_C) === self::FLAG_C);
+        $withoutKeys = array_fill_keys($without, true);
+
+        if (!isset($withoutKeys[self::FLAG_N])) {
+            $this->setFlagN(($value & self::FLAG_N) === self::FLAG_N);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_V])) {
+            $this->setFlagV(($value & self::FLAG_V) === self::FLAG_V);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_B])) {
+            $this->setFlagB(($value & self::FLAG_B) === self::FLAG_B);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_D])) {
+            $this->setFlagD(($value & self::FLAG_D) === self::FLAG_D);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_I])) {
+            $this->setFlagI(($value & self::FLAG_I) === self::FLAG_I);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_Z])) {
+            $this->setFlagZ(($value & self::FLAG_Z) === self::FLAG_Z);
+        }
+
+        if (!isset($withoutKeys[self::FLAG_C])) {
+            $this->setFlagC(($value & self::FLAG_C) === self::FLAG_C);
+        }
     }
 
     public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value): void
@@ -334,6 +356,10 @@ final class CPU implements EventSubscriberInterface
 
     public function popFromStack(): int /* UInt8 */
     {
+        // Dummy read
+        $this->getMemory(UInt16::add(self::STACK_START, $this->SP));
+        $this->endTick();
+
         $this->SP = UInt8::increment($this->SP);
 
         $addr = UInt16::add(self::STACK_START, $this->SP);
