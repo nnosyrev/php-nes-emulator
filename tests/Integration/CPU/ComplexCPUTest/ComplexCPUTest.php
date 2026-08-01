@@ -120,7 +120,7 @@ final class ComplexCPUTest extends TestCase
     {
         $dir = __DIR__ . '/TestScenario';
 
-        $allJson = \file_get_contents($dir . '/28.json');
+        $allJson = \file_get_contents($dir . '/31.json');
 
         $allData = \json_decode($allJson, true);
 

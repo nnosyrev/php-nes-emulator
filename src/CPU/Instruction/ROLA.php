@@ -11,6 +11,9 @@ final class ROLA extends ROLAbstract
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
+        // Dummy read
+        $CPU->getMemory($CPU->getPC(), dummy: true);
+
         $old = $CPU->getRegisterA();
 
         $new = $this->getNew($CPU, $old);
