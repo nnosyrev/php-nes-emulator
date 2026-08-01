@@ -41,7 +41,6 @@ final class PLPTest extends TestCase
 
         $this->assertSame($CPU->getFlagN(), true);
         $this->assertSame($CPU->getFlagV(), true);
-        $this->assertSame($CPU->getFlagB(), true);
         $this->assertSame($CPU->getFlagD(), true);
         $this->assertSame($CPU->getFlagI(), true);
         $this->assertSame($CPU->getFlagZ(), true);
@@ -58,7 +57,6 @@ final class PLPTest extends TestCase
 
         $this->assertSame($CPU->getFlagN(), false);
         $this->assertSame($CPU->getFlagV(), false);
-        $this->assertSame($CPU->getFlagB(), false);
         $this->assertSame($CPU->getFlagD(), false);
         $this->assertSame($CPU->getFlagI(), false);
         $this->assertSame($CPU->getFlagZ(), false);

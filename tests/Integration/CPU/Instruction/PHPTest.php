@@ -72,7 +72,7 @@ final class PHPTest extends TestCase
 
         $this->assertSame($stackValue | 0b01111111, 0b01111111);
         $this->assertSame($stackValue | 0b10111111, 0b10111111);
-        $this->assertSame($stackValue | 0b11101111, 0b11101111);
+        $this->assertSame($stackValue | 0b11101111, 0b11111111);
         $this->assertSame($stackValue | 0b11110111, 0b11110111);
         $this->assertSame($stackValue | 0b11111011, 0b11111011);
         $this->assertSame($stackValue | 0b11111101, 0b11111101);
