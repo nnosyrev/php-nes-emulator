@@ -17,7 +17,8 @@ final class ROL extends ROLAbstract
 
         $CPU->endTick();
 
-        $CPU->setMemory($addr, $old); // Dummy write
+        // Dummy write
+        $CPU->setMemory($addr, $old, dummy: true);
         $CPU->endTick();
 
         $new = $this->getNew($CPU, $old);

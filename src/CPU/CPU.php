@@ -314,29 +314,29 @@ final class CPU implements EventSubscriberInterface
         }
     }
 
-    public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value): void
+    public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $value, bool $dummy = false): void
     {
-        $this->bus->setMemory($addr, $value);
+        $this->bus->setMemory($addr, $value, $dummy);
     }
 
-    public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
+    public function getMemory(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt8 */
     {
-        return $this->bus->getMemory($addr);
+        return $this->bus->getMemory($addr, $dummy);
     }
 
-    public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data): void
+    public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data, bool $dummy = false): void
     {
         assert(UInt16::check($addr));
         assert(UInt16::check($data));
 
-        $this->bus->setMemoryUInt16($addr, $data);
+        $this->bus->setMemoryUInt16($addr, $data, $dummy);
     }
 
-    public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
+    public function getMemoryUInt16(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt16 */
     {
         assert(UInt16::check($addr));
 
-        return $this->bus->getMemoryUInt16($addr);
+        return $this->bus->getMemoryUInt16($addr, $dummy);
     }
 
     public function pushToStack(int /* UInt8 */ $data): void
@@ -357,7 +357,7 @@ final class CPU implements EventSubscriberInterface
     public function popFromStack(): int /* UInt8 */
     {
         // Dummy read
-        $this->getMemory(UInt16::add(self::STACK_START, $this->SP));
+        $this->getMemory(UInt16::add(self::STACK_START, $this->SP), dummy: true);
         $this->endTick();
 
         $this->SP = UInt8::increment($this->SP);

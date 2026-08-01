@@ -11,7 +11,8 @@ final class PLP implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $CPU->getMemory($CPU->getPC()); // Dummy read
+        // Dummy read
+        $CPU->getMemory($CPU->getPC(), dummy: true);
         $CPU->endTick();
 
         $CPU->setFlagsFromUInt8($CPU->popFromStack(), [CPU::FLAG_B]);

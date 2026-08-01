@@ -18,7 +18,8 @@ final class ASL implements InstructionInterface
 
         $CPU->endTick();
 
-        $CPU->setMemory($addr, $old); // Dummy write
+        // Dummy write
+        $CPU->setMemory($addr, $old, dummy: true);
         $CPU->endTick();
 
         $new = UInt8::shiftToLeft($old, 1);

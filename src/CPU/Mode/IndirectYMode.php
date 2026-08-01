@@ -27,7 +27,8 @@ final class IndirectYMode implements ModeInterface
         $addr = UInt16::add($result, $CPU->getRegisterY());
 
         if ($forceDummyRead || ($addr & 0xFF00) !== ($result & 0xFF00)) {
-            $CPU->getMemory($result & 0xFF00 | $addr & 0x00FF); // Dummy read
+            // Dummy read
+            $CPU->getMemory($result & 0xFF00 | $addr & 0x00FF, dummy: true);
             $CPU->endTick();
         }
 

@@ -15,7 +15,8 @@ final class IndirectXMode implements ModeInterface
 
         $CPU->endTick();
 
-        $CPU->getMemory($param); // Dummy read
+        // Dummy read
+        $CPU->getMemory($param, dummy: true);
         $CPU->endTick();
 
         $ptr = UInt8::add($param, $CPU->getRegisterX());

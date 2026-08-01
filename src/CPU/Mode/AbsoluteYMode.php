@@ -19,7 +19,8 @@ final class AbsoluteYMode implements ModeInterface
         $result = UInt16::add($param, $CPU->getRegisterY());
 
         if ($forceDummyRead || ($result & 0xFF00) !== ($param & 0xFF00)) {
-            $CPU->getMemory($param & 0xFF00 | $result & 0x00FF); // Dummy read
+            // Dummy read
+            $CPU->getMemory($param & 0xFF00 | $result & 0x00FF, dummy: true);
             $CPU->endTick();
         }
 

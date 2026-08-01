@@ -17,7 +17,8 @@ final class RLA implements InstructionInterface
         $old = $cpu->getMemory($addr);
         $cpu->endTick();
 
-        $cpu->setMemory($addr, $old); // Dummy write
+        // Dummy write
+        $cpu->setMemory($addr, $old, dummy: true);
         $cpu->endTick();
 
         $new = UInt8::shiftToLeft($old, 1);

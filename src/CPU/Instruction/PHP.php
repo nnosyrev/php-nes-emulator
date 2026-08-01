@@ -12,7 +12,8 @@ final class PHP implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $CPU->getMemory($CPU->getPC()); // Dummy read
+        // Dummy read
+        $CPU->getMemory($CPU->getPC(), dummy: true);
         $CPU->endTick();
 
         // Setting B flag

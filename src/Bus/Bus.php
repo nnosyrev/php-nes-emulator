@@ -40,6 +40,8 @@ final class Bus implements BusInterface
     private const RAM_MIRRORING = 0b11111111111;
     private const PPU_MIRRORING = self::PPUDATA_REGISTER;
 
+    private const DUMMY_VALUE = 0;
+
     private array $memory = [];
 
     public function __construct(
@@ -48,8 +50,12 @@ final class Bus implements BusInterface
         private readonly Joystick $joystick,
     ) {}
 
-    public function getMemory(int /* UInt16 */ $addr): int /* UInt8 */
+    public function getMemory(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt8 */
     {
+        if ($dummy) {
+            return self::DUMMY_VALUE;
+        }
+
         return match (true) {
             UInt16::inInterval($addr, self::PRG_START, self::PRG_END) => $this->rom->getPrgRom()[$addr - self::PRG_START],
             UInt16::inInterval($addr, self::RAM_START, self::RAM_END) => $this->memory[$this->ramMirror($addr)],
@@ -64,8 +70,12 @@ final class Bus implements BusInterface
         };
     }
 
-    public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $data): void
+    public function setMemory(int /* UInt16 */ $addr, int /* UInt8 */ $data, bool $dummy = false): void
     {
+        if ($dummy) {
+            return;
+        }
+
         match (true) {
             UInt16::inInterval($addr, self::RAM_START, self::RAM_END) => $this->memory[$this->ramMirror($addr)] = $data,
             $addr === self::JOYSTICK_1_REGISTER => $this->joystick->set($data),
@@ -87,8 +97,12 @@ final class Bus implements BusInterface
         };
     }
 
-    public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data): void
+    public function setMemoryUInt16(int /* UInt16 */ $addr, int /* UInt16 */ $data, bool $dummy = false): void
     {
+        if ($dummy) {
+            return;
+        }
+
         if (!UInt16::inInterval($addr, self::RAM_START, self::RAM_END)) {
             throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
         }
@@ -100,8 +114,12 @@ final class Bus implements BusInterface
         $this->memory[$addr + 1] = $high;
     }
 
-    public function getMemoryUInt16(int /* UInt16 */ $addr): int /* UInt16 */
+    public function getMemoryUInt16(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt16 */
     {
+        if ($dummy) {
+            return self::DUMMY_VALUE;
+        }
+
         if (UInt16::inInterval($addr, self::RAM_START, self::RAM_END)) {
             $low = $this->memory[$addr];
             $high = $this->memory[$addr + 1];
