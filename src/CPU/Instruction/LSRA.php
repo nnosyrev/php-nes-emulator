@@ -9,14 +9,16 @@ use App\CPU\Mode\ModeInterface;
 
 final class LSRA implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $old = $CPU->getRegisterA();
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+
+        $old = $cpu->getRegisterA();
 
         $new = $old >> 1;
 
-        $CPU->setRegisterA($new);
+        $cpu->setRegisterA($new);
 
-        $CPU->setFlagC(($old & 0b00000001) === 0b00000001);
+        $cpu->setFlagC(($old & 0b00000001) === 0b00000001);
     }
 }

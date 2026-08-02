@@ -45,6 +45,7 @@ final class CPU implements EventSubscriberInterface
     private int /* UInt16 */ $PC = self::PRG_ROM_START;
 
     private bool $PCHasChanged = false;
+    private bool $dummyHasReadForPopStack = false;
 
     private bool $needNMI = false;
 
@@ -84,6 +85,7 @@ final class CPU implements EventSubscriberInterface
             $mode = $this->modeFactory->make($opcode->modeClass);
 
             $this->PCHasChanged = false;
+            $this->dummyHasReadForPopStack = false;
 
             $instruction->execute($this, $mode);
 
@@ -365,9 +367,12 @@ final class CPU implements EventSubscriberInterface
 
     public function popFromStack(): int /* UInt8 */
     {
-        // Dummy read
-        $this->getMemory(UInt16::add(self::STACK_START, $this->SP), dummy: true);
-        $this->endTick();
+        // TODO: One dummy read per instruction ???
+        if (!$this->dummyHasReadForPopStack) {
+            $this->getMemory(UInt16::add(self::STACK_START, $this->SP), dummy: true);
+            $this->endTick();
+            $this->dummyHasReadForPopStack = true;
+        }
 
         $this->SP = UInt8::increment($this->SP);
 

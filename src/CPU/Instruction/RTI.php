@@ -11,8 +11,13 @@ final class RTI implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $cpu->setFlagsFromUInt8($cpu->popFromStack());
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+        $cpu->endTick();
+
+        $cpu->setFlagsFromUInt8($cpu->popFromStack(), [CPU::FLAG_B]);
+        $cpu->endTick();
 
         $cpu->setPC($cpu->popFromStackUInt16());
+        $cpu->endTick();
     }
 }

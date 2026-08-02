@@ -12,7 +12,12 @@ final class LSR implements InstructionInterface
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
         $addr = $mode->getOperandAddress($CPU);
+
         $old = $CPU->getMemory($addr);
+        $CPU->endTick();
+
+        $CPU->setMemory($addr, $old, dummy: true);
+        $CPU->endTick();
 
         $new = $old >> 1;
 

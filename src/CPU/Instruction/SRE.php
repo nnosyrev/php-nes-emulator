@@ -13,17 +13,19 @@ final class SRE implements InstructionInterface
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
         $addr = $mode->getOperandAddress($CPU);
+
         $old = $CPU->getMemory($addr);
+        $CPU->endTick();
+
+        $CPU->setMemory($addr, $old, dummy: true);
+        $CPU->endTick();
 
         $new = UInt8::shiftToRight($old, 1);
 
         $CPU->setMemory($addr, $new);
 
-        $CPU->endTick();
-
         $CPU->setFlagC(($old & 0b00000001) === 0b00000001);
         $CPU->setFlagsZNByValue($new);
-
         $CPU->setRegisterA(UInt8::xor($new, $CPU->getRegisterA()));
     }
 }

@@ -105,6 +105,7 @@ final class ComplexCPUTest extends TestCase
         CycleStorage::reset();
 
         foreach ($testData->cycles as $value) {
+            //var_dump($cpu->tick());
             $this->assertSame($value, $cpu->tick());
         }
 
@@ -122,7 +123,7 @@ final class ComplexCPUTest extends TestCase
 
     public static function getData(): Generator
     {
-        $items = Items::fromFile(self::DIR . '/40.json');
+        $items = Items::fromFile(self::DIR . '/4b.json');
 
         foreach ($items as $item) {
             $name = $item->name . ' ' . microtime();
