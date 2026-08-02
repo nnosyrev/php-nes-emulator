@@ -44,6 +44,8 @@ final class CPU implements EventSubscriberInterface
     private int /* UInt8 */ $SP = self::SP_END;
     private int /* UInt16 */ $PC = self::PRG_ROM_START;
 
+    private bool $PCHasChanged = false;
+
     private bool $needNMI = false;
 
     public function __construct(
@@ -75,16 +77,17 @@ final class CPU implements EventSubscriberInterface
             $this->endTick();
 
             $this->incrementPC();
-            $pcOld = $this->getPC();
 
             $opcode = $this->opcodeCollection->get($code);
 
             $instruction = $this->instructionFactory->make($opcode->instructionClass);
             $mode = $this->modeFactory->make($opcode->modeClass);
 
+            $this->PCHasChanged = false;
+
             $instruction->execute($this, $mode);
 
-            if ($this->getPC() === $pcOld) {
+            if (!$this->PCHasChanged) {
                 $this->addToPC($opcode->bytes - 1);
             }
 
@@ -115,12 +118,16 @@ final class CPU implements EventSubscriberInterface
 
         $this->PC = $new;
 
+        $this->PCHasChanged = true;
+
         return $this;
     }
 
     public function incrementPC(): self
     {
         $this->PC = UInt16::increment($this->PC);
+
+        $this->PCHasChanged = true;
 
         return $this;
     }
@@ -130,6 +137,8 @@ final class CPU implements EventSubscriberInterface
         assert(UInt8::check($add) || Int8::check($add));
 
         $this->PC = UInt16::add($this->PC, $add);
+
+        $this->PCHasChanged = true;
     }
 
     public function setRegisterA(int /* UInt8 */ $byte): void

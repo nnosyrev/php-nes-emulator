@@ -16,7 +16,7 @@ final class UInt16
         assert(self::check($a) || UInt8::check($a));
         assert(self::check($b) || UInt8::check($b) || Int8::check($b));
 
-        return self::mod($a + $b);
+        return self::mod($a + $b + self::BASE);
     }
 
     public static function subtract(int /* $UInt16 */ $value, int /* UInt8 */ $sub): int /* UInt16 */
