@@ -9,12 +9,17 @@ use App\CPU\Interrupter\InterrupterInterface;
 use App\UI\UIInterface;
 use DI\Container;
 use DI\ContainerBuilder;
+use Generator;
+use JsonMachine\Items;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Tests\CPUWrapper;
 
 final class ComplexCPUTest extends TestCase
 {
+    private const DIR = __DIR__ . '/TestScenario';
+
     private Container $container;
 
     /*
@@ -82,53 +87,47 @@ final class ComplexCPUTest extends TestCase
     }
 
     #[DataProvider('getData')]
-    public function test(array $testData): void
+    public function test(stdClass $testData): void
     {
         $cpu = $this->getCpu();
 
-        $cpu->setPC($testData['initial']['pc']);
-        $cpu->setRegisterA($testData['initial']['a']);
-        $cpu->setRegisterX($testData['initial']['x']);
-        $cpu->setRegisterY($testData['initial']['y']);
-        $cpu->setSP($testData['initial']['s']);
-        $cpu->setFlagsFromUInt8($testData['initial']['p']);
+        $cpu->setPC($testData->initial->pc);
+        $cpu->setRegisterA($testData->initial->a);
+        $cpu->setRegisterX($testData->initial->x);
+        $cpu->setRegisterY($testData->initial->y);
+        $cpu->setSP($testData->initial->s);
+        $cpu->setFlagsFromUInt8($testData->initial->p);
 
-        foreach ($testData['initial']['ram'] as $value) {
+        foreach ($testData->initial->ram as $value) {
             $cpu->setMemory($value[0], $value[1]);
         }
 
         CycleStorage::reset();
 
-        foreach ($testData['cycles'] as $value) {
-            //var_dump($cpu->tick());
+        foreach ($testData->cycles as $value) {
             $this->assertSame($value, $cpu->tick());
         }
 
-        $this->assertSame($cpu->getPC(), $testData['final']['pc']);
-        $this->assertSame($cpu->getRegisterA(), $testData['final']['a']);
-        $this->assertSame($cpu->getRegisterX(), $testData['final']['x']);
-        $this->assertSame($cpu->getRegisterY(), $testData['final']['y']);
-        $this->assertSame($cpu->getSP(), $testData['final']['s']);
-        $this->assertSame($cpu->getFlagsAsUInt8(), $testData['final']['p']);
+        $this->assertSame($cpu->getPC(), $testData->final->pc);
+        $this->assertSame($cpu->getRegisterA(), $testData->final->a);
+        $this->assertSame($cpu->getRegisterX(), $testData->final->x);
+        $this->assertSame($cpu->getRegisterY(), $testData->final->y);
+        $this->assertSame($cpu->getSP(), $testData->final->s);
+        $this->assertSame($cpu->getFlagsAsUInt8(), $testData->final->p);
 
-        foreach ($testData['final']['ram'] as $value) {
+        foreach ($testData->final->ram as $value) {
             $this->assertSame($cpu->getMemory($value[0]), $value[1]);
         }
     }
 
-    public static function getData(): array
+    public static function getData(): Generator
     {
-        $dir = __DIR__ . '/TestScenario';
+        $items = Items::fromFile(self::DIR . '/40.json');
 
-        $allJson = \file_get_contents($dir . '/3f.json');
+        foreach ($items as $item) {
+            $name = $item->name . ' ' . microtime();
 
-        $allData = \json_decode($allJson, true);
-
-        $result = [];
-        foreach ($allData as $testData) {
-            $result[$testData['name']] = [$testData];
+            yield $name => [$item];
         }
-
-        return $result;
     }
 }
