@@ -12,7 +12,7 @@ final class RLA implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($cpu);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
         $old = $cpu->getMemory($addr);
         $cpu->endTick();

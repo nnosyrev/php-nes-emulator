@@ -11,7 +11,7 @@ final class ROL extends ROLAbstract
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($CPU, forceDummyRead: true);
 
         $old = $CPU->getMemory($addr);
 
