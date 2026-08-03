@@ -11,8 +11,10 @@ final class AAX implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
+        $addr = $mode->getOperandAddress($cpu);
+
         $result = $cpu->getRegisterA() & $cpu->getRegisterX();
 
-        $cpu->setMemory($mode->getOperandAddress($cpu), $result);
+        $cpu->setMemory($addr, $result);
     }
 }

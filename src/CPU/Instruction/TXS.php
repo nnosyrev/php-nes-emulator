@@ -9,8 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class TXS implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $CPU->setSP($CPU->getRegisterX());
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+
+        $cpu->setSP($cpu->getRegisterX());
     }
 }

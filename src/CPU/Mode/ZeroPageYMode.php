@@ -13,6 +13,11 @@ final class ZeroPageYMode implements ModeInterface
     {
         $param = $CPU->getMemory($CPU->getPC());
 
+        $CPU->endTick();
+
+        $CPU->getMemory($param, dummy: true);
+        $CPU->endTick();
+
         return UInt8::add($param, $CPU->getRegisterY());
     }
 }
