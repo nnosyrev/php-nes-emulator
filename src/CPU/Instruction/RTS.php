@@ -12,8 +12,16 @@ final class RTS implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = UInt16::add($cpu->popFromStackUInt16(), 1);
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+        $cpu->endTick();
 
-        $cpu->setPC($addr);
+        $stackValue = $cpu->popFromStackUInt16();
+
+        $cpu->endTick();
+        $cpu->endTick();
+
+        $cpu->getMemory($stackValue, dummy: true);
+
+        $cpu->setPC(UInt16::add($stackValue, 1));
     }
 }

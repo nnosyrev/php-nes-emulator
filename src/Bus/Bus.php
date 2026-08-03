@@ -111,7 +111,7 @@ final class Bus implements BusInterface
         $low = $data & 0xFF;
 
         $this->memory[$addr] = $low;
-        $this->memory[$addr + 1] = $high;
+        $this->memory[UInt16::increment($addr)] = $high;
     }
 
     public function getMemoryUInt16(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt16 */
@@ -120,12 +120,14 @@ final class Bus implements BusInterface
             return self::DUMMY_VALUE;
         }
 
+        $addrIncremented = UInt16::increment($addr);
+
         if (UInt16::inInterval($addr, self::RAM_START, self::RAM_END)) {
             $low = $this->memory[$addr];
-            $high = $this->memory[$addr + 1];
+            $high = $this->memory[$addrIncremented];
         } elseif (UInt16::inInterval($addr, self::PRG_START, self::PRG_END)) {
             $low = $this->rom->getPrgRom()[$addr - self::PRG_START];
-            $high = $this->rom->getPrgRom()[$addr + 1 - self::PRG_START];
+            $high = $this->rom->getPrgRom()[$addrIncremented - self::PRG_START];
         } else {
             throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
         }

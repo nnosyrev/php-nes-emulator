@@ -14,9 +14,13 @@ final class RRA implements InstructionInterface
 
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($cpu);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
         $old = $cpu->getMemory($addr);
+        $cpu->endTick();
+
+        $cpu->setMemory($addr, $old, dummy: true);
+        $cpu->endTick();
 
         $new = UInt8::shiftToRight($old, 1);
         if ($cpu->getFlagC()) {

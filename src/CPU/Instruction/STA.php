@@ -11,7 +11,7 @@ final class STA implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($CPU, forceDummyRead: true);
 
         $CPU->setMemory($addr, $CPU->getRegisterA());
     }

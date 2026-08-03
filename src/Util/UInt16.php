@@ -28,7 +28,7 @@ final class UInt16
     {
         assert(self::check($value));
 
-        return self::mod($value + 1);
+        return self::mod($value + 1 + self::BASE);
     }
 
     public static function decrement(int /* UInt16 */ $value): int /* UInt16 */

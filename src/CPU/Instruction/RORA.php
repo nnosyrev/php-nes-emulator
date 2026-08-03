@@ -9,14 +9,16 @@ use App\CPU\Mode\ModeInterface;
 
 final class RORA extends RORAbstract
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $old = $CPU->getRegisterA();
+        $cpu->getMemory($cpu->getPC(), dummy: true);
 
-        $new = $this->getNew($CPU, $old);
+        $old = $cpu->getRegisterA();
 
-        $this->setFlagC($CPU, $old);
+        $new = $this->getNew($cpu, $old);
 
-        $CPU->setRegisterA($new);
+        $this->setFlagC($cpu, $old);
+
+        $cpu->setRegisterA($new);
     }
 }

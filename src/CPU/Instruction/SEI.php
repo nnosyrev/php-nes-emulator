@@ -9,8 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class SEI implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $CPU->setFlagI(true);
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+
+        $cpu->setFlagI(true);
     }
 }

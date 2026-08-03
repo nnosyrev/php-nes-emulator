@@ -11,6 +11,8 @@ final class CLI implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
+        $CPU->getMemory($CPU->getPC(), dummy: true);
+
         $CPU->setFlagI(false);
     }
 }

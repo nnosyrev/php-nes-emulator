@@ -9,17 +9,22 @@ use App\CPU\Mode\ModeInterface;
 
 final class ROR extends RORAbstract
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
-        $old = $CPU->getMemory($addr);
+        $old = $cpu->getMemory($addr);
+        $cpu->endTick();
 
-        $new = $this->getNew($CPU, $old);
+        $cpu->setMemory($addr, $old, dummy: true);
+        $cpu->endTick();
 
-        $this->setFlagC($CPU, $old);
+        $new = $this->getNew($cpu, $old);
 
-        $CPU->setFlagsZNByValue($new);
-        $CPU->setMemory($addr, $new);
+        $cpu->setMemory($addr, $new);
+
+        $this->setFlagC($cpu, $old);
+
+        $cpu->setFlagsZNByValue($new);
     }
 }

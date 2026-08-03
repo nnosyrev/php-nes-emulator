@@ -12,7 +12,7 @@ final class SRE implements InstructionInterface
 {
     public function execute(CPU $CPU, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($CPU, forceDummyRead: true);
 
         $old = $CPU->getMemory($addr);
         $CPU->endTick();
