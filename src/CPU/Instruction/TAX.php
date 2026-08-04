@@ -9,8 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class TAX implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $CPU->setRegisterX($CPU->getRegisterA());
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+
+        $cpu->setRegisterX($cpu->getRegisterA());
     }
 }

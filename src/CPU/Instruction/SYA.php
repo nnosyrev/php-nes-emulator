@@ -13,7 +13,7 @@ final class SYA implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($cpu);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
         $high = UInt16::shiftToRight($addr, 8);
 

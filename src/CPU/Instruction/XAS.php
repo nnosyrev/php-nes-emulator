@@ -13,7 +13,7 @@ final class XAS implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($cpu);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
         $cpu->setSP(UInt8::and($cpu->getRegisterX(), $cpu->getRegisterA()));
 
