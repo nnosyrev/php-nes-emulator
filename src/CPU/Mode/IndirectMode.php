@@ -8,17 +8,26 @@ use App\CPU\CPU;
 
 final class IndirectMode implements ModeInterface
 {
-    public function getOperandAddress(CPU $CPU, bool $forceDummyRead = false): int /* UInt16 */
+    public function getOperandAddress(CPU $cpu, bool $forceDummyRead = false): int /* UInt16 */
     {
-        $addr = $CPU->getMemoryUInt16($CPU->getPC());
+        $addr = $cpu->getMemoryUInt16($cpu->getPC());
+
+        $cpu->endTick();
+        $cpu->endTick();
 
         if (($addr & 0x00FF) === 0x00FF) {
-            $low = $CPU->getMemory($addr);
-            $high = $CPU->getMemory($addr & 0xFF00);
+            $low = $cpu->getMemory($addr);
+            $high = $cpu->getMemory($addr & 0xFF00);
+
+            $cpu->endTick();
 
             return ($high << 8) | $low;
         }
 
-        return $CPU->getMemoryUInt16($addr);
+        $result = $cpu->getMemoryUInt16($addr);
+
+        $cpu->endTick();
+
+        return $result;
     }
 }
