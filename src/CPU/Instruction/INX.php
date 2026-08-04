@@ -10,10 +10,12 @@ use App\Util\UInt8;
 
 final class INX implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $byte = $CPU->getRegisterX();
+        $cpu->getMemory($cpu->getPC(), dummy: true);
 
-        $CPU->setRegisterX(UInt8::increment($byte));
+        $byte = $cpu->getRegisterX();
+
+        $cpu->setRegisterX(UInt8::increment($byte));
     }
 }

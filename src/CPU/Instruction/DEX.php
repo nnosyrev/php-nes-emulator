@@ -10,10 +10,12 @@ use App\Util\UInt8;
 
 final class DEX implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $byte = $CPU->getRegisterX();
+        $cpu->getMemory($cpu->getPC(), dummy: true);
 
-        $CPU->setRegisterX(UInt8::decrement($byte));
+        $byte = $cpu->getRegisterX();
+
+        $cpu->setRegisterX(UInt8::decrement($byte));
     }
 }

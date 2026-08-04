@@ -10,15 +10,20 @@ use App\Util\UInt8;
 
 final class INC implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
-        $orig = $CPU->getMemory($addr);
-        $inc = UInt8::increment($orig);
+        $old = $cpu->getMemory($addr);
+        $cpu->endTick();
 
-        $CPU->setMemory($addr, $inc);
+        $cpu->setMemory($addr, $old);
+        $cpu->endTick();
 
-        $CPU->setFlagsZNByValue($inc);
+        $inc = UInt8::increment($old);
+
+        $cpu->setMemory($addr, $inc);
+
+        $cpu->setFlagsZNByValue($inc);
     }
 }

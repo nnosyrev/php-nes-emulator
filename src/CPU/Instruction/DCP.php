@@ -12,9 +12,12 @@ final class DCP implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($cpu);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
         $value = $cpu->getMemory($addr);
+
+        $cpu->setMemory($addr, $value, dummy: true);
+        $cpu->endTick();
 
         $result = UInt8::decrement($value);
 

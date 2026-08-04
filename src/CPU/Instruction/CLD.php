@@ -9,8 +9,10 @@ use App\CPU\Mode\ModeInterface;
 
 final class CLD implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $CPU->setFlagD(false);
+        $cpu->getMemory($cpu->getPC(), dummy: true);
+
+        $cpu->setFlagD(false);
     }
 }

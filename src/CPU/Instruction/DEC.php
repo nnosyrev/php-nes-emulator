@@ -10,15 +10,19 @@ use App\Util\UInt8;
 
 final class DEC implements InstructionInterface
 {
-    public function execute(CPU $CPU, ModeInterface $mode): void
+    public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        $addr = $mode->getOperandAddress($CPU);
+        $addr = $mode->getOperandAddress($cpu, forceDummyRead: true);
 
-        $orig = $CPU->getMemory($addr);
-        $dec = UInt8::decrement($orig);
+        $value = $cpu->getMemory($addr);
 
-        $CPU->setMemory($addr, $dec);
+        $cpu->setMemory($addr, $value, dummy: true);
+        $cpu->endTick();
 
-        $CPU->setFlagsZNByValue($dec);
+        $dec = UInt8::decrement($value);
+
+        $cpu->setMemory($addr, $dec);
+
+        $cpu->setFlagsZNByValue($dec);
     }
 }

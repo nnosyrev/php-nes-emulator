@@ -18,9 +18,7 @@ final class AXS implements InstructionInterface
 
         $cpu->setRegisterX($cpu->getRegisterX() & $cpu->getRegisterA());
 
-        if ($value <= $cpu->getRegisterX()) {
-            $cpu->setFlagC(true);
-        }
+        $cpu->setFlagC($value <= $cpu->getRegisterX());
 
         $cpu->setRegisterX(UInt8::subtract($cpu->getRegisterX(), $value));
     }
