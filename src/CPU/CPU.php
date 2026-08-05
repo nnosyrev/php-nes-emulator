@@ -21,6 +21,8 @@ final class CPU implements EventSubscriberInterface
     private const STACK_START = 0x0100;
     private const SP_END = 0xFF;
 
+    public const IRQ_HANDLER = 0xFFFE;
+
     public const FLAG_C = 0b00000001;
     public const FLAG_Z = 0b00000010;
     public const FLAG_I = 0b00000100;
