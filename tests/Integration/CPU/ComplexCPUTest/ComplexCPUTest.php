@@ -123,7 +123,7 @@ final class ComplexCPUTest extends TestCase
 
     public static function getData(): Generator
     {
-        $items = Items::fromFile(self::DIR . '/8b.json');
+        $items = Items::fromFile(self::DIR . '/02.json');
 
         foreach ($items as $item) {
             $name = $item->name . ' ' . \microtime();

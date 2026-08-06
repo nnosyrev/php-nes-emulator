@@ -44,6 +44,7 @@ use App\CPU\Instruction\INY;
 use App\CPU\Instruction\ISC;
 use App\CPU\Instruction\JMP;
 use App\CPU\Instruction\JSR;
+use App\CPU\Instruction\KIL;
 use App\CPU\Instruction\LAR;
 use App\CPU\Instruction\LAX;
 use App\CPU\Instruction\LDA;
@@ -365,19 +366,18 @@ final class OpcodeCollection
         $this->add(0xA3, LAX::class, 2, 6, IndirectXMode::class);
         $this->add(0xB3, LAX::class, 2, 5 /* +1 if page crossed */, IndirectYMode::class);
 
-        // KIL
-        $this->add(0x02, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x12, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x22, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x32, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x42, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x52, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x62, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x72, NOP::class, 1, null, NoneMode::class);
-        $this->add(0x92, NOP::class, 1, null, NoneMode::class);
-        $this->add(0xB2, NOP::class, 1, null, NoneMode::class);
-        $this->add(0xD2, NOP::class, 1, null, NoneMode::class);
-        $this->add(0xF2, NOP::class, 1, null, NoneMode::class);
+        $this->add(0x02, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x12, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x22, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x32, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x42, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x52, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x62, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x72, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0x92, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0xB2, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0xD2, KIL::class, 1, 11, NoneMode::class);
+        $this->add(0xF2, KIL::class, 1, 11, NoneMode::class);
 
         $this->add(0x87, AAX::class, 2, 3, ZeroPageMode::class);
         $this->add(0x97, AAX::class, 2, 4, ZeroPageYMode::class);

@@ -17,7 +17,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CPU implements EventSubscriberInterface
 {
-    private const PRG_ROM_START = 0x8000;
+    public const PRG_ROM_START = 0x8000;
+    public const PRG_ROM_END   = 0xFFFF;
+
     private const STACK_START = 0x0100;
     private const SP_END = 0xFF;
 
