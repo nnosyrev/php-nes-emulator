@@ -352,11 +352,16 @@ final class CPU implements EventSubscriberInterface
         return $this->bus->getMemoryUInt16($addr, $dummy);
     }
 
+    public function getCurrentStackAddr(): int /* UInt16 */
+    {
+        return UInt16::add(self::STACK_START, $this->SP);
+    }
+
     public function pushToStack(int /* UInt8 */ $data): void
     {
         assert(UInt8::check($data));
 
-        $addr = UInt16::add(self::STACK_START, $this->SP);
+        $addr = $this->getCurrentStackAddr();
 
         assert(UInt16::check($addr));
 
@@ -371,14 +376,14 @@ final class CPU implements EventSubscriberInterface
     {
         // TODO: One dummy read per instruction ???
         if (!$this->dummyHasReadForPopStack) {
-            $this->getMemory(UInt16::add(self::STACK_START, $this->SP), dummy: true);
+            $this->getMemory($this->getCurrentStackAddr(), dummy: true);
             $this->endTick();
             $this->dummyHasReadForPopStack = true;
         }
 
         $this->SP = UInt8::increment($this->SP);
 
-        $addr = UInt16::add(self::STACK_START, $this->SP);
+        $addr = $this->getCurrentStackAddr();
 
         assert(UInt16::check($addr));
 
