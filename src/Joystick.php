@@ -34,7 +34,7 @@ final class Joystick
             return 1;
         }
 
-        $result = $this->bits & (1 << $this->index) >> $this->index;
+        $result = ($this->bits & (1 << $this->index)) >> $this->index;
 
         if (!$this->strobe) {
             $this->index += 1;

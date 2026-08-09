@@ -69,8 +69,11 @@ final class Renderer
         for ($i = 252; $i >= 0; $i = $i - 4) {
             $baseY = $oamData[$i];
             $tileN = $oamData[$i + 1];
-            //$attributes = $oamData[$i + 2];
+            $attributes = $oamData[$i + 2];
             $baseX = $oamData[$i + 3];
+
+            $flipVertical   = (($attributes >> 7) & 1) === 1;
+            $flipHorizontal = (($attributes >> 6) & 1) === 1;
 
             // TODO: !!!
             $tile = \array_slice($chrRom, $spriteBankStart + $tileN * 16, 16);
@@ -84,7 +87,12 @@ final class Renderer
                     $upper = $upper >> 1;
                     $lower = $lower >> 1;
 
-                    $frame->setPixel($baseX + $x, $baseY + $y, $this->pallete[$value]);
+                    match ([$flipHorizontal, $flipVertical]) {
+                        [false, false] => $frame->setPixel($baseX + $x, $baseY + $y, $this->pallete[$value]),
+                        [true, false] => $frame->setPixel($baseX + 7 - $x, $baseY + $y, $this->pallete[$value]),
+                        [false, true] => $frame->setPixel($baseX + $x, $baseY + 7 - $y, $this->pallete[$value]),
+                        [true, true] => $frame->setPixel($baseX + 7 - $x, $baseY + 7 - $y, $this->pallete[$value]),
+                    };
                 }
             }
         }

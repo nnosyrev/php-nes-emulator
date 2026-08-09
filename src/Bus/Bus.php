@@ -137,11 +137,8 @@ final class Bus implements BusInterface
 
     private function setOamDma(int /* UInt8 */ $data): void
     {
-        $readFrom = $data << 8;
-        $readTo = $readFrom | 0b11111111;
-
-        for ($addr = $readFrom; $addr <= $readTo; $addr++) {
-            $this->ppu->setOamData($this->getMemory($addr));
+        for ($i = 0; $i <= 255; $i++) {
+            $this->ppu->setOamData($this->getMemory(0x100 * $data + $i));
         }
     }
 
