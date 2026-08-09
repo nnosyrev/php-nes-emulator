@@ -43,6 +43,7 @@ use App\CPU\Instruction\INX;
 use App\CPU\Instruction\INY;
 use App\CPU\Instruction\ISC;
 use App\CPU\Instruction\JMP;
+use App\CPU\Instruction\JMPA;
 use App\CPU\Instruction\JSR;
 use App\CPU\Instruction\KIL;
 use App\CPU\Instruction\LAR;
@@ -290,7 +291,7 @@ final class OpcodeCollection
         $this->add(0x4E, LSR::class, 3, 6, AbsoluteMode::class);
         $this->add(0x5E, LSR::class, 3, 7, AbsoluteXMode::class);
 
-        $this->add(0x4C, JMP::class, 3, 3, AbsoluteMode::class);
+        $this->add(0x4C, JMPA::class, 3, 3, NoneMode::class);
         $this->add(0x6C, JMP::class, 3, 5, IndirectMode::class);
 
         $this->add(0x20, JSR::class, 3, 6, AbsoluteMode::class);
