@@ -30,4 +30,13 @@ final class AddressRegisterTest extends TestCase
 
         $this->assertSame($addressRegister->get(), 0x4011 & 0b11111111111111);
     }
+
+    public function testMirroring2(): void
+    {
+        $addressRegister = new AddressRegister();
+        $addressRegister->set(0b11111111);
+        $addressRegister->set(0b11111111);
+
+        $this->assertSame($addressRegister->get(), 0b11111111111111);
+    }
 }

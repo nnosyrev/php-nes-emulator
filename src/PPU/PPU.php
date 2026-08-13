@@ -195,9 +195,7 @@ final class PPU
             // goes into the read buffer as normal. The old contents of the read buffer are discarded when
             // reading palettes, but by changing the address to point outside palette RAM and performing
             // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
-            $this->dataBuf = $this->palleteTable[$addr - 0x3f00];
-
-            return $this->dataBuf;
+            return $this->palleteTable[$addr - 0x3f00];
         } else {
             throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
         }

@@ -79,6 +79,13 @@ final class UInt8
         return $value ^ $xor;
     }
 
+    public static function not(int /* UInt8 */ $value): int /* UInt8 */
+    {
+        assert(self::check($value));
+
+        return (~$value) & 0b11111111;
+    }
+
     private static function mod(int /* UInt8 */ $value): int /* UInt8 */
     {
         return $value % self::BASE;

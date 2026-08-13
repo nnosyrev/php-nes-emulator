@@ -424,7 +424,7 @@ final class CPU implements EventSubscriberInterface
 
         // Clearing B flag
         $flags = $this->getFlagsAsUInt8();
-        $flags = UInt8::and($flags, ~ self::FLAG_B);
+        $flags = UInt8::and($flags, UInt8::not(self::FLAG_B));
 
         $this->pushToStack($flags);
 
