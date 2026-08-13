@@ -42,18 +42,26 @@ final class UInt16Test extends TestCase
         $this->assertSame(UInt16::decrement(0), 65535);
     }
 
+    public function testShiftToLeft(): void
+    {
+        $this->assertSame(UInt16::shiftToLeft(0b0010000000000000, 1), 0b0100000000000000);
+        $this->assertSame(UInt16::shiftToLeft(0b0010000000000000, 3), 0b0000000000000000);
+        $this->assertSame(UInt16::shiftToLeft(0b00000001, 7), 0b10000000);
+    }
+
     public function testShiftToRight(): void
     {
-        $this->assertSame(UInt16::shiftToRight(0b00100000, 1), 0b00010000);
-        $this->assertSame(UInt16::shiftToRight(0b10000000, 7), 0b00000001);
+        $this->assertSame(UInt16::shiftToRight(0b0010000000000000, 1), 0b0001000000000000);
+        $this->assertSame(UInt16::shiftToRight(0b1000000000000000, 7), 0b0000000100000000);
+        $this->assertSame(UInt16::shiftToRight(0b0000010000000000, 3), 0b0000000010000000);
         $this->assertSame(UInt16::shiftToRight(0b00000100, 3), 0b00000000);
     }
 
     public function testInInterval(): void
     {
-        $this->assertSame(UInt16::inInterval(100, 0, 200), true);
-        $this->assertSame(UInt16::inInterval(100, 200, 300), false);
-        $this->assertSame(UInt16::inInterval(400, 200, 300), false);
+        $this->assertSame(UInt16::inInterval(1000, 0, 2000), true);
+        $this->assertSame(UInt16::inInterval(1000, 2000, 3000), false);
+        $this->assertSame(UInt16::inInterval(4000, 2000, 3000), false);
     }
 
     public function testHexString(): void

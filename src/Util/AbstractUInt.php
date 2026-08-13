@@ -9,7 +9,7 @@ abstract class AbstractUInt
         throw new \Exception('You need to redefine the method in the child class.');
     }
 
-    public static function check(int /* UInt8 */ $value): bool
+    public static function check(int $value): bool
     {
         return ($value >= 0 && $value <= (static::getBase() - 1));
     }
