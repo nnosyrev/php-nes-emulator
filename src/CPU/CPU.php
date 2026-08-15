@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\CPU;
 
 use App\Bus\BusInterface;
-use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Instruction\InstructionCollectionInterface;
 use App\CPU\Interrupter\InterrupterInterface;
 use App\CPU\Mode\ModeFactory;
 use App\CPU\Opcode\OpcodeCollection;
@@ -56,7 +56,7 @@ final class CPU implements EventSubscriberInterface
     public function __construct(
         private readonly BusInterface $bus,
         private readonly OpcodeCollection $opcodeCollection,
-        private readonly InstructionFactoryInterface $instructionFactory,
+        private readonly InstructionCollectionInterface $instructionCollection,
         private readonly ModeFactory $modeFactory,
         private readonly InterrupterInterface $cpuInterrupter,
     ) {
@@ -85,7 +85,7 @@ final class CPU implements EventSubscriberInterface
 
             $opcode = $this->opcodeCollection->get($code);
 
-            $instruction = $this->instructionFactory->make($opcode->instructionClass);
+            $instruction = $this->instructionCollection->get($opcode->instructionClass);
             $mode = $this->modeFactory->make($opcode->modeClass);
 
             $this->PCHasChanged = false;
