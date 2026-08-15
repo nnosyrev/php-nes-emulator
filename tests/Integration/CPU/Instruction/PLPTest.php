@@ -6,7 +6,7 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\BRK;
-use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Instruction\InstructionCollectionInterface;
 use App\CPU\Instruction\InstructionInterface;
 use App\CPU\Instruction\PHA;
 use App\CPU\Instruction\PLP;
@@ -23,15 +23,15 @@ final class PLPTest extends TestCase
         $brk->method('execute')
             ->willThrowException(new BreakException());
 
-        $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('make')
+        $instructionCollection = $this->createStub(InstructionCollectionInterface::class);
+        $instructionCollection->method('get')
             ->willReturnMap([
                 [PHA::class, new PHA()],
                 [PLP::class, new PLP()],
                 [BRK::class, $brk],
             ]);
 
-        $this->container->set(InstructionFactoryInterface::class, $instructionFactory);
+        $this->container->set(InstructionCollectionInterface::class, $instructionCollection);
 
         $this->loadProgramToRom([0x48, 0x28, 0x00]);
 

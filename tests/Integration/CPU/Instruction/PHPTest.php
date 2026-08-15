@@ -6,7 +6,7 @@ namespace Tests\Integration\CPU\Instruction;
 
 use App\CPU\Exception\BreakException;
 use App\CPU\Instruction\BRK;
-use App\CPU\Instruction\InstructionFactoryInterface;
+use App\CPU\Instruction\InstructionCollectionInterface;
 use App\CPU\Instruction\InstructionInterface;
 use App\CPU\Instruction\PHP;
 use PHPUnit\Framework\TestCase;
@@ -22,14 +22,14 @@ final class PHPTest extends TestCase
         $brk->method('execute')
             ->willThrowException(new BreakException());
 
-        $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('make')
+        $instructionCollection = $this->createStub(InstructionCollectionInterface::class);
+        $instructionCollection->method('get')
             ->willReturnMap([
                 [PHP::class, new PHP()],
                 [BRK::class, $brk],
             ]);
 
-        $this->container->set(InstructionFactoryInterface::class, $instructionFactory);
+        $this->container->set(InstructionCollectionInterface::class, $instructionCollection);
 
         $this->loadProgramToRom([0x08, 0x00]);
 
