@@ -7,7 +7,7 @@ namespace App\CPU;
 use App\Bus\BusInterface;
 use App\CPU\Instruction\InstructionCollectionInterface;
 use App\CPU\Interrupter\InterrupterInterface;
-use App\CPU\Mode\ModeFactory;
+use App\CPU\Mode\ModeCollection;
 use App\CPU\Opcode\OpcodeCollection;
 use App\Event\NMIEvent;
 use App\Util\Int8;
@@ -57,7 +57,7 @@ final class CPU implements EventSubscriberInterface
         private readonly BusInterface $bus,
         private readonly OpcodeCollection $opcodeCollection,
         private readonly InstructionCollectionInterface $instructionCollection,
-        private readonly ModeFactory $modeFactory,
+        private readonly ModeCollection $modeCollection,
         private readonly InterrupterInterface $cpuInterrupter,
     ) {
         $this->cpuInterrupter->init($this, 'run');
@@ -86,7 +86,7 @@ final class CPU implements EventSubscriberInterface
             $opcode = $this->opcodeCollection->get($code);
 
             $instruction = $this->instructionCollection->get($opcode->instructionClass);
-            $mode = $this->modeFactory->make($opcode->modeClass);
+            $mode = $this->modeCollection->get($opcode->modeClass);
 
             $this->PCHasChanged = false;
             $this->dummyHasReadForPopStack = false;
