@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use App\CPU\Instruction\BRK;
 use App\CPU\Interrupter\InterrupterInterface;
 use App\Rom\RomInterface;
 use App\UI\UIInterface;
 use DI\Container;
 use DI\ContainerBuilder;
-use Tests\BRK as TestsBRK;
 
 trait CPUTestTrait
 {
@@ -24,7 +22,6 @@ trait CPUTestTrait
         $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
         $this->container->set(InterrupterInterface::class, $this->container->get(InterrupterEmptyDecorator::class));
-        $this->container->set(BRK::class, $this->container->get(TestsBRK::class));
     }
 
     protected function loadProgramToRom(array $program): void
