@@ -23,7 +23,7 @@ final class PHPTest extends TestCase
             ->willThrowException(new BreakException());
 
         $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('make')
+        $instructionFactory->method('get')
             ->willReturnMap([
                 [PHP::class, new PHP()],
                 [BRK::class, $brk],

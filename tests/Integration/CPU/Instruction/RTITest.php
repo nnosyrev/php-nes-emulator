@@ -23,7 +23,7 @@ final class RTITest extends TestCase
             ->willThrowException(new BreakException());
 
         $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('make')
+        $instructionFactory->method('get')
             ->willReturnMap([
                 [RTI::class, new RTI()],
                 [BRK::class, $brk],

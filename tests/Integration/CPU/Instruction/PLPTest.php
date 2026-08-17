@@ -24,7 +24,7 @@ final class PLPTest extends TestCase
             ->willThrowException(new BreakException());
 
         $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('make')
+        $instructionFactory->method('get')
             ->willReturnMap([
                 [PHA::class, new PHA()],
                 [PLP::class, new PLP()],

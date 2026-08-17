@@ -85,8 +85,8 @@ final class CPU implements EventSubscriberInterface
 
             $opcode = $this->opcodeCollection->get($code);
 
-            $instruction = $this->instructionFactory->make($opcode->instructionClass);
-            $mode = $this->modeFactory->make($opcode->modeClass);
+            $instruction = $this->instructionFactory->get($opcode->instructionClass);
+            $mode = $this->modeFactory->get($opcode->modeClass);
 
             $this->PCHasChanged = false;
             $this->dummyHasReadForPopStack = false;

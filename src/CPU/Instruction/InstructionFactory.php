@@ -10,7 +10,7 @@ final class InstructionFactory implements InstructionFactoryInterface
 {
     private array $instructions = [];
 
-    public function make(string $class): InstructionInterface
+    public function get(string $class): InstructionInterface
     {
         if (!\array_key_exists($class, $this->instructions)) {
             $instruction = new $class();

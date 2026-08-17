@@ -6,5 +6,5 @@ namespace App\CPU\Instruction;
 
 interface InstructionFactoryInterface
 {
-    public function make(string $class): InstructionInterface;
+    public function get(string $class): InstructionInterface;
 }
