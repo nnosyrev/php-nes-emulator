@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use App\CPU\Instruction\InstructionFactoryInterface;
 use App\CPU\Interrupter\InterrupterInterface;
 use App\Rom\RomInterface;
 use App\UI\UIInterface;
@@ -22,6 +23,7 @@ trait CPUTestTrait
         $this->container = $builder->build();
         $this->container->set(UIInterface::class, $this->createStub(UIInterface::class));
         $this->container->set(InterrupterInterface::class, $this->container->get(InterrupterEmptyDecorator::class));
+        $this->container->set(InstructionFactoryInterface::class, $this->container->get(InstructionFactoryDecorator::class));
     }
 
     protected function loadProgramToRom(array $program): void

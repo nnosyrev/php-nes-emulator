@@ -13,7 +13,7 @@ final class InstructionFactory implements InstructionFactoryInterface
     public function get(string $class): InstructionInterface
     {
         if (!\array_key_exists($class, $this->instructions)) {
-            $instruction = new $class();
+            $instruction = $this->create($class);
 
             if (!($instruction instanceof InstructionInterface)) {
                 throw new Exception('Incorrect instruction class');
@@ -23,5 +23,10 @@ final class InstructionFactory implements InstructionFactoryInterface
         }
 
         return $this->instructions[$class];
+    }
+
+    private function create(string $class): InstructionInterface
+    {
+        return new $class();
     }
 }
