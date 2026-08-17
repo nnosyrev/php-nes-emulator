@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Integration\CPU\Instruction;
 
-use App\CPU\Exception\BreakException;
-use App\CPU\Instruction\BRK;
-use App\CPU\Instruction\InstructionFactoryInterface;
-use App\CPU\Instruction\InstructionInterface;
-use App\CPU\Instruction\PHA;
-use App\CPU\Instruction\PLP;
 use PHPUnit\Framework\TestCase;
 use Tests\CPUTestTrait;
 
@@ -19,20 +13,6 @@ final class PLPTest extends TestCase
 
     public function testPLPTrue(): void
     {
-        $brk = $this->createStub(InstructionInterface::class);
-        $brk->method('execute')
-            ->willThrowException(new BreakException());
-
-        $instructionFactory = $this->createStub(InstructionFactoryInterface::class);
-        $instructionFactory->method('get')
-            ->willReturnMap([
-                [PHA::class, new PHA()],
-                [PLP::class, new PLP()],
-                [BRK::class, $brk],
-            ]);
-
-        $this->container->set(InstructionFactoryInterface::class, $instructionFactory);
-
         $this->loadProgramToRom([0x48, 0x28, 0x00]);
 
         $CPU = $this->getCpu();

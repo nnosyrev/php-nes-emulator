@@ -13,11 +13,6 @@ final class BRK implements InstructionInterface
 {
     public function execute(CPU $cpu, ModeInterface $mode): void
     {
-        // TODO: To fix instructions tests.
-        // In the PHPTest, PLPTest, RTITest and SEITest, a stub of this class
-        // is created to disable the check (because the I flag appears in them)
-        if (!$cpu->getFlagI()) {
-            throw new BreakException('Break');
-        }
+        throw new BreakException('Break');
     }
 }
