@@ -9,6 +9,7 @@ use App\Mirroring;
 use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
 use App\PPU\Register\ScrollRegister;
+use App\PPU\Register\StatusRegister;
 use App\Rom\RomInterface;
 use App\Util\UInt16;
 use App\Util\UInt8;
@@ -47,20 +48,6 @@ final class PPU
     private int /* UInt8 */ $mask;
 
     /*
-     * PPUSTATUS - Rendering events ($2002 read)
-     *
-     * 7  bit  0
-     * ---- ----
-     * VSOx xxxx
-     * |||| ||||
-     * |||+-++++- (PPU open bus or 2C05 PPU identifier)
-     * ||+------- Sprite overflow flag
-     * |+-------- Sprite 0 hit flag
-     * +--------- Vblank flag, cleared on read. Unreliable; see below.
-     */
-    private int /* UInt8 */ $status = 0;
-
-    /*
      * OAMADDR - Sprite RAM address ($2003 write)
      *
      * 7  bit  0
@@ -88,6 +75,7 @@ final class PPU
         private readonly AddressRegister $addressRegister,
         private readonly ControlRegister $controlRegister,
         private readonly ScrollRegister $scrollRegister,
+        private readonly StatusRegister $statusRegister,
     ) {
         // TODO: it's may be wrong (32)
         $this->palleteTable = new SplFixedArray(32);
@@ -102,7 +90,7 @@ final class PPU
         $this->controlRegister->set($value);
 
         // Changing NMI enable from 0 to 1 while the vblank flag in PPUSTATUS is 1 will immediately trigger an NMI
-        if (!$oldNMIEnableBit && $this->controlRegister->getNMIEnableBit() && $this->getStatusVblankFlag()) {
+        if (!$oldNMIEnableBit && $this->controlRegister->getNMIEnableBit() && $this->statusRegister->getVblankFlag()) {
             $this->dispatcher->dispatch(new NMIEvent());
         }
     }
@@ -114,35 +102,13 @@ final class PPU
 
     public function getStatus(): int /* UInt8 */
     {
-        $status = $this->status;
+        $status = $this->statusRegister->get();
 
-        // Vblank flag, cleared on read.
-        $this->status = UInt8::and($this->status, 0b01111111);
-
+        $this->statusRegister->clearVblankFlag();
         $this->addressRegister->resetLatch();
         $this->scrollRegister->resetLatch();
 
         return $status;
-    }
-
-    private function setStatusSprite0Flag(): void
-    {
-        $this->status = UInt8::or($this->status, 0b01000000);
-    }
-
-    private function setStatusVblankFlag(): void
-    {
-        $this->status = UInt8::or($this->status, 0b10000000);
-    }
-
-    private function clearStatusVblankFlag(): void
-    {
-        $this->status = UInt8::and($this->status, 0b01111111);
-    }
-
-    private function getStatusVblankFlag(): bool
-    {
-        return (UInt8::and($this->status, 0b10000000) !== 0);
     }
 
     public function setOamAddr(int /* UInt8 */ $value): void
@@ -252,7 +218,7 @@ final class PPU
             $this->cycles = $this->cycles - self::CYCLES_PER_SCANLINE;
 
             if ($this->scanlines == self::START_VBLANK_SCANLINE) {
-                $this->setStatusVblankFlag();
+                $this->statusRegister->setVblankFlag();
 
                 if ($this->controlRegister->getNMIEnableBit()) {
                     // Trigger NMI interrupt
@@ -261,8 +227,8 @@ final class PPU
             }
 
             if ($this->scanlines >= self::SCANLINES_PER_FRAME) {
-                $this->clearStatusVblankFlag();
-                $this->setStatusSprite0Flag();
+                $this->statusRegister->clearVblankFlag();
+                $this->statusRegister->setSprite0Flag();
 
                 $this->scanlines = 0;
                 $this->needRender = true;
