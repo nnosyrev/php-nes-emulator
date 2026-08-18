@@ -8,6 +8,7 @@ use App\Event\NMIEvent;
 use App\Mirroring;
 use App\PPU\Register\AddressRegister;
 use App\PPU\Register\ControlRegister;
+use App\PPU\Register\MaskRegister;
 use App\PPU\Register\ScrollRegister;
 use App\PPU\Register\StatusRegister;
 use App\Rom\RomInterface;
@@ -28,24 +29,6 @@ final class PPU
     private SplFixedArray $vram;
 
     private int /* UInt8 */ $dataBuf = 0;
-
-    /*
-     * PPUMASK - Rendering settings ($2001 write)
-     *
-     * 7  bit  0
-     * ---- ----
-     * BGRs bMmG
-     * |||| ||||
-     * |||| |||+- Greyscale (0: normal color, 1: greyscale)
-     * |||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide
-     * |||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide
-     * |||| +---- 1: Enable background rendering
-     * |||+------ 1: Enable sprite rendering
-     * ||+------- Emphasize red (green on PAL/Dendy)
-     * |+-------- Emphasize green (red on PAL/Dendy)
-     * +--------- Emphasize blue
-     */
-    private int /* UInt8 */ $mask;
 
     /*
      * OAMADDR - Sprite RAM address ($2003 write)
@@ -76,6 +59,7 @@ final class PPU
         private readonly ControlRegister $controlRegister,
         private readonly ScrollRegister $scrollRegister,
         private readonly StatusRegister $statusRegister,
+        private readonly MaskRegister $maskRegister,
     ) {
         // TODO: it's may be wrong (32)
         $this->palleteTable = new SplFixedArray(32);
@@ -97,7 +81,7 @@ final class PPU
 
     public function setMask(int /* UInt8 */ $value): void
     {
-        $this->mask = $value;
+        $this->maskRegister->set($value);
     }
 
     public function getStatus(): int /* UInt8 */
