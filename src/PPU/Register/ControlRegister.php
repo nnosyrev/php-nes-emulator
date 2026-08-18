@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\PPU\Register;
 
+use App\Util\UInt8;
+
 final class ControlRegister
 {
     private const VRAM_ADDR_INCREMENT      = 0b00000100;
@@ -28,6 +30,11 @@ final class ControlRegister
     // +--------- Vblank NMI enable (0: off, 1: on)
     private int /* UInt8 */ $bits = 0b00000000;
 
+    public function __construct(int /* UInt8 */ $bits = 0b00000000)
+    {
+        $this->bits = $bits;
+    }
+
     public function set(int /* UInt8 */ $value): void
     {
         $this->bits = $value;
@@ -35,25 +42,21 @@ final class ControlRegister
 
     public function getAddressIncrement(): int /* UInt8 */
     {
-        if (($this->bits & self::VRAM_ADDR_INCREMENT) === 0) {
-            return 1;
-        }
-
-        return 32;
+        return UInt8::and($this->bits, self::VRAM_ADDR_INCREMENT) === 0 ? 1 : 32;
     }
 
     public function getNMIEnableBit(): bool
     {
-        return (($this->bits & self::NMI_ENABLE) === self::NMI_ENABLE);
+        return UInt8::and($this->bits, self::NMI_ENABLE) === self::NMI_ENABLE;
     }
 
     public function getSpritePatternTableBit(): bool
     {
-        return ($this->bits & self::SPRITE_PATTERN_TABLE) !== 0;
+        return UInt8::and($this->bits, self::SPRITE_PATTERN_TABLE) !== 0;
     }
 
     public function getBackgroundPatternTableBit(): bool
     {
-        return ($this->bits & self::BACKGROUND_PATTERN_TABLE) !== 0;
+        return UInt8::and($this->bits, self::BACKGROUND_PATTERN_TABLE) !== 0;
     }
 }

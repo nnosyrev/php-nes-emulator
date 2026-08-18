@@ -240,13 +240,13 @@ final class PPU
         return $this->oamData;
     }
 
-    public function getSpriteChrBank(): int
+    public function getSpriteChrBank(): bool
     {
-        return ($this->controlRegister->getSpritePatternTableBit() ? 1 : 0);
+        return $this->controlRegister->getSpritePatternTableBit();
     }
 
-    public function getBackgroundChrBank(): int
+    public function getBackgroundChrBank(): bool
     {
-        return ($this->controlRegister->getBackgroundPatternTableBit() ? 1 : 0);
+        return $this->controlRegister->getBackgroundPatternTableBit();
     }
 }

@@ -34,7 +34,7 @@ final class Renderer
         $frame = $this->frame;
 
         // Render background
-        $backgroundBankStart = $ppu->getBackgroundChrBank() * 0x1000;
+        $backgroundBankStart = (int) $ppu->getBackgroundChrBank() * 0x1000;
 
         $vram = $ppu->getVRam();
         for ($i = 0x2000; $i <= 0x23BF; $i++) {
@@ -64,7 +64,7 @@ final class Renderer
         // Render sprites
         $oamData = $ppu->getAllOamData();
 
-        $spriteBankStart = $ppu->getSpriteChrBank() * 0x1000;
+        $spriteBankStart = (int) $ppu->getSpriteChrBank() * 0x1000;
 
         for ($i = 252; $i >= 0; $i = $i - 4) {
             $baseY = $oamData[$i];
