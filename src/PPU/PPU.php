@@ -24,6 +24,8 @@ final class PPU
     private const SCANLINES_PER_FRAME = 261;
     private const START_VBLANK_SCANLINE = 241;
 
+    private const ATTRIBUTE_TABLE_START = 0x3C0;
+
     private SplFixedArray $palleteTable;
 
     private SplFixedArray $vram;
@@ -61,7 +63,6 @@ final class PPU
         private readonly StatusRegister $statusRegister,
         private readonly MaskRegister $maskRegister,
     ) {
-        // TODO: it's may be wrong (32)
         $this->palleteTable = new SplFixedArray(32);
         $this->vram = new SplFixedArray(2048);
         $this->oamData = new SplFixedArray(UInt8::BASE);
@@ -145,6 +146,7 @@ final class PPU
             // goes into the read buffer as normal. The old contents of the read buffer are discarded when
             // reading palettes, but by changing the address to point outside palette RAM and performing
             // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
+            // TODO: !!!
             return $this->palleteTable[$addr - 0x3f00];
         } else {
             throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
@@ -248,5 +250,15 @@ final class PPU
     public function getBackgroundChrBank(): bool
     {
         return $this->controlRegister->getBackgroundPatternTableBit();
+    }
+
+    public function getPaletteTable($index): ?int
+    {
+        return $this->palleteTable[$index];
+    }
+
+    public function getAttributeTable(int $attrIndex): ?int
+    {
+        return $this->vram[self::ATTRIBUTE_TABLE_START + $attrIndex];
     }
 }

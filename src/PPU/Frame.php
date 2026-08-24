@@ -11,6 +11,22 @@ final class Frame
     public const WIDTH = 256;
     public const HEIGHT = 240;
 
+    private const SYSTEM_PALETTE = [
+       0x808080, 0x003DA6, 0x0012B0, 0x440096, 0xA1005E,
+       0xC70028, 0xBA0600, 0x8C1700, 0x5C2F00, 0x104500,
+       0x054A00, 0x00472E, 0x004166, 0x000000, 0x050505,
+       0x050505, 0xC7C7C7, 0x0077FF, 0x2155FF, 0x8237FA,
+       0xEB2FB5, 0xFF2950, 0xFF2200, 0xD63200, 0xC46200,
+       0x358000, 0x058F00, 0x008A55, 0x0099CC, 0x212121,
+       0x090909, 0x090909, 0xFFFFFF, 0x0FD7FF, 0x69A2FF,
+       0xD480FF, 0xFF45F3, 0xFF618B, 0xFF8833, 0xFF9C12,
+       0xFABC20, 0x9FE30E, 0x2BF035, 0x0CF0A4, 0x05FBFF,
+       0x5E5E5E, 0x0D0D0D, 0x0D0D0D, 0xFFFFFF, 0xA6FCFF,
+       0xB3ECFF, 0xDAABEB, 0xFFA8F9, 0xFFABB3, 0xFFD2B0,
+       0xFFEFA6, 0xFFF79C, 0xD7E895, 0xA6EDAF, 0xA2F2DA,
+       0x99FFFC, 0xDDDDDD, 0x111111, 0x111111
+    ];
+
     private array $data = [];
 
     public function __construct(int $color)
@@ -21,11 +37,11 @@ final class Frame
     private function init(int $color): void
     {
         for ($i = 0; $i < self::WIDTH * self::HEIGHT; $i++) {
-            $this->data[$i] = $color;
+            $this->data[$i] = self::SYSTEM_PALETTE[$color];
         }
     }
 
-    public function setPixel(int $x, int $y, int $color): void
+    public function setPixel(int $x, int $y, ?int $color): void
     {
         if ($x >= self::WIDTH || $y >= self::HEIGHT) {
             // TODO:fix this !!!
@@ -36,7 +52,7 @@ final class Frame
 
         $pixelPosition = $y * self::WIDTH + $x;
 
-        $this->data[$pixelPosition] = $color;
+        $this->data[$pixelPosition] = self::SYSTEM_PALETTE[(int) $color];
     }
 
     public function getPixels(): array
