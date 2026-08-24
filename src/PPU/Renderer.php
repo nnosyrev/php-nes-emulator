@@ -8,21 +8,12 @@ use App\Rom\RomInterface;
 
 final class Renderer
 {
-    private array $pallete;
-
     private Frame $frame;
 
     public function __construct(
         private readonly RomInterface $rom,
         private readonly PPU $ppu,
     ) {
-        $this->pallete = [
-            0x808080,
-            0xFF0000,
-            0x008F00,
-            10000000,
-        ];
-
         $this->frame = new Frame(0x000000);
     }
 

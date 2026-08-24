@@ -17,7 +17,7 @@ final class InstructionFactoryDecorator implements InstructionFactoryInterface
     public function get(string $class): InstructionInterface
     {
         if ($class === BRK::class) {
-            return new TestsBRK;
+            return new TestsBRK();
         }
 
         return $this->instructionFactory->get($class);
