@@ -60,6 +60,7 @@ final class Renderer
         $spriteBankStart = (int) $ppu->getSpriteChrBank() * 0x1000;
 
         for ($i = 252; $i >= 0; $i = $i - 4) {
+            // TODO: Check "idle" line
             $baseY = $oamData[$i];
             $tileN = $oamData[$i + 1];
             $attributes = $oamData[$i + 2];

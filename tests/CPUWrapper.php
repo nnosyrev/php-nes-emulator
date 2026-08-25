@@ -6,8 +6,6 @@ namespace Tests;
 
 use App\CPU\CPU;
 use App\CPU\Exception\BreakException;
-use Fiber;
-use Tests\Integration\CPU\ComplexCPUTest\CycleStorage;
 
 /**
  * @method incrementPC()

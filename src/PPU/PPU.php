@@ -30,7 +30,7 @@ final class PPU
 
     private SplFixedArray $vram;
 
-    private int /* UInt8 */ $dataBuf = 0;
+    private ?int /* UInt8 */ $dataBuf = 0;
 
     /*
      * OAMADDR - Sprite RAM address ($2003 write)
@@ -123,7 +123,7 @@ final class PPU
         $this->addressRegister->set($value);
     }
 
-    public function getData(): int /* UInt8 */
+    public function getData(): ?int /* UInt8 */
     {
         $addr = $this->addressRegister->get();
 
@@ -197,6 +197,7 @@ final class PPU
 
     public function tick(): void
     {
+        // TODO: Check. I think there's something missing here.
         $this->cycles += 1;
 
         if ($this->cycles >= self::CYCLES_PER_SCANLINE) {
