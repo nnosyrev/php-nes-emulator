@@ -28,14 +28,13 @@ final class Renderer
         $backgroundBankStart = (int) $ppu->getBackgroundChrBank() * 0x1000;
 
         $vram = $ppu->getVRam();
-        for ($i = 0x2000; $i <= 0x23BF; $i++) {
-            $offset = $i - 0x2000;
+        for ($offset = 0; $offset <= 959; $offset++) {
             $tileN = $vram[$offset];
 
             // TODO: !!!
             $tile = \array_slice($chrRom, $backgroundBankStart + $tileN * 16, 16);
 
-            $baseX = $offset % 32;
+            $baseX = (int) ($offset % 32);
             $baseY = (int) \floor($offset / 32);
 
             $palette = $this->getBgPalette($baseX, $baseY);
@@ -61,6 +60,7 @@ final class Renderer
 
         for ($i = 252; $i >= 0; $i = $i - 4) {
             // TODO: Check "idle" line
+            // TODO: Check "sprite 0 hits"
             $baseY = $oamData[$i];
             $tileN = $oamData[$i + 1];
             $attributes = $oamData[$i + 2];

@@ -111,8 +111,6 @@ final class Rom implements RomInterface
             throw new Exception('Invalid byte address');
         }
 
-        $byte = \ord($this->file[$n]);
-
-        return $byte;
+        return \ord($this->file[$n]);
     }
 }

@@ -27,17 +27,17 @@ final class Scheduler
                 $this->cpu->tick();
 
                 // 1 CPU cycle = 3 PPU cycles
-                $this->ppu->tick();
-                $this->ppu->tick();
-                $this->ppu->tick();
+                for ($i = 0; $i < 3; $i++) {
+                    $this->ppu->tick();
 
-                if ($this->ppu->getNeedRender()) {
-                    $frame = $this->renderer->render();
+                    if ($this->ppu->getNeedRender()) {
+                        $frame = $this->renderer->render();
 
-                    $this->ui->render($frame);
-                    $this->ui->processEvent($this->joystick);
+                        $this->ui->render($frame);
+                        $this->ui->processEvent($this->joystick);
 
-                    $this->ppu->setNeedRenderToFalse();
+                        $this->ppu->setNeedRenderToFalse();
+                    }
                 }
 
                 // APU...

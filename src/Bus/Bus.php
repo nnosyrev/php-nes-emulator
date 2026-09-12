@@ -37,6 +37,12 @@ final class Bus implements BusInterface
     private const APU_REGISTERS_START = 0x4000;
     private const APU_REGISTERS_END   = 0x4015;
 
+    private const EXPANSION_ROM_START = 0x4020;
+    private const EXPANSION_ROM_END   = 0x5FFF;
+
+    private const CARTRIDGE_RAM_START = 0x6000;
+    private const CARTRIDGE_RAM_END   = 0x7FFF;
+
     private const RAM_MIRRORING = 0b11111111111;
     private const PPU_MIRRORING = self::PPUDATA_REGISTER;
 
@@ -44,11 +50,15 @@ final class Bus implements BusInterface
 
     private array $memory = [];
 
+    private int $prgRomSize;
+
     public function __construct(
         private readonly PPU $ppu,
         private readonly RomInterface $rom,
         private readonly Joystick $joystick,
-    ) {}
+    ) {
+        $this->prgRomSize = count($this->rom->getPrgRom());
+    }
 
     public function getMemory(int /* UInt16 */ $addr, bool $dummy = false): int /* UInt8 */
     {
@@ -57,8 +67,8 @@ final class Bus implements BusInterface
         }
 
         return match (true) {
-            UInt16::inInterval($addr, self::PRG_START, self::PRG_END) => $this->rom->getPrgRom()[$addr - self::PRG_START],
-            UInt16::inInterval($addr, self::RAM_START, self::RAM_END) => $this->memory[$this->ramMirror($addr)],
+            UInt16::inInterval($addr, self::PRG_START, self::PRG_END) => $this->getPrgRom($addr),
+            UInt16::inInterval($addr, self::RAM_START, self::RAM_END) => $this->memory[$this->ramMirror($addr)] ?? 0,
             $addr === self::JOYSTICK_1_REGISTER => $this->joystick->get(),
             $addr === self::JOYSTICK_2_REGISTER => 0,
             $addr === self::PPUDATA_REGISTER => $this->ppu->getData(),
@@ -66,6 +76,8 @@ final class Bus implements BusInterface
             $addr === self::OAMDATA_REGISTER => $this->ppu->getOamData(),
             UInt16::inInterval($addr, self::PPU_REGISTERS_MIRRORS_START, self::PPU_REGISTERS_MIRRORS_END) => $this->getMemory($this->ppuMirror($addr)),
             UInt16::inInterval($addr, self::APU_REGISTERS_START, self::APU_REGISTERS_END) => 0,
+            UInt16::inInterval($addr, self::EXPANSION_ROM_START, self::EXPANSION_ROM_END) => 0,
+            UInt16::inInterval($addr, self::CARTRIDGE_RAM_START, self::CARTRIDGE_RAM_END) => 0,
             default => throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr)),
         };
     }
@@ -126,13 +138,24 @@ final class Bus implements BusInterface
             $low = $this->memory[$addr];
             $high = $this->memory[$addrIncremented];
         } elseif (UInt16::inInterval($addr, self::PRG_START, self::PRG_END)) {
-            $low = $this->rom->getPrgRom()[$addr - self::PRG_START];
-            $high = $this->rom->getPrgRom()[$addrIncremented - self::PRG_START];
+            $low = $this->getPrgRom($addr);
+            $high = $this->getPrgRom($addrIncremented);
         } else {
             throw new Exception('An attempt to access an invalid memory address ' . UInt16::hexString($addr));
         }
 
         return ($high << 8) | $low;
+    }
+
+    private function getPrgRom(int /* UInt16 */ $addr): int /* UInt8 */
+    {
+        $addr -= self::PRG_START;
+
+        if ($this->prgRomSize === 0x4000 && $addr >= 0x4000) {
+            $addr = $addr % 0x4000;
+        }
+
+        return $this->rom->getPrgRom()[$addr];
     }
 
     private function setOamDma(int /* UInt8 */ $data): void

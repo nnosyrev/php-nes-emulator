@@ -3,8 +3,8 @@
 
 use App\PPU\Frame;
 use App\Rom\Rom;
-use App\Type\Rgb;
-use App\Type\UInt8;
+use Serafim\SDL\Event\Type;
+use Serafim\SDL\SDL;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -13,10 +13,7 @@ const WINDOW_WIDTH = Frame::WIDTH * SQUARE_WIDTH;
 const WINDOW_HEIGHT = Frame::HEIGHT * SQUARE_WIDTH;
 
 $pallete = [
-    new Rgb(new UInt8(50), new UInt8(100), new UInt8(200)),
-    new Rgb(new UInt8(200), new UInt8(100), new UInt8(50)),
-    new Rgb(new UInt8(100), new UInt8(50), new UInt8(200)),
-    new Rgb(new UInt8(100), new UInt8(100), new UInt8(100)),
+    2, 10, 32, 14
 ];
 
 function getFrame(array $chrRom, int $bank, array $pallete): Frame
@@ -27,20 +24,23 @@ function getFrame(array $chrRom, int $bank, array $pallete): Frame
 
     $bankStart = $bank * 0x1000;
 
-    $frame = new Frame(new Rgb(new UInt8(255), new UInt8(255), new UInt8(255)));
+    $frame = new Frame(0);
 
-    foreach (range(0, 255) as $tileN) {
-        $tile = array_slice($chrRom, $bankStart + $tileN * 16, 16);
+    foreach (\range(0, 255) as $tileN) {
+        if ($tileN != 251) {
+            //continue;
+        }
+        $tile = \array_slice($chrRom, $bankStart + $tileN * 16, 16);
 
         $baseX = ($tileN % 32) * 8;
-        $baseY = floor($tileN / 32) * 8;
+        $baseY = \floor($tileN / 32) * 8;
 
-        foreach (range(0, 7) as $y) {
+        foreach (\range(0, 7) as $y) {
             $upper = $tile[$y];
             $lower = $tile[$y + 8];
 
-            foreach (range(7, 0) as $x) {
-                $value = (1 & $upper) << 1 | (1 & $lower);
+            foreach (\range(7, 0) as $x) {
+                $value = (1 & $lower) << 1 | (1 & $upper);
                 $upper = $upper >> 1;
                 $lower = $lower >> 1;
 
@@ -52,41 +52,61 @@ function getFrame(array $chrRom, int $bank, array $pallete): Frame
     return $frame;
 }
 
-$file = file_get_contents($argv[1]);
+$file = \file_get_contents($argv[1]);
 $rom = new Rom($file);
 
 $frame = getFrame($rom->getChrRom(), 0, $pallete);
 
 // Init
-SDL_Init(SDL_INIT_VIDEO);
-$window = SDL_CreateWindow("Drawing lines on screen", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-$renderer = SDL_CreateRenderer($window, 0, SDL_RENDERER_ACCELERATED);
+$sdl = new SDL();
+
+$event = $sdl->new('SDL_Event');
+$pixels = $sdl->new('int *');
+$pitch = $sdl->new('int');
+
+$window = $sdl->SDL_CreateWindow(
+    'NES emulator',
+    SDL::SDL_WINDOWPOS_UNDEFINED,
+    SDL::SDL_WINDOWPOS_UNDEFINED,
+    WINDOW_WIDTH,
+    WINDOW_HEIGHT,
+    SDL::SDL_WINDOW_SHOWN
+);
+
+$renderer = $sdl->SDL_CreateRenderer($window, 0, SDL::SDL_RENDERER_ACCELERATED);
+
+$texture = $sdl->SDL_CreateTexture(
+    $renderer,
+    SDL::SDL_PIXELFORMAT_RGBA32,
+    SDL::SDL_TEXTUREACCESS_STREAMING,
+    Frame::WIDTH,
+    Frame::HEIGHT
+);
+
 
 // Clear screen
-SDL_SetRenderDrawColor($renderer, 100, 0, 0, 0);
-SDL_RenderClear($renderer);
+$sdl->SDL_SetRenderDrawColor($renderer, 100, 0, 0, 0);
+$sdl->SDL_RenderClear($renderer);
 
-// Show frame
-for ($x = 0; $x < Frame::WIDTH; $x++) {
-    for ($y = 0; $y < Frame::HEIGHT; $y++) {
-        $rgb = $frame->getPixel($x, $y);
-
-        SDL_SetRenderDrawColor($renderer, $rgb->r->value, $rgb->g->value, $rgb->b->value, 255);
-
-        $rect = new SDL_Rect($x * SQUARE_WIDTH, $y * SQUARE_WIDTH, SQUARE_WIDTH, SQUARE_WIDTH);
-        SDL_RenderFillRect($renderer, $rect);
+if (0 == $sdl->SDL_LockTexture($texture, null, $sdl->cast('void**', \FFI::addr($pixels)), \FFI::addr($pitch))) {
+    foreach ($frame->getPixels() as $key => $value) {
+        $pixels[$key] = $value;
     }
+
+    $sdl->SDL_UnlockTexture($texture);
 }
-SDL_RenderPresent($renderer);
+
+$sdl->SDL_RenderCopy($renderer, $texture, null, null);
+
+$sdl->SDL_RenderPresent($renderer);
 
 // Wait for quit event
-$event = new SDL_Event;
 while (true) {
-    if (SDL_PollEvent($event)) {
-        if ($event->type == SDL_QUIT) {
+    if ($sdl->SDL_PollEvent(\FFI::addr($event))) {
+        if ($event->type == Type::SDL_QUIT) {
             break;
-        } elseif ($event->type == SDL_KEYDOWN) {
-            $symChar = chr($event->key->keysym->sym);
+        } elseif ($event->type == Type::SDL_KEYDOWN) {
+            $symChar = \chr($event->key->keysym->sym);
             if ($symChar == 'q') {
                 break;
             }
@@ -95,6 +115,7 @@ while (true) {
 }
 
 // Destroy
-SDL_DestroyRenderer($renderer);
-SDL_DestroyWindow($window);
-SDL_Quit();
+$sdl->SDL_DestroyTexture($texture);
+$sdl->SDL_DestroyRenderer($renderer);
+$sdl->SDL_DestroyWindow($window);
+$sdl->SDL_Quit();
