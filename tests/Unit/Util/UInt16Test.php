@@ -24,6 +24,13 @@ final class UInt16Test extends TestCase
         $this->assertSame(UInt16::add(65535, 7), 6);
     }
 
+    public function testAddZero(): void
+    {
+        $this->assertSame(UInt16::add(34, 0), 34);
+        $this->assertSame(UInt16::add(65535, 0), 65535);
+        $this->assertSame(UInt16::add(5535, 0), 5535);
+    }
+
     public function testSubtract(): void
     {
         $this->assertSame(UInt16::subtract(134, 8), 126);

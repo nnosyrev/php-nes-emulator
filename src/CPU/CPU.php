@@ -122,9 +122,11 @@ final class CPU implements EventSubscriberInterface
     {
         assert(UInt16::check($new));
 
+        $old = $this->PC;
+
         $this->PC = $new;
 
-        $this->PCHasChanged = true;
+        $this->PCHasChanged = ($old !== $this->PC);
 
         return $this;
     }
@@ -142,9 +144,11 @@ final class CPU implements EventSubscriberInterface
     {
         assert(UInt8::check($add) || Int8::check($add));
 
+        $old = $this->PC;
+
         $this->PC = UInt16::add($this->PC, $add);
 
-        $this->PCHasChanged = true;
+        $this->PCHasChanged = ($old !== $this->PC);
     }
 
     public function setRegisterA(int /* UInt8 */ $byte): void
