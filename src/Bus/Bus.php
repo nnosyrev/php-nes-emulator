@@ -135,8 +135,8 @@ final class Bus implements BusInterface
         $addrIncremented = UInt16::increment($addr);
 
         if (UInt16::inInterval($addr, self::RAM_START, self::RAM_END)) {
-            $low = $this->memory[$addr];
-            $high = $this->memory[$addrIncremented];
+            $low = $this->memory[$addr] ?? 0;
+            $high = $this->memory[$addrIncremented] ?? 0;
         } elseif (UInt16::inInterval($addr, self::PRG_START, self::PRG_END)) {
             $low = $this->getPrgRom($addr);
             $high = $this->getPrgRom($addrIncremented);

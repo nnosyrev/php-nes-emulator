@@ -21,7 +21,8 @@ final class CPU implements EventSubscriberInterface
     public const PRG_ROM_END   = 0xFFFF;
 
     private const STACK_START = 0x0100;
-    private const SP_END = 0xFF;
+    private const STACK_SIZE  = 0xFF;
+    private const STACK_RESET = 0xFD;
 
     public const IRQ_HANDLER = 0xFFFE;
 
@@ -39,13 +40,13 @@ final class CPU implements EventSubscriberInterface
 
     private bool $flagC = false;
     private bool $flagZ = false;
-    private bool $flagI = false;
+    private bool $flagI = true;
     private bool $flagD = false;
     private bool $flagB = false;
     private bool $flagV = false;
     private bool $flagN = false;
 
-    private int /* UInt8 */ $SP = self::SP_END;
+    private int /* UInt8 */ $SP = self::STACK_RESET;
     private int /* UInt16 */ $PC = self::PRG_ROM_START;
 
     private bool $PCHasChanged = false;
