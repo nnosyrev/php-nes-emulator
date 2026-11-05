@@ -20,6 +20,8 @@ final class CPU implements EventSubscriberInterface
     public const PRG_ROM_START = 0x8000;
     public const PRG_ROM_END   = 0xFFFF;
 
+    private const INITIAL_PC_LOCATED_AT = 0xFFFC;
+
     private const STACK_START = 0x0100;
     private const STACK_SIZE  = 0xFF;
     private const STACK_RESET = 0xFD;
@@ -47,7 +49,7 @@ final class CPU implements EventSubscriberInterface
     private bool $flagN = false;
 
     private int /* UInt8 */ $SP = self::STACK_RESET;
-    private int /* UInt16 */ $PC = self::PRG_ROM_START;
+    private int /* UInt16 */ $PC;
 
     private bool $PCHasChanged = false;
     private bool $dummyHasReadForPopStack = false;
@@ -62,6 +64,8 @@ final class CPU implements EventSubscriberInterface
         private readonly InterrupterInterface $cpuInterrupter,
     ) {
         $this->cpuInterrupter->init($this, 'run');
+
+        $this->PC = $this->getMemoryUInt16(self::INITIAL_PC_LOCATED_AT);
     }
 
     public function tick(): ?array
