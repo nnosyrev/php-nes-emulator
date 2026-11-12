@@ -26,7 +26,7 @@ final class PPU
 
     private const ATTRIBUTE_TABLE_START = 0x3C0;
 
-    private SplFixedArray $palleteTable;
+    private SplFixedArray $paletteTable;
 
     private SplFixedArray $vram;
 
@@ -63,7 +63,7 @@ final class PPU
         private readonly StatusRegister $statusRegister,
         private readonly MaskRegister $maskRegister,
     ) {
-        $this->palleteTable = new SplFixedArray(32);
+        $this->paletteTable = new SplFixedArray(32);
         $this->vram = new SplFixedArray(2048);
         $this->oamData = new SplFixedArray(UInt8::BASE);
     }
@@ -147,7 +147,7 @@ final class PPU
             // reading palettes, but by changing the address to point outside palette RAM and performing
             // one read, the contents of this shadowed memory (usually mirrored nametables) can be accessed
             // TODO: !!!
-            return $this->palleteTable[$addr - 0x3f00];
+            return $this->getPaletteTable($addr - 0x3f00);
         } else {
             throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
         }
@@ -166,7 +166,7 @@ final class PPU
         } elseif (UInt16::inInterval($addr, 0x3000, 0x3EFF)) {
             throw new Exception('Address space 0x3000..0x3eff is not expected to be used. Requested: ' . UInt16::hexString($addr));
         } elseif (UInt16::inInterval($addr, 0x3F00, 0x3FFF)) {
-            $this->palleteTable[$addr - 0x3f00] = $data;
+            $this->setPaletteTable($addr - 0x3f00, $data);
         } else {
             throw new Exception('Unexpected access to mirrored space ' . UInt16::hexString($addr));
         }
@@ -253,9 +253,19 @@ final class PPU
         return $this->controlRegister->getBackgroundPatternTableBit();
     }
 
-    public function getPaletteTable($index): ?int
+    private function setPaletteTable(int /* UInt16 */ $index, int /* UInt8 */ $value): ?int
     {
-        return $this->palleteTable[$index];
+        return $this->paletteTable[$this->mirrorPaletteAddress($index)] = $value;
+    }
+
+    public function getPaletteTable(int /* UInt16 */ $index): ?int
+    {
+        return $this->paletteTable[$this->mirrorPaletteAddress($index)];
+    }
+
+    private function mirrorPaletteAddress(int /* UInt16 */ $addr): int /* UInt16 */
+    {
+        return $addr % 32;
     }
 
     public function getAttributeTable(int $attrIndex): ?int
