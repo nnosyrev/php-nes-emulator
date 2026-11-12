@@ -114,10 +114,10 @@ final class Renderer
         $start = 1 + $palette * 4;
 
         return [
-            $this->ppu->getPaletteTable(0),
-            $this->ppu->getPaletteTable($start),
-            $this->ppu->getPaletteTable($start + 1),
-            $this->ppu->getPaletteTable($start + 2),
+            $this->ppu->getPalette(0),
+            $this->ppu->getPalette($start),
+            $this->ppu->getPalette($start + 1),
+            $this->ppu->getPalette($start + 2),
         ];
     }
 
@@ -127,9 +127,9 @@ final class Renderer
 
         return [
             0,
-            $this->ppu->getPaletteTable($start),
-            $this->ppu->getPaletteTable($start + 1),
-            $this->ppu->getPaletteTable($start + 2),
+            $this->ppu->getPalette($start),
+            $this->ppu->getPalette($start + 1),
+            $this->ppu->getPalette($start + 2),
         ];
     }
 }
