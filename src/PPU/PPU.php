@@ -132,7 +132,7 @@ final class PPU
         $this->addressRegister->add($this->controlRegister->getAddressIncrement());
 
         if (UInt16::inInterval($addr, 0, 0x1FFF)) {
-            $this->dataBuf = $this->rom->getChrRom()[$addr];
+            $this->dataBuf = $this->rom->getChrRom()[$addr] ?? 0;
         } elseif (UInt16::inInterval($addr, 0x2000, 0x2FFF)) {
             $this->dataBuf = $this->vram[$this->mirrorVRamAddress($addr)];
         } elseif (UInt16::inInterval($addr, 0x3000, 0x3EFF)) {
